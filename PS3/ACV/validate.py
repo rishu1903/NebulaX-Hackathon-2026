@@ -18,7 +18,7 @@ from sklearn.model_selection import LeaveOneGroupOut
 import acv_core as core
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATASET_DIR = os.path.join(HERE, "..", "..", "02_Datasets", "ACV")
+DATASET_DIR = os.path.join(HERE, "..", "02_Datasets", "ACV")
 TRAIN_DIR = os.path.join(DATASET_DIR, "Train")
 TEST_DIR = os.path.join(DATASET_DIR, "Test")
 LABELS_PATH = os.path.join(DATASET_DIR, "Train_Labels.csv")
