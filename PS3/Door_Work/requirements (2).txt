@@ -1,0 +1,19 @@
+{
+  "subsystem": "Door",
+  "model": "per-operation decision stump",
+  "feature": "trimmed_mean(current,20%) / trimmed_mean(back_EMF,20%)",
+  "interpretation": "load per unit speed = mechanical resistance",
+  "thresholds": {
+    "Open": 0.38434,
+    "Close": 0.32315
+  },
+  "trim": 0.2,
+  "gap_threshold_s": 1.0,
+  "fitted_on": "Train.csv + Train_Segments_Answer.csv (110 labelled cycles, Train labels only)",
+  "selection_criterion": "prediction stability under bootstrap (accuracy saturated at 100% for 8 of 11 candidates)",
+  "train_accuracy": 1.0,
+  "loo_accuracy": 0.9909,
+  "permutation_p": "<0.001",
+  "bootstrap_abnormal_range": "8-8 over 60 refits (sd 0.000)",
+  "version": "1.0"
+}
