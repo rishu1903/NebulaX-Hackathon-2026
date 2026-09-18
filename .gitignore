@@ -23,3 +23,5 @@ PS3/SHM_Work/outputs/modeling/shm_oof_predictions.csv
 PS3/SHM_Work/outputs/modeling/physics_k_values.csv
 PS3/SHM_Work/outputs/submission/shm_test_predictions.csv
 PS3/SHM_Work/.pytest_tmp/
+
+/outputs/
