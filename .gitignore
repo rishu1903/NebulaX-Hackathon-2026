@@ -6,12 +6,15 @@ __pycache__/
 .pytest_cache/
 .agents/
 .vscode/
-
 .env
 .env.*
 *.pem
 *.key
+cred.txt
+*.log
 
+# PS3 Modeling intermediate artifacts
+PS3/*_Work/outputs/modeling/*.csv
 PS3/SHM_Work/outputs/figures/
 PS3/SHM_Work/outputs/shm_audit.csv
 PS3/SHM_Work/outputs/shm_basic_feature_correlations.csv
@@ -25,3 +28,4 @@ PS3/SHM_Work/outputs/submission/shm_test_predictions.csv
 PS3/SHM_Work/.pytest_tmp/
 
 /outputs/
+
