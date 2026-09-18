@@ -6,6 +6,7 @@ statistics. It never modifies raw files in PS3/02_Datasets/SHM/.
 
 from __future__ import annotations
 
+import argparse
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -13,10 +14,6 @@ import numpy as np
 import pandas as pd
 
 
-SHM_ROOT = Path(__file__).resolve().parents[2] / "02_Datasets" / "SHM"
-TRAIN_DIR = SHM_ROOT / "Train"
-TEST_DIR = SHM_ROOT / "Test"
-LABELS_PATH = SHM_ROOT / "Train_Labels.csv"
 OUTPUT_DIR = Path(__file__).resolve().parents[1] / "outputs"
 AUDIT_OUTPUT_PATH = OUTPUT_DIR / "shm_audit.csv"
 
@@ -32,6 +29,59 @@ class LabelAudit:
     duplicate_label_filenames: list[str]
     missing_labels: list[str]
     unexpected_label_rows: list[str]
+
+
+@dataclass(frozen=True)
+class ShmDataPaths:
+    data_root: Path
+    train_dir: Path
+    test_dir: Path
+    labels_path: Path
+
+
+def parse_args() -> argparse.Namespace:
+    parser = argparse.ArgumentParser(
+        description="Run a read-only audit of the SHM raw dataset."
+    )
+    parser.add_argument(
+        "--data-root",
+        required=True,
+        type=Path,
+        help="Path to the SHM dataset root containing Train/, Test/, and Train_Labels.csv.",
+    )
+    return parser.parse_args()
+
+
+def validate_data_root(data_root: Path) -> ShmDataPaths:
+    """Validate the external SHM data root supplied by the caller."""
+    resolved_root = data_root.expanduser().resolve()
+    train_dir = resolved_root / "Train"
+    test_dir = resolved_root / "Test"
+    labels_path = resolved_root / "Train_Labels.csv"
+
+    missing_paths = [
+        path
+        for path in (resolved_root, train_dir, test_dir, labels_path)
+        if not path.exists()
+    ]
+    if missing_paths:
+        missing = "\n  ".join(str(path) for path in missing_paths)
+        raise SystemExit(
+            "Invalid --data-root. Expected a directory containing Train/, Test/, "
+            f"and Train_Labels.csv. Missing:\n  {missing}"
+        )
+    if not train_dir.is_dir() or not test_dir.is_dir() or not labels_path.is_file():
+        raise SystemExit(
+            "Invalid --data-root. Train and Test must be directories, and "
+            "Train_Labels.csv must be a file."
+        )
+
+    return ShmDataPaths(
+        data_root=resolved_root,
+        train_dir=train_dir,
+        test_dir=test_dir,
+        labels_path=labels_path,
+    )
 
 
 def discover_csv_files(directory: Path) -> list[Path]:
@@ -85,7 +135,12 @@ def read_signal_as_strings(file_path: Path) -> pd.Series:
     return df[RAW_COLUMN]
 
 
-def audit_signal_file(file_path: Path, split: str, damage: float | None = None) -> dict:
+def audit_signal_file(
+    file_path: Path,
+    data_root: Path,
+    split: str,
+    damage: float | None = None,
+) -> dict:
     """Compute read-only quality and descriptive statistics for one signal file."""
     raw_values = read_signal_as_strings(file_path)
     stripped = raw_values.str.strip()
@@ -120,7 +175,7 @@ def audit_signal_file(file_path: Path, split: str, damage: float | None = None) 
     return {
         "split": split,
         "file_id": file_path.name,
-        "path": str(file_path),
+        "path": file_path.relative_to(data_root).as_posix(),
         "damage": damage,
         "row_count": row_count,
         "unexpected_row_count": row_count != EXPECTED_ROW_COUNT,
@@ -145,6 +200,7 @@ def build_audit_dataframe(
     train_files: list[Path],
     test_files: list[Path],
     labels: pd.DataFrame,
+    data_root: Path,
 ) -> pd.DataFrame:
     """Build one audit row per source train/test signal file."""
     damage_by_filename = labels.set_index("filename")["damage"].to_dict()
@@ -154,13 +210,16 @@ def build_audit_dataframe(
         records.append(
             audit_signal_file(
                 file_path=file_path,
+                data_root=data_root,
                 split="train",
                 damage=damage_by_filename.get(file_path.name),
             )
         )
 
     for file_path in test_files:
-        records.append(audit_signal_file(file_path=file_path, split="test"))
+        records.append(
+            audit_signal_file(file_path=file_path, data_root=data_root, split="test")
+        )
 
     return pd.DataFrame(records)
 
@@ -206,12 +265,20 @@ def print_summary(
 
 
 def main() -> None:
-    train_files = discover_csv_files(TRAIN_DIR)
-    test_files = discover_csv_files(TEST_DIR)
-    labels = load_labels(LABELS_PATH)
+    args = parse_args()
+    paths = validate_data_root(args.data_root)
+
+    train_files = discover_csv_files(paths.train_dir)
+    test_files = discover_csv_files(paths.test_dir)
+    labels = load_labels(paths.labels_path)
     label_audit = audit_labels(labels, train_files)
 
-    audit_df = build_audit_dataframe(train_files, test_files, label_audit.labels)
+    audit_df = build_audit_dataframe(
+        train_files,
+        test_files,
+        label_audit.labels,
+        paths.data_root,
+    )
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     audit_df.to_csv(AUDIT_OUTPUT_PATH, index=False)
 
