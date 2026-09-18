@@ -1,0 +1,10 @@
+{
+  "model_name": "Physics_k_times_fatigue_power_5",
+  "formula": "predicted_damage = fitted_k * fatigue_power_5",
+  "fitted_k": 4.2742163879400325e-11,
+  "training_sample_count": 64,
+  "selected_feature": "fatigue_power_5",
+  "cross_validation_method": "RepeatedKFold(n_splits=5, n_repeats=20, random_state=42)",
+  "cv_mean_mape": 0.0264144451985507,
+  "cv_mean_competition_score": 0.9735855548014491
+}
