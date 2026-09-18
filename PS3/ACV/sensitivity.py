@@ -12,7 +12,7 @@ import acv_core as a
 
 warnings.filterwarnings("ignore")
 HERE = os.path.dirname(os.path.abspath(__file__))
-DATASET_DIR = os.path.join(HERE, "..", "..", "02_Datasets", "ACV")
+DATASET_DIR = os.path.join(HERE, "..", "02_Datasets", "ACV")
 FILES = ["acv_case_01", "acv_case_02", "acv_case_03", "acv_case_05", "acv_case_06"]
 
 

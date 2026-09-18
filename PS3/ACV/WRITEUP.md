@@ -66,7 +66,7 @@ red ≥ 0.171 (p95), yellow ≥ 0.148 (p90), green below. The top-ranked car is 
 ## Run it
 ```
 pip install pandas openpyxl scikit-learn streamlit
-python predict.py --input ../../02_Datasets/ACV/Test/acv_test_case.xlsx --output output/acv_predictions.csv
+python predict.py --input ../02_Datasets/ACV/Test/acv_test_case.xlsx --output output/acv_predictions.csv
 streamlit run app.py          # upload -> ranked table -> download CSV
 python validate.py            # leave-one-file-out + benchmarks
 python sensitivity.py         # design-choice robustness
