@@ -46,14 +46,22 @@ const ANALYSIS_STEPS = ["Parsing report", "Extracting subsystem signals", "Updat
 const TRAIN_OPTIONS = ["011", "012", "601", "701"] as const
 type TrainId = (typeof TRAIN_OPTIONS)[number]
 
+const SUBSYSTEM_UPLOAD: Record<Subsystem, { accept: string; label: string }> = {
+  ACV: { accept: ".xlsx", label: "Excel (.xlsx)" },
+  DOOR: { accept: ".csv", label: "CSV (.csv)" },
+  RAIL: { accept: ".csv", label: "CSV (.csv)" },
+  SHM: { accept: ".csv", label: "CSV (.csv)" },
+}
+
 export default function Page() {
   const [subsystem, setSubsystem] = useState<Subsystem>("ACV")
   const [selectedTrain, setSelectedTrain] = useState<TrainId>("011")
   const [analyzed, setAnalyzed] = useState(false)
-  const [reportFileName, setReportFileName] = useState<string | null>(null)
+  const [reportFile, setReportFile] = useState<File | null>(null)
+  const [fileError, setFileError] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisStep, setAnalysisStep] = useState(0)
-  const [carCount, setCarCount] = useState<3 | 6>(6)
+  const [carCount, setCarCount] = useState<3 | 6 | 8>(8)
   const [hoveredId, setHoveredId] = useState<number | null>(null)
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const [rectifiedIds, setRectifiedIds] = useState<Set<number>>(() => new Set())
@@ -61,6 +69,8 @@ export default function Page() {
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
 
   const view = SUBSYSTEM_DATA[subsystem]
+  const reportFileName = reportFile?.name ?? null
+  const uploadConfig = SUBSYSTEM_UPLOAD[subsystem]
 
   const cars: CarState[] = useMemo(() => {
     const consist = view.cars.slice(0, carCount)
@@ -89,7 +99,14 @@ export default function Page() {
   const allRectified = analyzed && unresolvedCars.length === 0
 
   function switchSubsystem(s: Subsystem) {
+    if (s === subsystem) return
+    clearAnalysisTimers()
     setSubsystem(s)
+    setReportFile(null)
+    setFileError(null)
+    setAnalyzed(false)
+    setIsAnalyzing(false)
+    setAnalysisStep(0)
     setSelectedId(null)
     setHoveredId(null)
     setRectifiedIds(new Set())
@@ -98,6 +115,8 @@ export default function Page() {
   function switchTrain(train: string) {
     setSelectedTrain(train as TrainId)
     clearAnalysisTimers()
+    setReportFile(null)
+    setFileError(null)
     setAnalyzed(false)
     setIsAnalyzing(false)
     setAnalysisStep(0)
@@ -114,7 +133,19 @@ export default function Page() {
   function stageReport(file: File | null | undefined) {
     if (!file) return
     clearAnalysisTimers()
-    setReportFileName(file.name)
+
+    const requiredExtension = uploadConfig.accept.toLowerCase()
+    if (!file.name.toLowerCase().endsWith(requiredExtension)) {
+      setReportFile(null)
+      setFileError(`${subsystem} requires ${uploadConfig.label} input.`)
+      setAnalyzed(false)
+      setIsAnalyzing(false)
+      setAnalysisStep(0)
+      return
+    }
+
+    setReportFile(file)
+    setFileError(null)
     setAnalyzed(false)
     setIsAnalyzing(false)
     setAnalysisStep(0)
@@ -212,7 +243,7 @@ export default function Page() {
         ref={fileInputRef}
         type="file"
         className="sr-only"
-        accept=".csv,.pdf,.xlsx,.xls,.json,.txt"
+        accept={uploadConfig.accept}
         onChange={handleFileChange}
       />
 
@@ -278,7 +309,7 @@ export default function Page() {
               role="group"
               aria-label="Consist length"
             >
-              {([3, 6] as const).map((n) => (
+              {([3, 6, 8] as const).map((n) => (
                 <button
                   key={n}
                   type="button"
@@ -368,6 +399,8 @@ export default function Page() {
           {!analyzed ? (
             <ReportIntake
               fileName={reportFileName}
+              fileError={fileError}
+              acceptedFormat={uploadConfig.label}
               isAnalyzing={isAnalyzing}
               activeStep={analysisStep}
               onUploadClick={() => fileInputRef.current?.click()}
@@ -449,12 +482,16 @@ function FindingActionPanel({
 
 function ReportIntake({
   fileName,
+  fileError,
+  acceptedFormat,
   isAnalyzing,
   activeStep,
   onUploadClick,
   onDrop,
 }: {
   fileName: string | null
+  fileError: string | null
+  acceptedFormat: string
   isAnalyzing: boolean
   activeStep: number
   onUploadClick: () => void
@@ -481,8 +518,9 @@ function ReportIntake({
           {isAnalyzing ? "Analyzing report" : fileName ? "Report ready for analysis" : "Drop inspection report here"}
         </p>
         <p className="mt-1 text-xs text-slate-500">
-          {fileName ?? "Supports CSV, PDF, XLSX, JSON, and text telemetry exports."}
+          {fileName ?? `Required input: ${acceptedFormat}`}
         </p>
+        {fileError && <p className="mt-2 text-xs font-semibold text-red-600">{fileError}</p>}
       </div>
 
       {isAnalyzing ? (
