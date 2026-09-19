@@ -520,6 +520,7 @@ function Car({
   const isNeutral = car.condition === "neutral"
   const isIssue = car.condition === "issue"
   const isReview = car.condition === "review"
+  const isNormal = car.condition === "normal"
   const active = isIssue || isReview
 
   const gradientId = `car-body-${car.id}`
@@ -530,8 +531,8 @@ function Car({
       ? ["#ffffff", "#fee2e2"]
       : isReview
         ? ["#ffffff", "#fef3c7"]
-        : isNeutral
-          ? ["#ffffff", "#e2e8f0"]
+        : isNormal
+          ? ["#ffffff", "#d1fae5"]
           : ["#ffffff", "#e2e8f0"]
 
   const outlineColor =
@@ -539,13 +540,15 @@ function Car({
       ? "#ef4444"
       : isReview
         ? "#f59e0b"
-        : selected
-          ? "#0f172a"
-          : isNeutral
-            ? "#cbd5e1"
-            : "#94a3b8"
+        : isNormal
+          ? "#10b981"
+          : selected
+            ? "#0f172a"
+            : isNeutral
+              ? "#cbd5e1"
+              : "#94a3b8"
 
-  const outlineW = selected ? 3.5 : active ? 2.5 : 1.2
+  const outlineW = selected ? 3.5 : (active || isNormal) ? 2.2 : 1.2
 
   const dzS = x + (isLead ? 72 : 24)
   const dzE = x + CAR_W - 22
@@ -645,7 +648,7 @@ function Car({
           y={STRIPE_Y}
           width={CAR_W - 16}
           height={STRIPE_H}
-          fill={isNeutral ? "#94a3b8" : "#dc2626"}
+          fill={isNeutral ? "#94a3b8" : isNormal ? "#10b981" : isReview ? "#f59e0b" : "#dc2626"}
           opacity={isNeutral ? 0.6 : 1}
         />
 

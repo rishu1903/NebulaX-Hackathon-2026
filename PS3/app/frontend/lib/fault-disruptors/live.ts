@@ -428,6 +428,14 @@ function shmView(result: AnalyseResult): LiveView {
         ? "review"
         : "normal"
 
+  const damageStatus = !valid
+    ? "No cumulative damage value computed"
+    : damage >= SHM_BANDS.issue
+      ? `Critical Fatigue Damage (D = ${damage.toFixed(4)} >= 0.8)`
+      : damage >= SHM_BANDS.review
+        ? `Elevated Fatigue Damage (D = ${damage.toFixed(4)} >= 0.5)`
+        : `Nominal Structural Health (D = ${damage.toFixed(4)} < 0.5)`
+
   return {
     headline: "Structural fatigue damage prediction",
     verdict: {
@@ -438,7 +446,8 @@ function shmView(result: AnalyseResult): LiveView {
     },
     cars: idleCars().map((car) => ({
       ...car,
-      finding: "The train is shown as asset context. SHM reports one result for the complete uploaded structural record.",
+      condition,
+      finding: `Consist structural health: ${damageStatus}. Result applies to the complete structural record.`,
     })),
     kpis: [
       {
