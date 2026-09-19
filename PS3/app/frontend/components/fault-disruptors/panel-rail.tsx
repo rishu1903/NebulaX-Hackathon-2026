@@ -123,7 +123,7 @@ export function PanelRail({
 
       <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
         <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
-          Recommended follow-up
+          Suggested technician check
         </p>
 
         {side ? (

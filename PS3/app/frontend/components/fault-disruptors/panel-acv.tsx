@@ -134,8 +134,10 @@ export function PanelAcv({
         </p>
 
         <p className="rounded-lg bg-slate-50 px-3 py-2">
-          <strong className="text-slate-700">Recommended workflow:</strong> inspect the highest-ranked carriage first,
-          then continue down the ranking if the initial inspection does not explain the cooling deviation.
+          <strong className="text-slate-700">Suggested technician check:</strong>{" "}
+          {top
+            ? `inspect ${carLabel(top.car)} first, focusing on the air-conditioning and refrigerant system. If the inspection does not explain the cooling deviation, continue down the ranking.`
+            : "review the uploaded telemetry because no carriage could be ranked."}
         </p>
       </div>
 

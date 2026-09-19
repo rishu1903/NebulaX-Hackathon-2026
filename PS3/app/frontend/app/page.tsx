@@ -1,7 +1,7 @@
 "use client"
 
 import { type DragEvent, type ChangeEvent, useMemo, useRef, useState } from "react"
-import { CheckCircle2, Download, FileText, Loader2, RotateCcw, UploadCloud, Wrench } from "lucide-react"
+import { CheckCircle2, Download, FileText, Loader2, RotateCcw, UploadCloud } from "lucide-react"
 import { ConditionIcon } from "@/components/fault-disruptors/condition-icon"
 import { Header } from "@/components/fault-disruptors/header"
 import { HoverBubble } from "@/components/fault-disruptors/hover-bubble"
@@ -42,7 +42,7 @@ export default function Page() {
   const [analysisStep, setAnalysisStep] = useState(0)
   const [hoveredId, setHoveredId] = useState<number | null>(null)
   const [selectedId, setSelectedId] = useState<number | null>(null)
-  const [rectifiedIds, setRectifiedIds] = useState<Set<number>>(() => new Set())
+
   const fileInputRef = useRef<HTMLInputElement>(null)
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
   /** Incremented whenever an in-flight analysis should be ignored (reset, new file, subsystem switch). */
@@ -56,26 +56,12 @@ export default function Page() {
 
   const cars: CarState[] = useMemo(() => {
     if (!live) return idleCars()
-    return live.cars.map((c) =>
-      rectifiedIds.has(c.id)
-        ? {
-            ...c,
-            condition: "normal",
-            rank: undefined,
-            finding: "Rectified maintenance action logged. Monitor on next inspection cycle.",
-          }
-        : c,
-    )
-  }, [live, rectifiedIds])
+    return live.cars
+  }, [live])
 
   const railSide = live?.railSide ?? null
   const hoveredCar = hoveredId ? cars.find((c) => c.id === hoveredId) ?? null : null
   const hoveredIndex = hoveredCar ? cars.findIndex((c) => c.id === hoveredCar.id) : -1
-  const unresolvedCars = cars.filter((car) => car.condition === "issue" || car.condition === "review")
-  const selectedCar = selectedId ? cars.find((car) => car.id === selectedId) ?? null : null
-  const actionCar = selectedCar && selectedCar.condition !== "normal" ? selectedCar : unresolvedCars[0] ?? null
-  const hadFlaggedCars = live ? live.cars.some((c) => c.condition === "issue" || c.condition === "review") : false
-  const allRectified = analyzed && hadFlaggedCars && unresolvedCars.length === 0
 
   function clearAnalysisTimers() {
     timersRef.current.forEach((timer) => clearTimeout(timer))
@@ -92,7 +78,7 @@ export default function Page() {
     setAnalysisError(null)
     setSelectedId(null)
     setHoveredId(null)
-    setRectifiedIds(new Set())
+
     if (!keepFile) {
       setReportFile(null)
       setFileError(null)
@@ -158,19 +144,9 @@ export default function Page() {
     }
   }
 
-  function markRectified(id: number) {
-    setRectifiedIds((current) => {
-      const next = new Set(current)
-      next.add(id)
-      return next
-    })
-    setSelectedId(null)
-    setHoveredId(null)
-  }
-
-  const verdictCondition = allRectified ? "normal" : (live?.verdict.condition ?? "neutral")
+  const verdictCondition = live?.verdict.condition ?? "neutral"
   const verdictMeta = CONDITION_META[verdictCondition]
-  const verdictText = allRectified ? "All highlighted findings rectified. Continue monitoring." : (live?.verdict.text ?? "")
+  const verdictText = live?.verdict.text ?? ""
   const analysisButtonLabel = isAnalyzing ? "Analyzing..." : reportFileName ? "Analyze Dataset" : "Upload dataset first"
 
   return (
@@ -283,7 +259,6 @@ export default function Page() {
           </div>
         </div>
 
-        {analyzed && <FindingActionPanel car={actionCar} allRectified={allRectified} onRectify={markRectified} />}
 
         {/* KPI strip */}
         {live && (
@@ -375,60 +350,6 @@ export default function Page() {
         </section>
       </div>
     </main>
-  )
-}
-
-function FindingActionPanel({
-  car,
-  allRectified,
-  onRectify,
-}: {
-  car: CarState | null
-  allRectified: boolean
-  onRectify: (id: number) => void
-}) {
-  if (allRectified) {
-    return (
-      <section className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3">
-        <div className="flex items-center gap-2 text-sm font-bold text-emerald-800">
-          <CheckCircle2 className="size-5" aria-hidden="true" />
-          Maintenance update recorded
-        </div>
-        <p className="mt-1 text-sm text-emerald-700">All currently detected carriage findings have been marked as rectified.</p>
-      </section>
-    )
-  }
-
-  if (!car) return null
-
-  const meta = CONDITION_META[car.condition]
-  return (
-    <section className="mt-5 rounded-xl border bg-white p-4 shadow-sm" style={{ borderColor: meta.color }}>
-      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-2">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-1 text-sm font-bold"
-              style={{ backgroundColor: meta.soft, color: meta.color }}
-            >
-              <ConditionIcon condition={car.condition} />
-              {meta.label}
-            </span>
-            <span className="text-sm font-semibold text-slate-500">{car.label}</span>
-            {car.rank && <span className="text-sm font-semibold text-slate-400">Priority #{car.rank}</span>}
-          </div>
-          <p className="mt-2 text-lg font-bold leading-tight text-slate-950">{car.finding}</p>
-        </div>
-        <button
-          type="button"
-          onClick={() => onRectify(car.id)}
-          className="inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 text-sm font-bold text-white transition-colors hover:bg-emerald-700 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-emerald-500/30"
-        >
-          <Wrench className="size-4" aria-hidden="true" />
-          Log Rectification
-        </button>
-      </div>
-    </section>
   )
 }
 

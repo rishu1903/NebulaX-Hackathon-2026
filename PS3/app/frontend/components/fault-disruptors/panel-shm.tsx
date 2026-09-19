@@ -159,6 +159,19 @@ export function PanelShm({
 
       <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
         <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+          Suggested engineering check
+        </p>
+        <p className="mt-1 text-sm font-bold text-slate-900">
+          Review the predicted damage value together with the asset&apos;s maintenance history and applicable engineering criteria.
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-slate-500">
+          If the result warrants follow-up, use a physical structural inspection to determine the location and nature of
+          any damage. The SHM prediction itself does not localise a defect.
+        </p>
+      </div>
+
+      <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
           Scope of result
         </p>
         <p className="mt-1 text-sm font-bold text-slate-900">

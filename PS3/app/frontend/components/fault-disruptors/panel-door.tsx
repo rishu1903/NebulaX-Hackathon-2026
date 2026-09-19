@@ -124,6 +124,25 @@ export function PanelDoor({ cycles }: { cycles: DoorCycle[] }) {
 
       {selected && <SelectedCycle cycle={selected} />}
 
+      {selected && (
+        <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
+            Suggested technician check
+          </p>
+          <p className="mt-1 text-sm font-bold text-slate-900">
+            {selected.label === "Abnormal resistance"
+              ? `Inspect the door mechanism and motor loading associated with Cycle ${selected.index}.`
+              : selected.flags.length > 0
+                ? `Review Cycle ${selected.index} and its data-quality flags before drawing a maintenance conclusion.`
+                : `Cycle ${selected.index} is classified as normal; prioritise any abnormal or review-flagged cycles for inspection.`}
+          </p>
+          <p className="mt-1 text-xs leading-relaxed text-slate-500">
+            Use the cycle timing, operation, resistance ratio and quality checks above to guide the physical inspection.
+            The model identifies an abnormal operating cycle; it does not identify the exact mechanical cause.
+          </p>
+        </div>
+      )}
+
       {attention.length > 0 && (
         <div className="mt-5">
           <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
