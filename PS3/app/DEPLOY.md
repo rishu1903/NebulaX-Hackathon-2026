@@ -31,9 +31,14 @@ why the requirements are pinned.
 Cloud Shell (the terminal icon in the console) already has `gcloud`, Node and Docker, and is
 already signed in.
 
+The repository contains several GB of datasets and Cloud Shell's home disk is ~5 GB, so a normal
+`git clone` fails with "No space left on device". The deploy does not need the datasets, so clone
+only the folders it uses:
+
 ```bash
-git clone https://github.com/rishu1903/NebulaX-Hackathon-2026.git
+git clone --depth 1 --filter=blob:none --sparse https://github.com/rishu1903/NebulaX-Hackathon-2026.git
 cd NebulaX-Hackathon-2026
+git sparse-checkout set PS3/app PS3/ACV PS3/SHM_Work PS3/Rail_Corrugation_Work PS3/Door_Work
 gcloud config set project <YOUR_PROJECT_ID>
 bash PS3/app/deploy/deploy.sh
 ```
