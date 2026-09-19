@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import {
   Area,
   AreaChart,
@@ -27,18 +27,33 @@ import { PanelTitle } from "./panel-acv"
 
 const axis = { fontSize: 10, fill: "#94a3b8" }
 
-function ChartCard({ title, sub, children }: { title: string; sub: string; children: React.ReactNode }) {
+function ChartCard({ title, sub, children, ready }: { title: string; sub: string; children: React.ReactNode; ready: boolean }) {
   return (
     <div className="rounded-xl border border-border bg-white p-3 shadow-sm">
       <p className="text-xs font-bold text-slate-800">{title}</p>
       <p className="mb-2 text-[11px] text-slate-400">{sub}</p>
-      <div className="h-40">{children}</div>
+      <div className="h-40">
+        {ready ? (
+          children
+        ) : (
+          <div className="flex h-full w-full items-center justify-center rounded-lg bg-slate-50 font-mono text-xs text-slate-400">
+            Streaming sensor telemetry...
+          </div>
+        )}
+      </div>
     </div>
   )
 }
 
 export function PanelRail() {
   const [dispatched, setDispatched] = useState(false)
+  const [chartsMounted, setChartsMounted] = useState(false)
+
+  useEffect(() => {
+    // Tiny delay to unblock main thread so train animation starts on frame 0 with 0ms lag
+    const timer = setTimeout(() => setChartsMounted(true), 60)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleExportJson = () => {
     const data = {
@@ -81,7 +96,7 @@ export function PanelRail() {
 
       {/* 3 Telemetry Sensor Charts */}
       <div className="grid gap-3 lg:grid-cols-3">
-        <ChartCard title="Vibration Envelope & Rolling RMS" sub="Ch1 / Ch2 acceleration (m/s²) · ISO 10816 limit">
+        <ChartCard title="Vibration Envelope & Rolling RMS" sub="Ch1 / Ch2 acceleration (m/s²) · ISO 10816 limit" ready={chartsMounted}>
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={RAIL_VIBRATION} margin={{ top: 5, right: 6, left: -18, bottom: 0 }}>
               <defs>
@@ -101,7 +116,7 @@ export function PanelRail() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Instantaneous Speed Tachograph" sub="Ch0 speed (km/h) over 1000 ms window">
+        <ChartCard title="Instantaneous Speed Tachograph" sub="Ch0 speed (km/h) over 1000 ms window" ready={chartsMounted}>
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={RAIL_SPEED} margin={{ top: 5, right: 6, left: -18, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" />
@@ -113,7 +128,7 @@ export function PanelRail() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Vibration Frequency Spectrum" sub="Real FFT power · ~340 Hz corrugation peak">
+        <ChartCard title="Vibration Frequency Spectrum" sub="Real FFT power · ~340 Hz corrugation peak" ready={chartsMounted}>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={RAIL_SPECTRUM} margin={{ top: 5, right: 6, left: -18, bottom: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="#eef2f7" vertical={false} />

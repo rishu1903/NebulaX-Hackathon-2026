@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, type CSSProperties } from "react"
+import { useState, useMemo, type CSSProperties } from "react"
 import { motion } from "framer-motion"
 import { CONDITION_META, type CarState, type Subsystem } from "@/lib/fault-disruptors/data"
 
@@ -70,6 +70,10 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
   const defectEndFrac = 13.8 / 18.07
   const defectX = trackX + trackW * defectStartFrac
   const defectW = trackW * (defectEndFrac - defectStartFrac)
+
+  // Precomputed waves (zero lag on click)
+  const waveTop = useMemo(() => generateCorrugationWave(defectX, defectW, 124, 3, 12), [defectX, defectW])
+  const waveBottom = useMemo(() => generateCorrugationWave(defectX, defectW, 134, 3, 12), [defectX, defectW])
 
   // Distance ticks across 18.07 m
   const majorTicks = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18.07]
@@ -187,8 +191,8 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
             y: inspectRailBed ? -50 : 0,
           }}
           transition={{
-            duration: 0.8,
-            delay: inspectRailBed ? 0.35 : 0,
+            duration: 0.65,
+            delay: inspectRailBed ? 0.08 : 0,
             ease: [0.16, 1, 0.3, 1],
           }}
         >
@@ -247,9 +251,9 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
             strokeWidth={inspectRailBed ? 1.5 : 1}
           />
 
-          {/* Concrete Sleepers (Ties) */}
-          {Array.from({ length: Math.round(trackW / (inspectRailBed ? 18 : 22)) }).map((_, i) => {
-            const sleeperX = trackX + 6 + i * (inspectRailBed ? 18 : 22)
+          {/* Concrete Sleepers (Ties) - Constant count prevents DOM thrashing on click */}
+          {Array.from({ length: Math.round(trackW / 20) }).map((_, i) => {
+            const sleeperX = trackX + 6 + i * 20
             return (
               <g key={i}>
                 <rect
@@ -320,13 +324,13 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
               {inspectRailBed && (
                 <>
                   <path
-                    d={generateCorrugationWave(defectX, defectW, 124, 3, 12)}
+                    d={waveTop}
                     stroke="#991b1b"
                     strokeWidth={2}
                     fill="none"
                   />
                   <path
-                    d={generateCorrugationWave(defectX, defectW, 134, 3, 12)}
+                    d={waveBottom}
                     stroke="#991b1b"
                     strokeWidth={2}
                     fill="none"
@@ -447,27 +451,22 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
         </motion.g>
 
         {/* ------------------------------------------------------------- */}
-        {/* THE TRAIN CONSIST (ANIMATES COMPLETELY AWAY IN RAIL MODE)     */}
+        {/* THE TRAIN CONSIST (ANIMATES OFF THE TRACK IMMEDIATELY)        */}
         {/* ------------------------------------------------------------- */}
         <motion.g
           id="train-consist-group"
           initial={false}
           animate={{
             x: inspectRailBed ? -(VIEW_W + 500) : 0,
-            opacity: inspectRailBed ? [1, 1, 0.85, 0] : 1,
+            opacity: inspectRailBed ? 0 : 1,
           }}
           transition={{
-            x: {
-              duration: 1.25,
-              ease: inspectRailBed ? [0.38, 0, 0.25, 1] : [0.16, 1, 0.3, 1],
-            },
-            opacity: {
-              duration: inspectRailBed ? 1.25 : 0.4,
-              times: [0, 0.65, 0.88, 1],
-            },
+            duration: 0.75,
+            ease: [0.16, 1, 0.3, 1],
           }}
           style={{
             pointerEvents: inspectRailBed ? "none" : "auto",
+            willChange: "transform",
           }}
         >
           {cars.map((car, i) => (
