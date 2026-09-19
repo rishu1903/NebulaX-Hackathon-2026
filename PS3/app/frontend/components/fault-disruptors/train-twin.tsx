@@ -78,14 +78,6 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
       aria-label={`Train digital twin showing ${subsystem} subsystem status`}
     >
       <defs>
-        <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="var(--body-hi)" />
-          <stop offset="1" stopColor="var(--body-lo)" />
-        </linearGradient>
-        <linearGradient id="roofGrad" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="var(--roof-hi)" />
-          <stop offset="1" stopColor="var(--roof-lo)" />
-        </linearGradient>
         <linearGradient id="trackGrad" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor="#e2e6ea" />
           <stop offset="1" stopColor="#cbd2d9" />
@@ -121,7 +113,7 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
         />
         {railSide && (
           <text x={trackX} y={SKIRT_Y + 92} fontSize="11" fill="#ef4444" fontWeight={600}>
-            {`Side ${railSide} corrugation · 0.0 m → 18.07 m`}
+            {`Side ${railSide} corrugation detected`}
           </text>
         )}
       </g>
@@ -169,11 +161,6 @@ function Car({
     transition: "transform 0.35s cubic-bezier(0.22,1,0.36,1)",
     transform: `translateY(${lift}px)`,
     cursor: "pointer",
-    // feed palette to the gradient stops
-    ["--body-hi" as string]: P.bodyHi,
-    ["--body-lo" as string]: P.body,
-    ["--roof-hi" as string]: P.roofHi,
-    ["--roof-lo" as string]: P.roof,
   }
 
   const outline = active ? meta.color : isNeutral ? "#c7cbd1" : "#d8d0c0"
@@ -195,9 +182,19 @@ function Car({
       onMouseLeave={() => onHover(null)}
       onClick={() => onSelect(selected ? null : car.id)}
     >
+      <defs>
+        <linearGradient id={`bodyGrad-${car.id}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor={P.bodyHi} />
+          <stop offset="1" stopColor={P.body} />
+        </linearGradient>
+        <linearGradient id={`roofGrad-${car.id}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor={P.roofHi} />
+          <stop offset="1" stopColor={P.roof} />
+        </linearGradient>
+      </defs>
       <g filter="url(#carShadow)">
         {/* roof */}
-        <rect x={x + 12} y={ROOF_Y} width={CAR_W - 24} height={ROOF_H + 14} rx={14} fill="url(#roofGrad)" />
+        <rect x={x + 12} y={ROOF_Y} width={CAR_W - 24} height={ROOF_H + 14} rx={14} fill={`url(#roofGrad-${car.id})`} />
         {/* roof AC pods */}
         <rect x={x + 30} y={ROOF_Y + 5} width={34} height={9} rx={4.5} fill={P.roof} opacity={0.65} />
         <rect x={x + CAR_W - 64} y={ROOF_Y + 5} width={34} height={9} rx={4.5} fill={P.roof} opacity={0.65} />
@@ -209,7 +206,7 @@ function Car({
           width={CAR_W - 12}
           height={BODY_H}
           rx={22}
-          fill="url(#bodyGrad)"
+          fill={`url(#bodyGrad-${car.id})`}
           stroke={outline}
           strokeWidth={outlineW}
           style={{ transition: "stroke 0.4s ease" }}
@@ -241,7 +238,6 @@ function Car({
 
       {/* doors — 4 per car */}
       {doorCenters.map((cx, d) => {
-        const affected = active && car.affectedDoors?.includes(d + 1)
         return (
         <g key={d}>
           <rect
@@ -250,21 +246,13 @@ function Car({
             width={doorW}
             height={doorH}
             rx={5}
-            fill={affected ? meta.soft : P.door}
-            stroke={affected ? meta.color : P.doorEdge}
-            strokeWidth={affected ? 2.8 : 1}
+            fill={P.door}
+            stroke={P.doorEdge}
+            strokeWidth={1}
             style={{ transition: "fill 0.3s ease, stroke 0.3s ease" }}
           />
           <line x1={cx} y1={doorTop + 3} x2={cx} y2={doorTop + doorH - 3} stroke={P.doorEdge} strokeWidth={1} opacity={0.6} />
           <rect x={cx - doorW / 2 + 2.5} y={doorTop + 5} width={doorW - 5} height={20} rx={3} fill={P.glass} opacity={isNeutral ? 0.5 : 0.85} />
-          {affected && (
-            <g>
-              <circle cx={cx} cy={doorTop - 9} r={9} fill={meta.color} />
-              <text x={cx} y={doorTop - 5.3} textAnchor="middle" fontSize="8.5" fontWeight={800} fill="#fff">
-                D{d + 1}
-              </text>
-            </g>
-          )}
         </g>
         )
       })}

@@ -1,18 +1,14 @@
 "use client"
 
-import { CheckCircle2, ChevronDown, FileUp, Loader2, TrainFront } from "lucide-react"
+import { CheckCircle2, FileUp, Loader2 } from "lucide-react"
 
 export function Header({
   onUploadClick,
-  selectedTrain,
-  onTrainChange,
   reportFileName,
   isAnalyzing,
   analysisComplete,
 }: {
   onUploadClick: () => void
-  selectedTrain: string
-  onTrainChange: (train: string) => void
   reportFileName: string | null
   isAnalyzing: boolean
   analysisComplete: boolean
@@ -41,25 +37,6 @@ export function Header({
 
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <div className="flex min-w-0 items-center gap-2 rounded-lg border border-border bg-slate-50 px-2 py-1.5">
-          <label className="relative inline-flex h-9 items-center gap-2 rounded-md border border-border bg-white pl-3 pr-8 text-sm font-semibold text-slate-700">
-            <TrainFront className="size-4 text-slate-500" aria-hidden="true" />
-            <span className="sr-only">Choose train</span>
-            <select
-              value={selectedTrain}
-              onChange={(event) => onTrainChange(event.target.value)}
-              className="absolute inset-0 cursor-pointer appearance-none bg-transparent pl-9 pr-8 text-transparent outline-none"
-              aria-label="Choose train for servicing"
-            >
-              {["011", "012", "601", "701"].map((train) => (
-                <option key={train} value={train}>
-                  Train {train}
-                </option>
-              ))}
-            </select>
-            <span aria-hidden="true">Train {selectedTrain}</span>
-            <ChevronDown className="pointer-events-none absolute right-2 size-4 text-slate-400" aria-hidden="true" />
-          </label>
-
           <button
             type="button"
             onClick={onUploadClick}
