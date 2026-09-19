@@ -53,7 +53,7 @@ export default function Page() {
   const [reportFileName, setReportFileName] = useState<string | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisStep, setAnalysisStep] = useState(0)
-  const [carCount, setCarCount] = useState<3 | 6>(6)
+  const [carCount, setCarCount] = useState<3 | 6 | 8>(8)
   const [hoveredId, setHoveredId] = useState<number | null>(null)
   const [selectedId, setSelectedId] = useState<number | null>(null)
   const [rectifiedIds, setRectifiedIds] = useState<Set<number>>(() => new Set())
@@ -80,7 +80,7 @@ export default function Page() {
     )
   }, [analyzed, view, carCount, rectifiedIds])
 
-  const railSide = analyzed && subsystem === "RAIL" ? ("I" as const) : null
+  const railSide = subsystem === "RAIL" ? ("I" as const) : null
   const hoveredCar = hoveredId ? cars.find((c) => c.id === hoveredId) ?? null : null
   const hoveredIndex = hoveredCar ? cars.findIndex((c) => c.id === hoveredCar.id) : -1
   const unresolvedCars = cars.filter((car) => car.condition === "issue" || car.condition === "review")
@@ -278,7 +278,7 @@ export default function Page() {
               role="group"
               aria-label="Consist length"
             >
-              {([3, 6] as const).map((n) => (
+              {([3, 6, 8] as const).map((n) => (
                 <button
                   key={n}
                   type="button"
@@ -349,7 +349,7 @@ export default function Page() {
                 onHover={setHoveredId}
                 onSelect={setSelectedId}
               />
-              {hoveredCar && hoveredCar.condition !== "neutral" && hoveredIndex >= 0 && (
+              {hoveredCar && hoveredIndex >= 0 && (
                 <HoverBubble car={hoveredCar} leftFraction={carCenterFraction(hoveredIndex, cars.length)} />
               )}
             </div>
