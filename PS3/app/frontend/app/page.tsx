@@ -1,7 +1,7 @@
 "use client"
 
 import { type ChangeEvent, type DragEvent, useEffect, useMemo, useRef, useState } from "react"
-import { Download, FileArchive, FileText, Loader2, RotateCcw, UploadCloud } from "lucide-react"
+import { ChevronDown, Download, FileArchive, FileText, Loader2, RotateCcw, UploadCloud } from "lucide-react"
 import { BatchQueue } from "@/components/fault-disruptors/batch-queue"
 import { ConditionIcon } from "@/components/fault-disruptors/condition-icon"
 import { Header } from "@/components/fault-disruptors/header"
@@ -13,7 +13,8 @@ import { PanelRail } from "@/components/fault-disruptors/panel-rail"
 import { PanelShm } from "@/components/fault-disruptors/panel-shm"
 import { TechnicalDetails } from "@/components/fault-disruptors/technical-details"
 import { carCenterFraction, TrainTwin } from "@/components/fault-disruptors/train-twin"
-import { analyse, downloadCsv, downloadResultsZip } from "@/lib/fault-disruptors/api"
+import { analyse, downloadCsv, downloadResultsZip, DOWNLOAD_NAME } from "@/lib/fault-disruptors/api"
+import { downloadMergedSubsystemCsv, downloadConsolidatedFleetReport } from "@/lib/fault-disruptors/report"
 import { CONDITION_META, SUBSYSTEM_PRESENTATION, SUBSYSTEMS, idleCars, type CarState, type Subsystem } from "@/lib/fault-disruptors/data"
 import { buildLiveView } from "@/lib/fault-disruptors/live"
 import { createDashboardWorkspace, fileJobId, loadDashboardWorkspace, saveDashboardWorkspace, type AnalysisJob, type DashboardWorkspace, type SubsystemWorkspace } from "@/lib/fault-disruptors/workspace"
@@ -30,6 +31,7 @@ export default function Page() {
   const [hydrated, setHydrated] = useState(false)
   const [fileError, setFileError] = useState<string | null>(null)
   const [hoveredId, setHoveredId] = useState<number | null>(null)
+  const [csvMenuOpen, setCsvMenuOpen] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
@@ -55,6 +57,10 @@ export default function Page() {
   const isAnalyzing = workspace.jobs.some((job) => job.status === "running")
   const completed = workspace.jobs.filter((job) => job.status === "complete" && job.result)
   const downloadable = completed.filter((job) => job.result?.submission_csv)
+  const completedSubsystems = useMemo(
+    () => SUBSYSTEMS.filter((item) => dashboard.workspaces[item.id].jobs.some((job) => job.status === "complete" && job.result)),
+    [dashboard.workspaces],
+  )
 
   function commitDashboard(updater: (current: DashboardWorkspace) => DashboardWorkspace) {
     setDashboard((current) => {
@@ -71,6 +77,7 @@ export default function Page() {
   function switchSubsystem(next: Subsystem) {
     setHoveredId(null)
     setFileError(null)
+    setCsvMenuOpen(false)
     commitDashboard((current) => ({ ...current, activeSubsystem: next }))
   }
 
@@ -160,11 +167,91 @@ export default function Page() {
             <nav aria-label="Subsystem switcher" className="inline-flex overflow-x-auto rounded-lg border border-border bg-white p-0.5">
               {SUBSYSTEMS.map((item) => <button key={item.id} type="button" onClick={() => switchSubsystem(item.id)} aria-pressed={item.id === subsystem} className={`rounded-md px-3 py-2 text-sm font-semibold transition ${item.id === subsystem ? "bg-slate-900 text-white" : "text-slate-500 hover:bg-slate-50"}`}>{item.label}{dashboard.workspaces[item.id].jobs.some((job) => job.status === "complete") && <span className="ml-1 text-emerald-400">•</span>}</button>)}
             </nav>
-            {workspace.jobs.length > 0 && <div className="flex flex-wrap justify-end gap-2">
-              {downloadable.length > 1 && <button type="button" onClick={() => downloadResultsZip(subsystem, workspace.jobs.filter((job) => job.status === "complete" || job.status === "error").map((job) => ({ sourceFile: job.fileName, submissionCsv: job.result?.submission_csv ?? null, prediction: job.result?.prediction, error: job.error })))} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"><FileArchive className="size-4" />ZIP ({downloadable.length})</button>}
-              {result?.submission_csv && <button type="button" onClick={() => downloadCsv(subsystem, result.submission_csv!)} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"><Download className="size-4" />CSV</button>}
+            <div className="flex flex-wrap items-center justify-end gap-2">
+              {completedSubsystems.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => downloadConsolidatedFleetReport(dashboard)}
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-slate-900 px-3 py-2 text-sm font-semibold text-white shadow-xs transition hover:bg-slate-800 active:scale-95"
+                  title="Download complete executive maintenance report & submission CSVs for all active subsystems"
+                >
+                  <Download className="size-4 text-emerald-400" />
+                  <span>Download All ({completedSubsystems.length})</span>
+                </button>
+              )}
+              {downloadable.length > 1 && (
+                <button
+                  type="button"
+                  onClick={() => downloadResultsZip(subsystem, workspace.jobs.filter((job) => job.status === "complete" || job.status === "error").map((job) => ({ sourceFile: job.fileName, submissionCsv: job.result?.submission_csv ?? null, prediction: job.result?.prediction, error: job.error })))}
+                  className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+                  <FileArchive className="size-4" />
+                  ZIP ({downloadable.length})
+                </button>
+              )}
+              {downloadable.length > 1 ? (
+                <div className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setCsvMenuOpen((prev) => !prev)}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                    aria-haspopup="true"
+                    aria-expanded={csvMenuOpen}
+                  >
+                    <Download className="size-4" />
+                    <span>CSV</span>
+                    <ChevronDown className="size-3 text-slate-400" />
+                  </button>
+
+                  {csvMenuOpen && (
+                    <>
+                      <div className="fixed inset-0 z-30" onClick={() => setCsvMenuOpen(false)} />
+                      <div className="absolute right-0 top-full z-40 mt-1 w-64 rounded-xl border border-border bg-white p-1.5 shadow-xl ring-1 ring-black/5">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCsvMenuOpen(false)
+                            if (result?.submission_csv) downloadCsv(subsystem, result.submission_csv)
+                          }}
+                          className="flex w-full items-start gap-2.5 rounded-lg p-2 text-left transition hover:bg-slate-50"
+                        >
+                          <FileText className="mt-0.5 size-4 shrink-0 text-slate-500" />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-bold text-slate-800">Current file only</p>
+                            <p className="truncate text-[11px] text-slate-400">{activeJob?.fileName}</p>
+                          </div>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCsvMenuOpen(false)
+                            downloadMergedSubsystemCsv(subsystem, workspace.jobs)
+                          }}
+                          className="flex w-full items-start gap-2.5 rounded-lg p-2 text-left transition hover:bg-slate-50"
+                        >
+                          <Download className="mt-0.5 size-4 shrink-0 text-emerald-600" />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-bold text-slate-800">All {downloadable.length} files (Merged)</p>
+                            <p className="truncate text-[11px] text-slate-400">{DOWNLOAD_NAME[subsystem]}</p>
+                          </div>
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ) : result?.submission_csv ? (
+                <button
+                  type="button"
+                  onClick={() => downloadCsv(subsystem, result.submission_csv!)}
+                  className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+                  <Download className="size-4" />
+                  CSV
+                </button>
+              ) : null}
               {workspace.jobs.length > 0 && <button type="button" onClick={clearWorkspace} className="rounded-lg border border-border bg-white p-2.5 text-slate-500 hover:text-red-600" aria-label="Clear this subsystem"><RotateCcw className="size-4" /></button>}
-            </div>}
+            </div>
           </div>
         </div>
 
