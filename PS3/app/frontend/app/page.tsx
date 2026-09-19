@@ -173,8 +173,8 @@ export default function Page() {
         {live && <div className="mt-5"><KpiStrip items={live.kpis} /></div>}
 
         <section className="relative mt-5 rounded-xl border border-border bg-white p-3 md:p-5">
-          <div className="mb-3 flex flex-wrap items-end justify-between gap-2 px-1"><div><p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">02 Digital Twin</p><h3 className="mt-0.5 text-sm font-bold text-slate-900">{dashboard.selectedTrain} · {presentation.twinLabel}</h3></div><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-500">8-Car Consist</span></div>
-          <div className="relative overflow-x-auto pb-2"><div className="relative min-w-[720px] md:min-w-0"><TrainTwin subsystem={subsystem} cars={cars} railSide={live?.railSide ?? null} selectedId={workspace.selectedCarId} hoveredId={hoveredId} onHover={setHoveredId} onSelect={(selectedCarId) => updateWorkspace(subsystem, (current) => ({ ...current, selectedCarId }))} />{hoveredCar && (hoveredCar.condition !== "neutral" || hoveredCar.overlay) && hoveredIndex >= 0 && <HoverBubble car={hoveredCar} leftFraction={carCenterFraction(hoveredIndex, cars.length)} />}</div></div>
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-2 px-1"><div><p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">02 Digital Twin</p><h3 className="mt-0.5 text-sm font-bold text-slate-900">{dashboard.selectedTrain} · {presentation.twinLabel}</h3></div><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-500">{subsystem === "RAIL" ? "Measured Track Window" : "8-Car Consist"}</span></div>
+          <div className="relative overflow-x-auto pb-2"><div className="relative min-w-[720px] md:min-w-0"><TrainTwin subsystem={subsystem} cars={cars} railSide={live?.railSide ?? null} railDistanceM={live?.panel.kind === "rail" ? live.panel.distanceM : null} railHotspot={live?.panel.kind === "rail" ? live.panel.hotspot : null} selectedId={workspace.selectedCarId} hoveredId={hoveredId} onHover={setHoveredId} onSelect={(selectedCarId) => updateWorkspace(subsystem, (current) => ({ ...current, selectedCarId }))} />{hoveredCar && (hoveredCar.condition !== "neutral" || hoveredCar.overlay) && hoveredIndex >= 0 && <HoverBubble car={hoveredCar} leftFraction={carCenterFraction(hoveredIndex, cars.length)} />}</div></div>
           <p className="mt-1 text-center text-xs font-medium text-slate-500">{live ? presentation.twinHint : presentation.twinIdleHint}</p>
         </section>
 
@@ -188,7 +188,7 @@ export default function Page() {
           {live && <div className="mt-6 border-t border-border pt-6">
             {live.panel.kind === "acv" && <PanelAcv rows={live.panel.rows} margin={live.panel.margin} emptyCars={live.panel.emptyCars} />}
             {live.panel.kind === "door" && <PanelDoor cycles={live.panel.cycles} showcaseLocation={live.panel.showcaseLocation} />}
-            {live.panel.kind === "rail" && <PanelRail label={live.panel.label} side={live.panel.side} speedKmh={live.panel.speedKmh} speedChanges={live.panel.speedChanges} lowMotion={live.panel.lowMotion} />}
+            {live.panel.kind === "rail" && <PanelRail label={live.panel.label} side={live.panel.side} speedKmh={live.panel.speedKmh} speedChanges={live.panel.speedChanges} distanceM={live.panel.distanceM} hotspot={live.panel.hotspot} filename={live.panel.filename} lowMotion={live.panel.lowMotion} />}
             {live.panel.kind === "shm" && <PanelShm damage={live.panel.damage} condition={live.panel.condition} showcaseLocation={live.panel.showcaseLocation} />}
             <TechnicalDetails details={live.technical} />
           </div>}

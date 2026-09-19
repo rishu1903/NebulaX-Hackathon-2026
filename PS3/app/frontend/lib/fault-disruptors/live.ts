@@ -33,6 +33,13 @@ export type DoorCycle = {
   condition: Condition
 }
 
+export type RailHotspot = {
+  startM: number
+  endM: number
+  centerM: number
+  peakToMedianEnergy: number
+}
+
 export type Panel =
   | { kind: "acv"; rows: AcvRow[]; margin: number | null; emptyCars: string[] }
   | { kind: "door"; cycles: DoorCycle[]; abnormal: number; review: number; showcaseLocation: string | null }
@@ -42,6 +49,9 @@ export type Panel =
       side: "I" | "II" | null
       speedKmh: number | null
       speedChanges: number | null
+      distanceM: number | null
+      hotspot: RailHotspot | null
+      filename: string
       lowMotion: boolean
     }
   | { kind: "shm"; damage: number; condition: Condition; showcaseLocation: string | null }
@@ -311,6 +321,20 @@ function railView(result: AnalyseResult): LiveView {
       ? result.summary.speed_transitions
       : null
   const lowMotion = Boolean(result.summary?.low_transition_override)
+  const distanceM = changes === null ? null : changes * 0.014835
+  const rawHotspot = result.summary?.hotspot
+  const hotspot: RailHotspot | null =
+    rawHotspot &&
+    [rawHotspot.start_m, rawHotspot.end_m, rawHotspot.center_m, rawHotspot.peak_to_median_energy].every(
+      (value) => typeof value === "number" && Number.isFinite(value),
+    )
+      ? {
+          startM: rawHotspot.start_m,
+          endM: rawHotspot.end_m,
+          centerM: rawHotspot.center_m,
+          peakToMedianEnergy: rawHotspot.peak_to_median_energy,
+        }
+      : null
 
   return {
     headline: "Rail corrugation classification",
@@ -327,9 +351,9 @@ function railView(result: AnalyseResult): LiveView {
     })),
     kpis: [
       {
-        label: "Classification",
-        value: damaged ? `Side ${side}` : "Normal",
-        condition: damaged ? "issue" : "normal",
+        label: "Traversed Distance",
+        value: distanceM === null ? "—" : `${distanceM.toFixed(2)} m`,
+        condition: "neutral",
       },
       {
         label: "Mean Speed",
@@ -337,14 +361,14 @@ function railView(result: AnalyseResult): LiveView {
         condition: "neutral",
       },
       {
-        label: "Speed Transitions",
-        value: changes === null ? "—" : String(changes),
-        condition: "neutral",
+        label: "Affected Rail",
+        value: damaged ? `Side ${side} Corrugation` : "Normal",
+        condition: damaged ? "issue" : "normal",
       },
       {
-        label: "Low-Motion Rule",
-        value: lowMotion ? "Applied" : "Not Applied",
-        condition: lowMotion ? "review" : "normal",
+        label: "Estimated Hotspot",
+        value: hotspot ? `${hotspot.startM.toFixed(2)}–${hotspot.endM.toFixed(2)} m` : "None",
+        condition: hotspot ? "issue" : "normal",
       },
     ],
     railSide: side,
@@ -354,6 +378,9 @@ function railView(result: AnalyseResult): LiveView {
       side,
       speedKmh: speed,
       speedChanges: changes,
+      distanceM,
+      hotspot,
+      filename: result.filename || "Recording",
       lowMotion,
     },
     ...base(result),
@@ -380,16 +407,6 @@ function shmView(result: AnalyseResult): LiveView {
         ? "review"
         : "normal"
 
-  const displayBand = !valid
-    ? "Unavailable"
-    : damage >= 1
-      ? "At / Above Reference"
-      : damage >= SHM_BANDS.issue
-        ? "Near Reference"
-        : damage >= SHM_BANDS.review
-          ? "Elevated"
-          : "Lower"
-
   return {
     headline: "Structural fatigue damage prediction",
     verdict: {
@@ -413,19 +430,19 @@ function shmView(result: AnalyseResult): LiveView {
         condition,
       },
       {
-        label: "Task",
-        value: "Regression",
-        condition: "neutral",
-      },
-      {
-        label: "Reference",
-        value: "D = 1.0",
-        condition: "neutral",
-      },
-      {
-        label: "Display Band",
-        value: displayBand,
+        label: "Reference Used",
+        value: valid ? `${Math.max(0, damage * 100).toFixed(1)}%` : "—",
         condition,
+      },
+      {
+        label: "Model Scope",
+        value: "Full Record",
+        condition: "neutral",
+      },
+      {
+        label: "Showcase Context",
+        value: condition === "review" || condition === "issue" ? "Car 04 · Centre" : "None",
+        condition: condition === "review" || condition === "issue" ? "review" : "neutral",
       },
     ],
     railSide: null,

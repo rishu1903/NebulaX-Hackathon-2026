@@ -4,6 +4,11 @@
 
 Phases 1–3 are implemented in the frontend. The production Next.js build and strict TypeScript check pass, and the FastAPI regression suite reports 21 passing tests. Live upload and Cloud Run verification will be completed after the next Git push and deployment.
 
+Rail and SHM received a second layout pass after live review:
+
+- Rail now converts wheel-pulse transitions into travelled metres, uses that distance on the track ribbon, and groups model verdict, measured context and inspection guidance without repeating the top KPI strip.
+- SHM now presents one compact damage gauge, separates model scope from the showcase asset context, collapses the calculation method, and renders front, centre, rear and underframe zones on the showcase carriage.
+
 ## Outcome
 
 Turn the current single-file dashboard into a persistent, batch-capable Train Digital Twin that keeps each subsystem's results when users switch views, shows all eight carriages clearly, and separates model findings from showcase-only asset locations.

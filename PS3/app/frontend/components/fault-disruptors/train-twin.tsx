@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { CONDITION_META, type CarState, type Subsystem } from "@/lib/fault-disruptors/data"
+import type { RailHotspot } from "@/lib/fault-disruptors/live"
 
 const MARGIN_X = 80
 const CAR_W = 220
@@ -17,7 +18,7 @@ const STRIPE_Y = 156
 const STRIPE_H = 16
 const SKIRT_Y = 190
 const WHEEL_Y = 226
-const VIEW_H = 320
+const VIEW_H = 300
 
 function viewWidth(total: number) {
   return MARGIN_X * 2 + total * CAR_W + (total - 1) * GAP
@@ -31,13 +32,15 @@ type Props = {
   subsystem: Subsystem
   cars: CarState[]
   railSide: "I" | "II" | null
+  railDistanceM?: number | null
+  railHotspot?: RailHotspot | null
   selectedId: number | null
   hoveredId: number | null
   onHover: (id: number | null) => void
   onSelect: (id: number | null) => void
 }
 
-export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, onHover, onSelect }: Props) {
+export function TrainTwin({ subsystem, cars, railSide, railDistanceM, railHotspot, selectedId, hoveredId, onHover, onSelect }: Props) {
   const total = cars.length
   const VIEW_W = viewWidth(total)
   const trackX = MARGIN_X - 40
@@ -46,12 +49,31 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
   const [showTrainContext, setShowTrainContext] = useState(false)
   const isRailMode = subsystem === "RAIL"
   const inspectRailBed = isRailMode && !showTrainContext
+  const viewHeight = inspectRailBed ? 260 : VIEW_H
   const [scrubberX, setScrubberX] = useState<number | null>(null)
 
   const railTopActive = railSide === "I"
   const railBottomActive = railSide === "II"
   const scrubberPercent =
     scrubberX === null ? 0 : Math.max(0, Math.min(100, ((scrubberX - trackX) / trackW) * 100))
+  const hasHotspot = Boolean(railHotspot && railDistanceM && railDistanceM > 0)
+  const hotspotStartPercent = hasHotspot
+    ? Math.max(0, Math.min(100, (railHotspot!.startM / railDistanceM!) * 100))
+    : 0
+  const hotspotEndPercent = hasHotspot
+    ? Math.max(hotspotStartPercent, Math.min(100, (railHotspot!.endM / railDistanceM!) * 100))
+    : 100
+  const hotspotCenterX = trackX + trackW * ((hotspotStartPercent + hotspotEndPercent) / 200)
+  const rawHotspotWidth = trackW * ((hotspotEndPercent - hotspotStartPercent) / 100)
+  const hotspotWidth = hasHotspot ? Math.min(trackW, Math.max(28, rawHotspotWidth)) : trackW
+  const hotspotX = Math.max(trackX, Math.min(trackX + trackW - hotspotWidth, hotspotCenterX - hotspotWidth / 2))
+  const scrubberDistanceM = railDistanceM === null || railDistanceM === undefined
+    ? null
+    : railDistanceM * (scrubberPercent / 100)
+  const scrubberInHotspot = Boolean(
+    railHotspot && scrubberDistanceM !== null &&
+    scrubberDistanceM >= railHotspot.startM && scrubberDistanceM <= railHotspot.endM,
+  )
 
   return (
     <div className="relative w-full">
@@ -69,7 +91,7 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
             <span className="font-bold text-slate-800">Recorded Track Window</span>
 
             <span className="rounded-full bg-white px-2.5 py-0.5 text-[11px] font-semibold text-slate-600 shadow-xs">
-              Side I / Side II classification
+              {railDistanceM === null || railDistanceM === undefined ? "Side I / Side II classification" : `${railDistanceM.toFixed(2)} m measured window`}
             </span>
           </div>
 
@@ -90,7 +112,7 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
       )}
 
       <svg
-        viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
+        viewBox={`0 0 ${VIEW_W} ${viewHeight}`}
         className="h-auto w-full max-w-none select-none"
         role="img"
         aria-label={`Train digital twin showing ${subsystem} subsystem status`}
@@ -161,7 +183,9 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
                 fontWeight={700}
                 fill="#ffffff"
               >
-                {`Model classification: Side ${railSide} corrugation`}
+                {railHotspot
+                  ? `Side ${railSide} hotspot · ${railHotspot.startM.toFixed(2)}–${railHotspot.endM.toFixed(2)} m`
+                  : `Model classification: Side ${railSide} corrugation`}
               </text>
             </g>
           )}
@@ -222,8 +246,8 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
 
           {railTopActive && (
             <RailHighlight
-              x={trackX}
-              width={trackW}
+              x={hotspotX}
+              width={hotspotWidth}
               y={inspectRailBed ? 122 : 228}
               large={inspectRailBed}
             />
@@ -231,8 +255,8 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
 
           {railBottomActive && (
             <RailHighlight
-              x={trackX}
-              width={trackW}
+              x={hotspotX}
+              width={hotspotWidth}
               y={inspectRailBed ? 176 : 242}
               large={inspectRailBed}
             />
@@ -289,7 +313,9 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
                       fontWeight={600}
                       fill="#475569"
                     >
-                      {percent}%
+                      {railDistanceM === null || railDistanceM === undefined
+                        ? `${percent}%`
+                        : `${(railDistanceM * percent / 100).toFixed(percent === 0 ? 1 : 2)} m`}
                     </text>
                   </g>
                 )
@@ -328,7 +354,9 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
                     fontWeight={700}
                     fill="#ffffff"
                   >
-                    {`Recording position: ${scrubberPercent.toFixed(0)}%`}
+                    {scrubberDistanceM === null
+                      ? `Recording position: ${scrubberPercent.toFixed(0)}%`
+                      : `Recording position: ${scrubberDistanceM.toFixed(2)} m`}
                   </text>
 
                   <text
@@ -337,10 +365,14 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
                     textAnchor="middle"
                     fontSize="9.5"
                     fontWeight={600}
-                    fill={railSide ? "#fca5a5" : "#cbd5e1"}
+                    fill={scrubberInHotspot ? "#fca5a5" : "#cbd5e1"}
                   >
-                    {railSide
-                      ? `Side ${railSide} is classified for the full uploaded window`
+                    {railSide && railHotspot
+                      ? scrubberInHotspot
+                        ? `Inside estimated Side ${railSide} hotspot`
+                        : `Outside estimated hotspot`
+                      : railSide
+                        ? `Side ${railSide} is classified for the uploaded window`
                       : "No rail side is highlighted in this view"}
                   </text>
                 </g>
@@ -592,16 +624,20 @@ function Car({
         />
 
         {car.overlay?.kind === "structure" && overlayMeta && (
-          <rect
-            x={x + CAR_W * 0.36}
-            y={BODY_Y + 8}
-            width={CAR_W * 0.28}
-            height={BODY_H - 20}
-            rx={10}
-            fill={overlayMeta.soft}
-            stroke={overlayMeta.color}
-            strokeWidth={3}
-          />
+          <g>
+            <rect x={x + 18} y={BODY_Y + 8} width={CAR_W - 36} height={BODY_H - 28} rx={9} fill="#ffffff" fillOpacity={0.34} stroke="#94a3b8" strokeDasharray="4 3" />
+            <line x1={x + 76} y1={BODY_Y + 8} x2={x + 76} y2={BODY_BOTTOM - 20} stroke="#94a3b8" strokeDasharray="3 3" />
+            <line x1={x + 144} y1={BODY_Y + 8} x2={x + 144} y2={BODY_BOTTOM - 20} stroke="#94a3b8" strokeDasharray="3 3" />
+            <rect x={x + 76} y={BODY_Y + 8} width={68} height={BODY_H - 28} fill={overlayMeta.soft} stroke={overlayMeta.color} strokeWidth={3} />
+            <rect x={x + 22} y={BODY_Y + 12} width={48} height={13} rx={3} fill="#ffffff" fillOpacity={0.82} />
+            <text x={x + 46} y={BODY_Y + 21.5} textAnchor="middle" fontSize="7" fontWeight={800} fill="#64748b">FRONT</text>
+            <rect x={x + 84} y={BODY_Y + 12} width={52} height={13} rx={3} fill={overlayMeta.color} />
+            <text x={x + 110} y={BODY_Y + 21.5} textAnchor="middle" fontSize="7" fontWeight={800} fill="#ffffff">CENTRE</text>
+            <rect x={x + 150} y={BODY_Y + 12} width={46} height={13} rx={3} fill="#ffffff" fillOpacity={0.82} />
+            <text x={x + 173} y={BODY_Y + 21.5} textAnchor="middle" fontSize="7" fontWeight={800} fill="#64748b">REAR</text>
+            <rect x={x + 24} y={174} width={CAR_W - 48} height={13} rx={3} fill="#ffffff" fillOpacity={0.82} stroke="#94a3b8" strokeDasharray="3 2" />
+            <text x={x + CAR_W / 2} y={183} textAnchor="middle" fontSize="7" fontWeight={800} fill="#64748b">UNDERFRAME</text>
+          </g>
         )}
 
         <rect
@@ -625,7 +661,7 @@ function Car({
         />
       </g>
 
-      {[0, 1, 2].map((g) => {
+      {car.overlay?.kind !== "structure" && [0, 1, 2].map((g) => {
         const cx = (doorCenters[g] + doorCenters[g + 1]) / 2
 
         return (
@@ -653,7 +689,7 @@ function Car({
         )
       })}
 
-      {doorCenters.map((cx, d) => {
+      {car.overlay?.kind !== "structure" && doorCenters.map((cx, d) => {
         const highlighted = car.overlay?.kind === "door" && car.overlay.componentIndex === d + 1
         return (
         <g key={d}>

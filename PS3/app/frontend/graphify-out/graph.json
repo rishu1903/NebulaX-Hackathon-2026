@@ -9,7 +9,7 @@
       "source_file": "next-env.d.ts",
       "source_location": "L1",
       "id": "next_env_d_ts",
-      "community": 14,
+      "community": 12,
       "norm_label": "next-env.d.ts"
     },
     {
@@ -18,7 +18,7 @@
       "source_file": "next.config.mjs",
       "source_location": "L1",
       "id": "next_config_mjs",
-      "community": 11,
+      "community": 9,
       "norm_label": "next.config.mjs"
     },
     {
@@ -27,7 +27,7 @@
       "source_file": "next.config.mjs",
       "source_location": "L2",
       "id": "frontend_next_config_nextconfig",
-      "community": 11,
+      "community": 9,
       "norm_label": "nextconfig"
     },
     {
@@ -36,7 +36,7 @@
       "source_file": "postcss.config.mjs",
       "source_location": "L1",
       "id": "postcss_config_mjs",
-      "community": 12,
+      "community": 10,
       "norm_label": "postcss.config.mjs"
     },
     {
@@ -45,7 +45,7 @@
       "source_file": "postcss.config.mjs",
       "source_location": "L2",
       "id": "frontend_postcss_config_config",
-      "community": 12,
+      "community": 10,
       "norm_label": "config"
     },
     {
@@ -54,7 +54,7 @@
       "source_file": "app/layout.tsx",
       "source_location": "L1",
       "id": "app_layout_tsx",
-      "community": 10,
+      "community": 8,
       "norm_label": "layout.tsx"
     },
     {
@@ -63,7 +63,7 @@
       "source_file": "app/layout.tsx",
       "source_location": "L4",
       "id": "app_layout_metadata",
-      "community": 10,
+      "community": 8,
       "norm_label": "metadata"
     },
     {
@@ -72,7 +72,7 @@
       "source_file": "app/layout.tsx",
       "source_location": "L27",
       "id": "app_layout_viewport",
-      "community": 10,
+      "community": 8,
       "norm_label": "viewport"
     },
     {
@@ -81,7 +81,7 @@
       "source_file": "app/layout.tsx",
       "source_location": "L32",
       "id": "app_layout_rootlayout",
-      "community": 10,
+      "community": 8,
       "norm_label": "rootlayout()"
     },
     {
@@ -90,7 +90,7 @@
       "source_file": "app/page.tsx",
       "source_location": "L1",
       "id": "app_page_tsx",
-      "community": 7,
+      "community": 0,
       "norm_label": "page.tsx"
     },
     {
@@ -99,7 +99,7 @@
       "source_file": "app/page.tsx",
       "source_location": "L21",
       "id": "app_page_subsystem_upload",
-      "community": 7,
+      "community": 0,
       "norm_label": "subsystem_upload"
     },
     {
@@ -108,7 +108,7 @@
       "source_file": "app/page.tsx",
       "source_location": "L28",
       "id": "app_page_page",
-      "community": 3,
+      "community": 4,
       "norm_label": "page()"
     },
     {
@@ -117,7 +117,7 @@
       "source_file": "app/page.tsx",
       "source_location": "L201",
       "id": "app_page_emptyupload",
-      "community": 7,
+      "community": 0,
       "norm_label": "emptyupload()"
     },
     {
@@ -126,7 +126,7 @@
       "source_file": "components/fault-disruptors/batch-queue.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_batch_queue_tsx",
-      "community": 7,
+      "community": 0,
       "norm_label": "batch-queue.tsx"
     },
     {
@@ -135,7 +135,7 @@
       "source_file": "components/fault-disruptors/batch-queue.tsx",
       "source_location": "L6",
       "id": "fault_disruptors_batch_queue_batchqueue",
-      "community": 7,
+      "community": 0,
       "norm_label": "batchqueue()"
     },
     {
@@ -144,7 +144,7 @@
       "source_file": "components/fault-disruptors/condition-icon.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_condition_icon_tsx",
-      "community": 4,
+      "community": 5,
       "norm_label": "condition-icon.tsx"
     },
     {
@@ -153,7 +153,7 @@
       "source_file": "components/fault-disruptors/condition-icon.tsx",
       "source_location": "L6",
       "id": "fault_disruptors_condition_icon_conditionicon",
-      "community": 4,
+      "community": 5,
       "norm_label": "conditionicon()"
     },
     {
@@ -162,7 +162,7 @@
       "source_file": "components/fault-disruptors/header.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_header_tsx",
-      "community": 2,
+      "community": 3,
       "norm_label": "header.tsx"
     },
     {
@@ -171,7 +171,7 @@
       "source_file": "components/fault-disruptors/header.tsx",
       "source_location": "L7",
       "id": "fault_disruptors_header_header",
-      "community": 2,
+      "community": 3,
       "norm_label": "header()"
     },
     {
@@ -180,7 +180,7 @@
       "source_file": "components/fault-disruptors/hover-bubble.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_hover_bubble_tsx",
-      "community": 4,
+      "community": 5,
       "norm_label": "hover-bubble.tsx"
     },
     {
@@ -189,7 +189,7 @@
       "source_file": "components/fault-disruptors/hover-bubble.tsx",
       "source_location": "L6",
       "id": "fault_disruptors_hover_bubble_hoverbubble",
-      "community": 4,
+      "community": 5,
       "norm_label": "hoverbubble()"
     },
     {
@@ -198,7 +198,7 @@
       "source_file": "components/fault-disruptors/kpi-strip.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_kpi_strip_tsx",
-      "community": 4,
+      "community": 5,
       "norm_label": "kpi-strip.tsx"
     },
     {
@@ -207,7 +207,7 @@
       "source_file": "components/fault-disruptors/kpi-strip.tsx",
       "source_location": "L6",
       "id": "fault_disruptors_kpi_strip_kpi",
-      "community": 4,
+      "community": 5,
       "norm_label": "kpi"
     },
     {
@@ -216,7 +216,7 @@
       "source_file": "components/fault-disruptors/kpi-strip.tsx",
       "source_location": "L8",
       "id": "fault_disruptors_kpi_strip_kpistrip",
-      "community": 4,
+      "community": 5,
       "norm_label": "kpistrip()"
     },
     {
@@ -252,7 +252,7 @@
       "source_file": "components/fault-disruptors/panel-door.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_panel_door_tsx",
-      "community": 8,
+      "community": 6,
       "norm_label": "panel-door.tsx"
     },
     {
@@ -261,7 +261,7 @@
       "source_file": "components/fault-disruptors/panel-door.tsx",
       "source_location": "L9",
       "id": "fault_disruptors_panel_door_flag_labels",
-      "community": 8,
+      "community": 6,
       "norm_label": "flag_labels"
     },
     {
@@ -270,7 +270,7 @@
       "source_file": "components/fault-disruptors/panel-door.tsx",
       "source_location": "L18",
       "id": "fault_disruptors_panel_door_paneldoor",
-      "community": 8,
+      "community": 6,
       "norm_label": "paneldoor()"
     },
     {
@@ -279,7 +279,7 @@
       "source_file": "components/fault-disruptors/panel-door.tsx",
       "source_location": "L202",
       "id": "fault_disruptors_panel_door_selectedcycle",
-      "community": 8,
+      "community": 6,
       "norm_label": "selectedcycle()"
     },
     {
@@ -288,7 +288,7 @@
       "source_file": "components/fault-disruptors/panel-door.tsx",
       "source_location": "L329",
       "id": "fault_disruptors_panel_door_summarycard",
-      "community": 8,
+      "community": 6,
       "norm_label": "summarycard()"
     },
     {
@@ -297,7 +297,7 @@
       "source_file": "components/fault-disruptors/panel-door.tsx",
       "source_location": "L356",
       "id": "fault_disruptors_panel_door_legend",
-      "community": 8,
+      "community": 6,
       "norm_label": "legend()"
     },
     {
@@ -306,7 +306,7 @@
       "source_file": "components/fault-disruptors/panel-door.tsx",
       "source_location": "L374",
       "id": "fault_disruptors_panel_door_humanizeflag",
-      "community": 8,
+      "community": 6,
       "norm_label": "humanizeflag()"
     },
     {
@@ -315,7 +315,7 @@
       "source_file": "components/fault-disruptors/panel-door.tsx",
       "source_location": "L380",
       "id": "fault_disruptors_panel_door_formatmetric",
-      "community": 8,
+      "community": 6,
       "norm_label": "formatmetric()"
     },
     {
@@ -337,22 +337,13 @@
       "norm_label": "panelrail()"
     },
     {
-      "label": "RailSideRow()",
+      "label": "RailSideCard()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/panel-rail.tsx",
-      "source_location": "L154",
-      "id": "fault_disruptors_panel_rail_railsiderow",
+      "source_location": "L98",
+      "id": "fault_disruptors_panel_rail_railsidecard",
       "community": 1,
-      "norm_label": "railsiderow()"
-    },
-    {
-      "label": "MetricCard()",
-      "file_type": "code",
-      "source_file": "components/fault-disruptors/panel-rail.tsx",
-      "source_location": "L185",
-      "id": "fault_disruptors_panel_rail_metriccard",
-      "community": 1,
-      "norm_label": "metriccard()"
+      "norm_label": "railsidecard()"
     },
     {
       "label": "panel-shm.tsx",
@@ -376,7 +367,7 @@
       "label": "MethodStep()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/panel-shm.tsx",
-      "source_location": "L197",
+      "source_location": "L96",
       "id": "fault_disruptors_panel_shm_methodstep",
       "community": 1,
       "norm_label": "methodstep()"
@@ -385,10 +376,19 @@
       "label": "damageBandLabel()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/panel-shm.tsx",
-      "source_location": "L222",
+      "source_location": "L100",
       "id": "fault_disruptors_panel_shm_damagebandlabel",
       "community": 1,
       "norm_label": "damagebandlabel()"
+    },
+    {
+      "label": "damageBandSummary()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L107",
+      "id": "fault_disruptors_panel_shm_damagebandsummary",
+      "community": 1,
+      "norm_label": "damagebandsummary()"
     },
     {
       "label": "technical-details.tsx",
@@ -396,7 +396,7 @@
       "source_file": "components/fault-disruptors/technical-details.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_technical_details_tsx",
-      "community": 7,
+      "community": 0,
       "norm_label": "technical-details.tsx"
     },
     {
@@ -405,7 +405,7 @@
       "source_file": "components/fault-disruptors/technical-details.tsx",
       "source_location": "L6",
       "id": "fault_disruptors_technical_details_technicaldetails",
-      "community": 7,
+      "community": 0,
       "norm_label": "technicaldetails()"
     },
     {
@@ -414,7 +414,7 @@
       "source_file": "components/fault-disruptors/train-selector.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_train_selector_tsx",
-      "community": 2,
+      "community": 3,
       "norm_label": "train-selector.tsx"
     },
     {
@@ -423,7 +423,7 @@
       "source_file": "components/fault-disruptors/train-selector.tsx",
       "source_location": "L6",
       "id": "fault_disruptors_train_selector_trainselector",
-      "community": 2,
+      "community": 3,
       "norm_label": "trainselector()"
     },
     {
@@ -432,7 +432,7 @@
       "source_file": "components/fault-disruptors/train-twin.tsx",
       "source_location": "L1",
       "id": "components_fault_disruptors_train_twin_tsx",
-      "community": 3,
+      "community": 4,
       "norm_label": "train-twin.tsx"
     },
     {
@@ -441,7 +441,7 @@
       "source_file": "components/fault-disruptors/train-twin.tsx",
       "source_location": "L22",
       "id": "fault_disruptors_train_twin_viewwidth",
-      "community": 3,
+      "community": 4,
       "norm_label": "viewwidth()"
     },
     {
@@ -450,7 +450,7 @@
       "source_file": "components/fault-disruptors/train-twin.tsx",
       "source_location": "L26",
       "id": "fault_disruptors_train_twin_carx",
-      "community": 3,
+      "community": 4,
       "norm_label": "carx()"
     },
     {
@@ -459,61 +459,61 @@
       "source_file": "components/fault-disruptors/train-twin.tsx",
       "source_location": "L30",
       "id": "fault_disruptors_train_twin_props",
-      "community": 3,
+      "community": 4,
       "norm_label": "props"
     },
     {
       "label": "TrainTwin()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/train-twin.tsx",
-      "source_location": "L40",
+      "source_location": "L41",
       "id": "fault_disruptors_train_twin_traintwin",
-      "community": 3,
+      "community": 4,
       "norm_label": "traintwin()"
     },
     {
       "label": "RailHighlight()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/train-twin.tsx",
-      "source_location": "L393",
+      "source_location": "L397",
       "id": "fault_disruptors_train_twin_railhighlight",
-      "community": 3,
+      "community": 4,
       "norm_label": "railhighlight()"
     },
     {
       "label": "RailLabel()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/train-twin.tsx",
-      "source_location": "L431",
+      "source_location": "L435",
       "id": "fault_disruptors_train_twin_raillabel",
-      "community": 3,
+      "community": 4,
       "norm_label": "raillabel()"
     },
     {
       "label": "Car()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/train-twin.tsx",
-      "source_location": "L468",
+      "source_location": "L472",
       "id": "fault_disruptors_train_twin_car",
-      "community": 3,
+      "community": 4,
       "norm_label": "car()"
     },
     {
       "label": "carCenterFraction()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/train-twin.tsx",
-      "source_location": "L776",
+      "source_location": "L784",
       "id": "fault_disruptors_train_twin_carcenterfraction",
-      "community": 3,
+      "community": 4,
       "norm_label": "carcenterfraction()"
     },
     {
       "label": "trainStageWidth()",
       "file_type": "code",
       "source_file": "components/fault-disruptors/train-twin.tsx",
-      "source_location": "L780",
+      "source_location": "L788",
       "id": "fault_disruptors_train_twin_trainstagewidth",
-      "community": 3,
+      "community": 4,
       "norm_label": "trainstagewidth()"
     },
     {
@@ -522,7 +522,7 @@
       "source_file": "components/ui/button.tsx",
       "source_location": "L1",
       "id": "components_ui_button_tsx",
-      "community": 9,
+      "community": 7,
       "norm_label": "button.tsx"
     },
     {
@@ -531,7 +531,7 @@
       "source_file": "components/ui/button.tsx",
       "source_location": "L6",
       "id": "ui_button_buttonvariants",
-      "community": 9,
+      "community": 7,
       "norm_label": "buttonvariants"
     },
     {
@@ -540,7 +540,7 @@
       "source_file": "components/ui/button.tsx",
       "source_location": "L43",
       "id": "ui_button_button",
-      "community": 9,
+      "community": 7,
       "norm_label": "button()"
     },
     {
@@ -549,7 +549,7 @@
       "source_file": "lib/utils.ts",
       "source_location": "L1",
       "id": "lib_utils_ts",
-      "community": 9,
+      "community": 7,
       "norm_label": "utils.ts"
     },
     {
@@ -558,7 +558,7 @@
       "source_file": "lib/utils.ts",
       "source_location": "L4",
       "id": "lib_utils_cn",
-      "community": 9,
+      "community": 7,
       "norm_label": "cn()"
     },
     {
@@ -567,7 +567,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L1",
       "id": "lib_fault_disruptors_api_ts",
-      "community": 5,
+      "community": 0,
       "norm_label": "api.ts"
     },
     {
@@ -576,7 +576,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L12",
       "id": "fault_disruptors_api_route",
-      "community": 5,
+      "community": 0,
       "norm_label": "route"
     },
     {
@@ -585,7 +585,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L15",
       "id": "fault_disruptors_api_download_name",
-      "community": 5,
+      "community": 0,
       "norm_label": "download_name"
     },
     {
@@ -594,7 +594,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L23",
       "id": "fault_disruptors_api_analyseresult",
-      "community": 6,
+      "community": 0,
       "norm_label": "analyseresult"
     },
     {
@@ -603,7 +603,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L37",
       "id": "fault_disruptors_api_apierror",
-      "community": 5,
+      "community": 0,
       "norm_label": "apierror"
     },
     {
@@ -612,7 +612,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L39",
       "id": "fault_disruptors_api_analyse",
-      "community": 5,
+      "community": 0,
       "norm_label": "analyse()"
     },
     {
@@ -621,7 +621,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L71",
       "id": "fault_disruptors_api_downloadcsv",
-      "community": 5,
+      "community": 0,
       "norm_label": "downloadcsv()"
     },
     {
@@ -630,7 +630,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L82",
       "id": "fault_disruptors_api_zipprediction",
-      "community": 5,
+      "community": 0,
       "norm_label": "zipprediction"
     },
     {
@@ -639,7 +639,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L89",
       "id": "fault_disruptors_api_safestem",
-      "community": 5,
+      "community": 0,
       "norm_label": "safestem()"
     },
     {
@@ -648,7 +648,7 @@
       "source_file": "lib/fault-disruptors/api.ts",
       "source_location": "L94",
       "id": "fault_disruptors_api_downloadresultszip",
-      "community": 5,
+      "community": 0,
       "norm_label": "downloadresultszip()"
     },
     {
@@ -657,7 +657,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L1",
       "id": "lib_fault_disruptors_data_ts",
-      "community": 2,
+      "community": 3,
       "norm_label": "data.ts"
     },
     {
@@ -666,7 +666,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L1",
       "id": "fault_disruptors_data_subsystem",
-      "community": 5,
+      "community": 4,
       "norm_label": "subsystem"
     },
     {
@@ -675,7 +675,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L3",
       "id": "fault_disruptors_data_condition",
-      "community": 4,
+      "community": 1,
       "norm_label": "condition"
     },
     {
@@ -684,7 +684,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L5",
       "id": "fault_disruptors_data_condition_meta",
-      "community": 4,
+      "community": 5,
       "norm_label": "condition_meta"
     },
     {
@@ -693,7 +693,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L15",
       "id": "fault_disruptors_data_subsystems",
-      "community": 2,
+      "community": 3,
       "norm_label": "subsystems"
     },
     {
@@ -702,7 +702,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L22",
       "id": "fault_disruptors_data_subsystempresentation",
-      "community": 2,
+      "community": 3,
       "norm_label": "subsystempresentation"
     },
     {
@@ -711,7 +711,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L34",
       "id": "fault_disruptors_data_subsystem_presentation",
-      "community": 2,
+      "community": 3,
       "norm_label": "subsystem_presentation"
     },
     {
@@ -720,7 +720,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L84",
       "id": "fault_disruptors_data_carstate",
-      "community": 4,
+      "community": 5,
       "norm_label": "carstate"
     },
     {
@@ -729,7 +729,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L93",
       "id": "fault_disruptors_data_componentoverlay",
-      "community": 2,
+      "community": 3,
       "norm_label": "componentoverlay"
     },
     {
@@ -738,7 +738,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L102",
       "id": "fault_disruptors_data_demo_trains",
-      "community": 2,
+      "community": 3,
       "norm_label": "demo_trains"
     },
     {
@@ -747,7 +747,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L103",
       "id": "fault_disruptors_data_demotrain",
-      "community": 2,
+      "community": 3,
       "norm_label": "demotrain"
     },
     {
@@ -765,7 +765,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L108",
       "id": "fault_disruptors_data_idlecars",
-      "community": 0,
+      "community": 2,
       "norm_label": "idlecars()"
     },
     {
@@ -774,7 +774,7 @@
       "source_file": "lib/fault-disruptors/data.ts",
       "source_location": "L118",
       "id": "fault_disruptors_data_subsystem_headlines",
-      "community": 2,
+      "community": 3,
       "norm_label": "subsystem_headlines"
     },
     {
@@ -783,7 +783,7 @@
       "source_file": "lib/fault-disruptors/live.ts",
       "source_location": "L1",
       "id": "lib_fault_disruptors_live_ts",
-      "community": 0,
+      "community": 2,
       "norm_label": "live.ts"
     },
     {
@@ -801,7 +801,7 @@
       "source_file": "lib/fault-disruptors/live.ts",
       "source_location": "L20",
       "id": "fault_disruptors_live_doorcycle",
-      "community": 8,
+      "community": 6,
       "norm_label": "doorcycle"
     },
     {
@@ -810,122 +810,122 @@
       "source_file": "lib/fault-disruptors/live.ts",
       "source_location": "L36",
       "id": "fault_disruptors_live_panel",
-      "community": 0,
+      "community": 2,
       "norm_label": "panel"
     },
     {
       "label": "LiveView",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L49",
+      "source_location": "L51",
       "id": "fault_disruptors_live_liveview",
-      "community": 0,
+      "community": 2,
       "norm_label": "liveview"
     },
     {
       "label": "buildLiveView()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L60",
+      "source_location": "L62",
       "id": "fault_disruptors_live_buildliveview",
-      "community": 0,
+      "community": 2,
       "norm_label": "buildliveview()"
     },
     {
       "label": "base()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L73",
+      "source_location": "L75",
       "id": "fault_disruptors_live_base",
-      "community": 0,
+      "community": 2,
       "norm_label": "base()"
     },
     {
       "label": "ACV_RISK",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L80",
+      "source_location": "L82",
       "id": "fault_disruptors_live_acv_risk",
-      "community": 0,
+      "community": 2,
       "norm_label": "acv_risk"
     },
     {
       "label": "ACV_NOTE",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L87",
+      "source_location": "L89",
       "id": "fault_disruptors_live_acv_note",
-      "community": 0,
+      "community": 2,
       "norm_label": "acv_note"
     },
     {
       "label": "acvView()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L94",
+      "source_location": "L96",
       "id": "fault_disruptors_live_acvview",
-      "community": 0,
+      "community": 2,
       "norm_label": "acvview()"
     },
     {
       "label": "MONTHS",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L196",
+      "source_location": "L198",
       "id": "fault_disruptors_live_months",
-      "community": 0,
+      "community": 2,
       "norm_label": "months"
     },
     {
       "label": "formatNativeTime()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L199",
+      "source_location": "L201",
       "id": "fault_disruptors_live_formatnativetime",
-      "community": 0,
+      "community": 2,
       "norm_label": "formatnativetime()"
     },
     {
       "label": "nativeTimestampMs()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L210",
+      "source_location": "L212",
       "id": "fault_disruptors_live_nativetimestampms",
-      "community": 0,
+      "community": 2,
       "norm_label": "nativetimestampms()"
     },
     {
       "label": "cycleCount()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L217",
+      "source_location": "L219",
       "id": "fault_disruptors_live_cyclecount",
-      "community": 0,
+      "community": 2,
       "norm_label": "cyclecount()"
     },
     {
       "label": "doorView()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L219",
+      "source_location": "L221",
       "id": "fault_disruptors_live_doorview",
-      "community": 0,
+      "community": 2,
       "norm_label": "doorview()"
     },
     {
       "label": "railView()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L304",
+      "source_location": "L306",
       "id": "fault_disruptors_live_railview",
-      "community": 0,
+      "community": 2,
       "norm_label": "railview()"
     },
     {
       "label": "SHM_BANDS",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L369",
+      "source_location": "L374",
       "id": "fault_disruptors_live_shm_bands",
       "community": 1,
       "norm_label": "shm_bands"
@@ -934,9 +934,9 @@
       "label": "shmView()",
       "file_type": "code",
       "source_file": "lib/fault-disruptors/live.ts",
-      "source_location": "L371",
+      "source_location": "L376",
       "id": "fault_disruptors_live_shmview",
-      "community": 0,
+      "community": 2,
       "norm_label": "shmview()"
     },
     {
@@ -945,7 +945,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L1",
       "id": "lib_fault_disruptors_workspace_ts",
-      "community": 6,
+      "community": 0,
       "norm_label": "workspace.ts"
     },
     {
@@ -954,7 +954,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L4",
       "id": "fault_disruptors_workspace_jobstatus",
-      "community": 6,
+      "community": 0,
       "norm_label": "jobstatus"
     },
     {
@@ -963,7 +963,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L6",
       "id": "fault_disruptors_workspace_analysisjob",
-      "community": 7,
+      "community": 0,
       "norm_label": "analysisjob"
     },
     {
@@ -972,7 +972,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L17",
       "id": "fault_disruptors_workspace_subsystemworkspace",
-      "community": 6,
+      "community": 0,
       "norm_label": "subsystemworkspace"
     },
     {
@@ -981,7 +981,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L23",
       "id": "fault_disruptors_workspace_dashboardworkspace",
-      "community": 6,
+      "community": 0,
       "norm_label": "dashboardworkspace"
     },
     {
@@ -990,7 +990,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L31",
       "id": "fault_disruptors_workspace_emptysubsystem",
-      "community": 6,
+      "community": 0,
       "norm_label": "emptysubsystem()"
     },
     {
@@ -999,7 +999,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L33",
       "id": "fault_disruptors_workspace_createdashboardworkspace",
-      "community": 6,
+      "community": 0,
       "norm_label": "createdashboardworkspace()"
     },
     {
@@ -1008,7 +1008,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L46",
       "id": "fault_disruptors_workspace_filejobid",
-      "community": 6,
+      "community": 0,
       "norm_label": "filejobid()"
     },
     {
@@ -1017,7 +1017,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L51",
       "id": "fault_disruptors_workspace_savedashboardworkspace",
-      "community": 6,
+      "community": 0,
       "norm_label": "savedashboardworkspace()"
     },
     {
@@ -1026,7 +1026,7 @@
       "source_file": "lib/fault-disruptors/workspace.ts",
       "source_location": "L68",
       "id": "fault_disruptors_workspace_loaddashboardworkspace",
-      "community": 6,
+      "community": 0,
       "norm_label": "loaddashboardworkspace()"
     },
     {
@@ -1035,7 +1035,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L1",
       "id": "agents_md",
-      "community": 13,
+      "community": 11,
       "norm_label": "agents.md"
     },
     {
@@ -1044,7 +1044,7 @@
       "source_file": "AGENTS.md",
       "source_location": "L3",
       "id": "frontend_agents_this_is_not_the_next_js_you_know",
-      "community": 13,
+      "community": 11,
       "norm_label": "this is not the next.js you know"
     },
     {
@@ -1053,15 +1053,33 @@
       "source_file": "CLAUDE.md",
       "source_location": "L1",
       "id": "claude_md",
-      "community": 15,
+      "community": 13,
       "norm_label": "claude.md"
+    },
+    {
+      "label": "RailSideRow()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L154",
+      "community": 1,
+      "norm_label": "railsiderow()",
+      "id": "fault_disruptors_panel_rail_railsiderow"
+    },
+    {
+      "label": "MetricCard()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L185",
+      "community": 1,
+      "norm_label": "metriccard()",
+      "id": "fault_disruptors_panel_rail_metriccard"
     },
     {
       "label": "ANALYSIS_STEPS",
       "file_type": "code",
       "source_file": "app/page.tsx",
       "source_location": "L26",
-      "community": 7,
+      "community": 0,
       "norm_label": "analysis_steps",
       "id": "app_page_analysis_steps"
     },
@@ -1070,7 +1088,7 @@
       "file_type": "code",
       "source_file": "app/page.tsx",
       "source_location": "L356",
-      "community": 7,
+      "community": 0,
       "norm_label": "reportintake()",
       "id": "app_page_reportintake"
     }
@@ -2308,6 +2326,16 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L98",
+      "weight": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "fault_disruptors_panel_rail_railsidecard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
       "source_location": "L154",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -2410,6 +2438,16 @@
       "target": "fault_disruptors_panel_shm_damagebandlabel"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_panel_shm_damagebandsummary",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -2419,6 +2457,17 @@
       "confidence_score": 1.0,
       "source": "fault_disruptors_panel_shm_panelshm",
       "target": "fault_disruptors_panel_shm_damagebandlabel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "fault_disruptors_panel_shm_panelshm",
+      "target": "fault_disruptors_panel_shm_damagebandsummary",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -3536,5 +3585,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "280e14af25b6138dd88e28c1e1683f200daf52f2"
+  "built_at_commit": "9501247c5815d23c2201449673d12cf90cd416c1"
 }
