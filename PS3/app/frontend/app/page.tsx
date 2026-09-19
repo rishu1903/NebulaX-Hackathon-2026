@@ -1,7 +1,8 @@
 "use client"
 
-import { type DragEvent, type ChangeEvent, useMemo, useRef, useState } from "react"
-import { CheckCircle2, Download, FileText, Loader2, RotateCcw, UploadCloud } from "lucide-react"
+import { type ChangeEvent, type DragEvent, useEffect, useMemo, useRef, useState } from "react"
+import { Download, FileArchive, FileText, Loader2, RotateCcw, UploadCloud } from "lucide-react"
+import { BatchQueue } from "@/components/fault-disruptors/batch-queue"
 import { ConditionIcon } from "@/components/fault-disruptors/condition-icon"
 import { Header } from "@/components/fault-disruptors/header"
 import { HoverBubble } from "@/components/fault-disruptors/hover-bubble"
@@ -11,19 +12,11 @@ import { PanelDoor } from "@/components/fault-disruptors/panel-door"
 import { PanelRail } from "@/components/fault-disruptors/panel-rail"
 import { PanelShm } from "@/components/fault-disruptors/panel-shm"
 import { TechnicalDetails } from "@/components/fault-disruptors/technical-details"
-import { carCenterFraction, TrainTwin, trainStageWidth } from "@/components/fault-disruptors/train-twin"
-import { analyse, downloadCsv, type AnalyseResult } from "@/lib/fault-disruptors/api"
-import {
-  CONDITION_META,
-  SUBSYSTEM_PRESENTATION,
-  SUBSYSTEMS,
-  idleCars,
-  type CarState,
-  type Subsystem,
-} from "@/lib/fault-disruptors/data"
+import { carCenterFraction, TrainTwin } from "@/components/fault-disruptors/train-twin"
+import { analyse, downloadCsv, downloadResultsZip } from "@/lib/fault-disruptors/api"
+import { CONDITION_META, SUBSYSTEM_PRESENTATION, SUBSYSTEMS, idleCars, type CarState, type Subsystem } from "@/lib/fault-disruptors/data"
 import { buildLiveView } from "@/lib/fault-disruptors/live"
-
-const ANALYSIS_STEPS = ["Uploading dataset", "Running the analysis model", "Preparing the diagnostic view"]
+import { createDashboardWorkspace, fileJobId, loadDashboardWorkspace, saveDashboardWorkspace, type AnalysisJob, type DashboardWorkspace, type SubsystemWorkspace } from "@/lib/fault-disruptors/workspace"
 
 const SUBSYSTEM_UPLOAD: Record<Subsystem, { accept: string; label: string }> = {
   ACV: { accept: ".xlsx", label: "Excel (.xlsx)" },
@@ -33,412 +26,178 @@ const SUBSYSTEM_UPLOAD: Record<Subsystem, { accept: string; label: string }> = {
 }
 
 export default function Page() {
-  const [subsystem, setSubsystem] = useState<Subsystem>("ACV")
-  const [result, setResult] = useState<AnalyseResult | null>(null)
-  const [reportFile, setReportFile] = useState<File | null>(null)
+  const [dashboard, setDashboard] = useState<DashboardWorkspace>(createDashboardWorkspace)
+  const [hydrated, setHydrated] = useState(false)
   const [fileError, setFileError] = useState<string | null>(null)
-  const [analysisError, setAnalysisError] = useState<string | null>(null)
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
-  const [analysisStep, setAnalysisStep] = useState(0)
   const [hoveredId, setHoveredId] = useState<number | null>(null)
-  const [selectedId, setSelectedId] = useState<number | null>(null)
-
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
-  /** Incremented whenever an in-flight analysis should be ignored (reset, new file, subsystem switch). */
-  const requestRef = useRef(0)
 
-  const analyzed = result !== null
-  const live = useMemo(() => (result ? buildLiveView(subsystem, result) : null), [result, subsystem])
-  const reportFileName = reportFile?.name ?? null
+  useEffect(() => {
+    setDashboard(loadDashboardWorkspace())
+    setHydrated(true)
+  }, [])
+
+  useEffect(() => {
+    if (!hydrated) return
+    try { saveDashboardWorkspace(dashboard) } catch { /* local storage can be unavailable or full */ }
+  }, [dashboard, hydrated])
+
+  const subsystem = dashboard.activeSubsystem
+  const workspace = dashboard.workspaces[subsystem]
+  const activeJob = workspace.jobs.find((job) => job.id === workspace.activeJobId) ?? workspace.jobs[0] ?? null
+  const result = activeJob?.status === "complete" ? activeJob.result ?? null : null
+  const live = useMemo(() => result ? buildLiveView(subsystem, result) : null, [result, subsystem])
+  const cars: CarState[] = useMemo(() => live?.cars ?? idleCars(), [live])
+  const hoveredCar = hoveredId ? cars.find((car) => car.id === hoveredId) ?? null : null
+  const hoveredIndex = hoveredCar ? cars.findIndex((car) => car.id === hoveredCar.id) : -1
   const uploadConfig = SUBSYSTEM_UPLOAD[subsystem]
   const presentation = SUBSYSTEM_PRESENTATION[subsystem]
+  const queued = workspace.jobs.filter((job) => job.file && (job.status === "staged" || job.status === "error"))
+  const isAnalyzing = workspace.jobs.some((job) => job.status === "running")
+  const completed = workspace.jobs.filter((job) => job.status === "complete" && job.result)
+  const downloadable = completed.filter((job) => job.result?.submission_csv)
 
-  const cars: CarState[] = useMemo(() => {
-    if (!live) return idleCars()
-    return live.cars
-  }, [live])
-
-  const railSide = live?.railSide ?? null
-  const hoveredCar = hoveredId ? cars.find((c) => c.id === hoveredId) ?? null : null
-  const hoveredIndex = hoveredCar ? cars.findIndex((c) => c.id === hoveredCar.id) : -1
-
-  function clearAnalysisTimers() {
-    timersRef.current.forEach((timer) => clearTimeout(timer))
-    timersRef.current = []
+  function commitDashboard(updater: (current: DashboardWorkspace) => DashboardWorkspace) {
+    setDashboard((current) => {
+      const next = updater(current)
+      try { saveDashboardWorkspace(next) } catch { /* persistence is best effort */ }
+      return next
+    })
   }
 
-  /** Back to the idle, pre-analysis state. Optionally keeps the staged file. */
-  function resetAnalysis({ keepFile }: { keepFile: boolean }) {
-    requestRef.current += 1
-    clearAnalysisTimers()
-    setResult(null)
-    setIsAnalyzing(false)
-    setAnalysisStep(0)
-    setAnalysisError(null)
-    setSelectedId(null)
+  function updateWorkspace(target: Subsystem, updater: (current: SubsystemWorkspace) => SubsystemWorkspace) {
+    commitDashboard((current) => ({ ...current, workspaces: { ...current.workspaces, [target]: updater(current.workspaces[target]) } }))
+  }
+
+  function switchSubsystem(next: Subsystem) {
     setHoveredId(null)
-
-    if (!keepFile) {
-      setReportFile(null)
-      setFileError(null)
-    }
+    setFileError(null)
+    commitDashboard((current) => ({ ...current, activeSubsystem: next }))
   }
 
-  function switchSubsystem(s: Subsystem) {
-    if (s === subsystem) return
-    resetAnalysis({ keepFile: false })
-    setSubsystem(s)
-  }
-
-  function stageReport(file: File | null | undefined) {
-    if (!file) return
-    resetAnalysis({ keepFile: false })
-
-    const requiredExtension = uploadConfig.accept.toLowerCase()
-    if (!file.name.toLowerCase().endsWith(requiredExtension)) {
-      setFileError(`${subsystem} requires ${uploadConfig.label} input.`)
-      return
+  function stageReports(files: File[]) {
+    const valid: AnalysisJob[] = []
+    const invalid: string[] = []
+    for (const file of files) {
+      if (!file.name.toLowerCase().endsWith(uploadConfig.accept)) invalid.push(file.name)
+      else valid.push({ id: fileJobId(file), fileName: file.name, size: file.size, lastModified: file.lastModified, status: "staged", file })
     }
-    setReportFile(file)
+    setFileError(invalid.length ? `${invalid.length} file${invalid.length === 1 ? "" : "s"} skipped. ${subsystem} requires ${uploadConfig.label}.` : null)
+    if (!valid.length) return
+    updateWorkspace(subsystem, (current) => {
+      const jobs = [...current.jobs]
+      for (const job of valid) {
+        const index = jobs.findIndex((item) => item.id === job.id)
+        if (index >= 0) jobs[index] = job
+        else jobs.push(job)
+      }
+      return { ...current, jobs, activeJobId: valid[0].id }
+    })
   }
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
-    stageReport(event.target.files?.[0])
+    stageReports(Array.from(event.target.files ?? []))
     event.target.value = ""
   }
 
   function handleDrop(event: DragEvent<HTMLDivElement>) {
     event.preventDefault()
-    stageReport(event.dataTransfer.files?.[0])
+    stageReports(Array.from(event.dataTransfer.files ?? []))
   }
 
-  async function runAnalysis() {
-    if (analyzed) {
-      resetAnalysis({ keepFile: true })
-      return
-    }
-    if (!reportFile) {
-      fileInputRef.current?.click()
-      return
-    }
-
-    resetAnalysis({ keepFile: true })
-    const requestId = requestRef.current
-    setIsAnalyzing(true)
-    timersRef.current = [setTimeout(() => setAnalysisStep(1), 500)]
-
-    try {
-      const response = await analyse(subsystem, reportFile)
-      if (requestRef.current !== requestId) return
-      setAnalysisStep(2)
-      setResult(response)
-    } catch (error) {
-      if (requestRef.current !== requestId) return
-      setAnalysisError(error instanceof Error ? error.message : "Analysis failed. Please try again.")
-    } finally {
-      if (requestRef.current === requestId) {
-        clearAnalysisTimers()
-        setIsAnalyzing(false)
+  async function runBatch() {
+    if (!queued.length) return fileInputRef.current?.click()
+    const targetSubsystem = subsystem
+    let cursor = 0
+    const worker = async () => {
+      while (cursor < queued.length) {
+        const job = queued[cursor++]
+        if (!job.file) continue
+        updateWorkspace(targetSubsystem, (current) => ({ ...current, jobs: current.jobs.map((item) => item.id === job.id ? { ...item, status: "running", error: undefined } : item) }))
+        try {
+          const response = await analyse(targetSubsystem, job.file)
+          updateWorkspace(targetSubsystem, (current) => ({ ...current, activeJobId: current.activeJobId ?? job.id, jobs: current.jobs.map((item) => item.id === job.id ? { ...item, status: "complete", result: response, error: undefined } : item) }))
+        } catch (error) {
+          updateWorkspace(targetSubsystem, (current) => ({ ...current, jobs: current.jobs.map((item) => item.id === job.id ? { ...item, status: "error", error: error instanceof Error ? error.message : "Analysis failed" } : item) }))
+        }
       }
     }
+    await Promise.all(Array.from({ length: Math.min(2, queued.length) }, worker))
+  }
+
+  function removeJob(id: string) {
+    updateWorkspace(subsystem, (current) => {
+      const jobs = current.jobs.filter((job) => job.id !== id)
+      return { ...current, jobs, activeJobId: current.activeJobId === id ? jobs[0]?.id ?? null : current.activeJobId }
+    })
+  }
+
+  function clearWorkspace() {
+    updateWorkspace(subsystem, () => ({ jobs: [], activeJobId: null, selectedCarId: null }))
+    setHoveredId(null)
+    setFileError(null)
   }
 
   const verdictCondition = live?.verdict.condition ?? "neutral"
   const verdictMeta = CONDITION_META[verdictCondition]
-  const verdictText = live?.verdict.text ?? ""
-  const analysisButtonLabel = isAnalyzing ? "Analyzing..." : reportFileName ? "Analyze Dataset" : "Upload dataset first"
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-900">
-      <Header
-        onUploadClick={() => fileInputRef.current?.click()}
-        reportFileName={reportFileName}
-        isAnalyzing={isAnalyzing}
-        analysisComplete={analyzed}
-      />
-      <input
-        ref={fileInputRef}
-        type="file"
-        className="sr-only"
-        accept={uploadConfig.accept}
-        onChange={handleFileChange}
-      />
+      <Header onUploadClick={() => fileInputRef.current?.click()} reportFileName={workspace.jobs.length ? `${workspace.jobs.length} file${workspace.jobs.length === 1 ? "" : "s"}` : null} isAnalyzing={isAnalyzing} analysisComplete={completed.length > 0} selectedTrain={dashboard.selectedTrain} onTrainChange={(selectedTrain) => commitDashboard((current) => ({ ...current, selectedTrain }))} />
+      <input ref={fileInputRef} type="file" multiple className="sr-only" accept={uploadConfig.accept} onChange={handleFileChange} />
 
-      <div className="mx-auto max-w-7xl px-4 py-6 md:px-6">
-        {/* Task + result + controls */}
+      <div className="mx-auto max-w-7xl px-4 py-5 md:px-6">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
           <div className="max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">
-              01 Task · {SUBSYSTEMS.find((s) => s.id === subsystem)?.full}
-            </p>
+            <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">01 Task · {SUBSYSTEMS.find((item) => item.id === subsystem)?.full}</p>
             <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-950">{presentation.title}</h2>
-            <p className="mt-1 max-w-2xl text-sm font-medium text-slate-500">{presentation.question}</p>
-
-            {analyzed ? (
-              <>
-                <p className="mt-4 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Model Result</p>
-                <div
-                  className="mt-1.5 inline-flex max-w-full items-center gap-2 rounded-lg px-3 py-2 text-base font-bold"
-                  style={{ backgroundColor: verdictMeta.soft, color: verdictMeta.color }}
-                >
-                  <ConditionIcon condition={verdictCondition} className="size-5 shrink-0" />
-                  <span>{verdictText}</span>
-                </div>
-              </>
-            ) : isAnalyzing ? (
-              <div className="mt-3 inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm font-semibold text-slate-600">
-                <Loader2 className="size-4 animate-spin" aria-hidden="true" />
-                {ANALYSIS_STEPS[analysisStep]}
-              </div>
-            ) : reportFileName ? (
-              <p className="mt-3 flex items-center gap-1.5 text-sm text-slate-500">
-                <FileText className="size-4 text-slate-400" aria-hidden="true" />
-                {reportFileName} is ready for analysis.
-              </p>
-            ) : (
-              <p className="mt-3 text-sm text-slate-500">{presentation.idleHint}</p>
-            )}
+            <p className="mt-1 text-sm font-medium text-slate-500">{presentation.question}</p>
+            {live ? <div className="mt-3 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold" style={{ backgroundColor: verdictMeta.soft, color: verdictMeta.color }}><ConditionIcon condition={verdictCondition} className="size-5" />{live.verdict.text}</div>
+              : isAnalyzing ? <p className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-slate-600"><Loader2 className="size-4 animate-spin" />Analyzing queued files…</p>
+                : <p className="mt-3 text-sm text-slate-500">{workspace.jobs.length ? "Select a result or analyze the staged files." : presentation.idleHint}</p>}
           </div>
 
-          <div className="flex flex-col items-stretch gap-2 lg:flex-row lg:items-center">
-            <nav
-              aria-label="Subsystem switcher"
-              className="inline-flex overflow-x-auto rounded-lg border border-border bg-white p-0.5"
-            >
-              {SUBSYSTEMS.map((s) => {
-                const selected = s.id === subsystem
-                return (
-                  <button
-                    key={s.id}
-                    type="button"
-                    onClick={() => switchSubsystem(s.id)}
-                    aria-pressed={selected}
-                    title={s.full}
-                    className={[
-                      "relative rounded-md px-3 py-2 text-sm font-semibold transition-colors",
-                      selected ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:bg-slate-50 hover:text-slate-900",
-                    ].join(" ")}
-                  >
-                    {s.label}
-                  </button>
-                )
-              })}
+          <div className="flex flex-col items-stretch gap-2">
+            <nav aria-label="Subsystem switcher" className="inline-flex overflow-x-auto rounded-lg border border-border bg-white p-0.5">
+              {SUBSYSTEMS.map((item) => <button key={item.id} type="button" onClick={() => switchSubsystem(item.id)} aria-pressed={item.id === subsystem} className={`rounded-md px-3 py-2 text-sm font-semibold transition ${item.id === subsystem ? "bg-slate-900 text-white" : "text-slate-500 hover:bg-slate-50"}`}>{item.label}{dashboard.workspaces[item.id].jobs.some((job) => job.status === "complete") && <span className="ml-1 text-emerald-400">•</span>}</button>)}
             </nav>
-            {!analyzed && (
-              <button
-                type="button"
-                onClick={runAnalysis}
-                disabled={isAnalyzing}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-70"
-              >
-                {isAnalyzing && <Loader2 className="size-4 animate-spin" aria-hidden="true" />}
-                {analysisButtonLabel}
-              </button>
-            )}
-            {analyzed && result?.submission_csv && (
-              <button
-                type="button"
-                onClick={() => downloadCsv(subsystem, result.submission_csv as string)}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-slate-800"
-              >
-                <Download className="size-4" aria-hidden="true" />
-                Download Prediction CSV
-              </button>
-            )}
-            {analyzed && (
-              <button
-                type="button"
-                onClick={() => resetAnalysis({ keepFile: true })}
-                className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-border bg-white px-2.5 text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-800"
-              >
-                <RotateCcw className="size-3.5" aria-hidden="true" />
-                Reset
-              </button>
-            )}
+            <div className="flex flex-wrap gap-2">
+              <button type="button" onClick={runBatch} disabled={isAnalyzing} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60">{isAnalyzing ? <Loader2 className="size-4 animate-spin" /> : <UploadCloud className="size-4" />}{queued.length ? `Analyze ${queued.length} file${queued.length === 1 ? "" : "s"}` : "Add files"}</button>
+              {downloadable.length > 1 && <button type="button" onClick={() => downloadResultsZip(subsystem, workspace.jobs.filter((job) => job.status === "complete" || job.status === "error").map((job) => ({ sourceFile: job.fileName, submissionCsv: job.result?.submission_csv ?? null, prediction: job.result?.prediction, error: job.error })))} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"><FileArchive className="size-4" />ZIP ({downloadable.length})</button>}
+              {result?.submission_csv && <button type="button" onClick={() => downloadCsv(subsystem, result.submission_csv!)} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"><Download className="size-4" />CSV</button>}
+              {workspace.jobs.length > 0 && <button type="button" onClick={clearWorkspace} className="rounded-lg border border-border bg-white p-2.5 text-slate-500 hover:text-red-600" aria-label="Clear this subsystem"><RotateCcw className="size-4" /></button>}
+            </div>
           </div>
         </div>
 
+        {live && <div className="mt-5"><KpiStrip items={live.kpis} /></div>}
 
-        {/* KPI strip */}
-        {live && (
-          <div className="mt-5">
-            <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">Result Summary</p>
-            <KpiStrip items={live.kpis} />
-          </div>
-        )}
-
-        {/* Train hero */}
-        <section className="relative mt-6 rounded-xl border border-border bg-white p-3 md:p-5">
-          <div className="mb-4 flex flex-wrap items-end justify-between gap-2 px-1">
-            <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">02 Digital Twin</p>
-              <h3 className="mt-0.5 text-sm font-bold text-slate-900">{presentation.twinLabel}</h3>
-            </div>
-            <span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-500">
-              8-Car Consist
-            </span>
-          </div>
-
-          <div className="relative overflow-x-auto pb-2">
-            <div className="relative" style={{ minWidth: trainStageWidth(cars.length) }}>
-              <TrainTwin
-                subsystem={subsystem}
-                cars={cars}
-                railSide={railSide}
-                selectedId={selectedId}
-                hoveredId={hoveredId}
-                onHover={setHoveredId}
-                onSelect={setSelectedId}
-              />
-              {hoveredCar && hoveredCar.condition !== "neutral" && hoveredIndex >= 0 && (
-                <HoverBubble car={hoveredCar} leftFraction={carCenterFraction(hoveredIndex, cars.length)} />
-              )}
-            </div>
-          </div>
-          <p className="mt-2 text-center text-sm font-medium text-slate-500">
-            {analyzed
-              ? presentation.twinHint
-              : reportFileName
-                ? "Dataset ready. Run the analysis to populate this diagnostic view."
-                : presentation.twinIdleHint}
-          </p>
+        <section className="relative mt-5 rounded-xl border border-border bg-white p-3 md:p-5">
+          <div className="mb-3 flex flex-wrap items-end justify-between gap-2 px-1"><div><p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">02 Digital Twin</p><h3 className="mt-0.5 text-sm font-bold text-slate-900">{dashboard.selectedTrain} · {presentation.twinLabel}</h3></div><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-bold uppercase tracking-wide text-slate-500">8-Car Consist</span></div>
+          <div className="relative overflow-x-auto pb-2"><div className="relative min-w-[720px] md:min-w-0"><TrainTwin subsystem={subsystem} cars={cars} railSide={live?.railSide ?? null} selectedId={workspace.selectedCarId} hoveredId={hoveredId} onHover={setHoveredId} onSelect={(selectedCarId) => updateWorkspace(subsystem, (current) => ({ ...current, selectedCarId }))} />{hoveredCar && (hoveredCar.condition !== "neutral" || hoveredCar.overlay) && hoveredIndex >= 0 && <HoverBubble car={hoveredCar} leftFraction={carCenterFraction(hoveredIndex, cars.length)} />}</div></div>
+          <p className="mt-1 text-center text-xs font-medium text-slate-500">{live ? presentation.twinHint : presentation.twinIdleHint}</p>
         </section>
 
-        {/* Supporting panel */}
-        <section className="mt-6 rounded-2xl border border-border bg-white p-4 md:p-6">
-          <div className="mb-4">
-            <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">
-              {live ? "03 Evidence & Analysis" : "03 Input Data"}
-            </p>
-            <h3 className="mt-0.5 text-sm font-bold text-slate-900">
-              {live ? presentation.evidenceLabel : presentation.uploadTitle}
-            </h3>
+        <section className="mt-5 rounded-2xl border border-border bg-white p-4 md:p-6">
+          <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">03 {live ? "Evidence & Analysis" : "Input Data"}</p><h3 className="mt-0.5 text-sm font-bold text-slate-900">{live ? presentation.evidenceLabel : presentation.uploadTitle}</h3></div><button type="button" onClick={() => fileInputRef.current?.click()} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50"><UploadCloud className="size-4" />Add multiple files</button></div>
+          <div onDragOver={(event) => event.preventDefault()} onDrop={handleDrop}>
+            <BatchQueue jobs={workspace.jobs} activeId={activeJob?.id ?? null} onSelect={(activeJobId) => updateWorkspace(subsystem, (current) => ({ ...current, activeJobId }))} onRemove={removeJob} />
+            {fileError && <p role="alert" className="mt-3 text-xs font-semibold text-red-600">{fileError}</p>}
+            {!live && workspace.jobs.length === 0 && <EmptyUpload title={presentation.uploadTitle} hint={presentation.uploadHint} format={uploadConfig.label} onClick={() => fileInputRef.current?.click()} />}
           </div>
-
-          {!live ? (
-            <ReportIntake
-              fileName={reportFileName}
-              errorMessage={fileError ?? analysisError}
-              acceptedFormat={uploadConfig.label}
-              uploadTitle={presentation.uploadTitle}
-              uploadHint={presentation.uploadHint}
-              isAnalyzing={isAnalyzing}
-              activeStep={analysisStep}
-              onUploadClick={() => fileInputRef.current?.click()}
-              onDrop={handleDrop}
-            />
-          ) : (
-            <>
-              {live.panel.kind === "acv" && (
-                <PanelAcv rows={live.panel.rows} margin={live.panel.margin} emptyCars={live.panel.emptyCars} />
-              )}
-              {live.panel.kind === "door" && <PanelDoor cycles={live.panel.cycles} />}
-              {live.panel.kind === "rail" && (
-                <PanelRail
-                  label={live.panel.label}
-                  side={live.panel.side}
-                  speedKmh={live.panel.speedKmh}
-                  speedChanges={live.panel.speedChanges}
-                  lowMotion={live.panel.lowMotion}
-                />
-              )}
-              {live.panel.kind === "shm" && <PanelShm damage={live.panel.damage} condition={live.panel.condition} />}
-              <TechnicalDetails details={live.technical} />
-            </>
-          )}
+          {live && <div className="mt-6 border-t border-border pt-6">
+            {live.panel.kind === "acv" && <PanelAcv rows={live.panel.rows} margin={live.panel.margin} emptyCars={live.panel.emptyCars} />}
+            {live.panel.kind === "door" && <PanelDoor cycles={live.panel.cycles} showcaseLocation={live.panel.showcaseLocation} />}
+            {live.panel.kind === "rail" && <PanelRail label={live.panel.label} side={live.panel.side} speedKmh={live.panel.speedKmh} speedChanges={live.panel.speedChanges} lowMotion={live.panel.lowMotion} />}
+            {live.panel.kind === "shm" && <PanelShm damage={live.panel.damage} condition={live.panel.condition} showcaseLocation={live.panel.showcaseLocation} />}
+            <TechnicalDetails details={live.technical} />
+          </div>}
         </section>
       </div>
     </main>
   )
 }
 
-function ReportIntake({
-  fileName,
-  errorMessage,
-  acceptedFormat,
-  uploadTitle,
-  uploadHint,
-  isAnalyzing,
-  activeStep,
-  onUploadClick,
-  onDrop,
-}: {
-  fileName: string | null
-  errorMessage: string | null
-  acceptedFormat: string
-  uploadTitle: string
-  uploadHint: string
-  isAnalyzing: boolean
-  activeStep: number
-  onUploadClick: () => void
-  onDrop: (event: DragEvent<HTMLDivElement>) => void
-}) {
-  return (
-    <div
-      className="flex min-h-48 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50/70 px-4 py-8 text-center transition-colors hover:border-slate-400 hover:bg-slate-50"
-      onDragOver={(event) => event.preventDefault()}
-      onDrop={onDrop}
-    >
-      <div className="flex size-12 items-center justify-center rounded-lg bg-white text-slate-700 shadow-sm ring-1 ring-border">
-        {isAnalyzing ? (
-          <Loader2 className="size-5 animate-spin" aria-hidden="true" />
-        ) : fileName ? (
-          <FileText className="size-5" aria-hidden="true" />
-        ) : (
-          <UploadCloud className="size-5" aria-hidden="true" />
-        )}
-      </div>
-
-      <div className="mt-3">
-        <p className="text-sm font-bold text-slate-800">
-          {isAnalyzing ? "Analyzing dataset" : fileName ? "Dataset ready for analysis" : uploadTitle}
-        </p>
-        <p className="mt-1 text-xs text-slate-500">
-          {fileName ? `${fileName} · ${acceptedFormat}` : uploadHint}
-        </p>
-        {errorMessage && (
-          <p role="alert" className="mt-2 max-w-xl text-xs font-semibold text-red-600">
-            {errorMessage}
-          </p>
-        )}
-      </div>
-
-      {isAnalyzing ? (
-        <div className="mt-5 grid w-full max-w-xl gap-2 md:grid-cols-3">
-          {ANALYSIS_STEPS.map((step, index) => {
-            const complete = index < activeStep
-            const active = index === activeStep
-            return (
-              <div
-                key={step}
-                className={[
-                  "flex items-center gap-2 rounded-lg border bg-white px-3 py-2 text-left text-xs font-semibold",
-                  active || complete ? "border-slate-300 text-slate-800" : "border-border text-slate-400",
-                ].join(" ")}
-              >
-                {complete ? (
-                  <CheckCircle2 className="size-4 text-emerald-600" aria-hidden="true" />
-                ) : active ? (
-                  <Loader2 className="size-4 animate-spin text-slate-700" aria-hidden="true" />
-                ) : (
-                  <span className="size-4 rounded-full border border-slate-300" aria-hidden="true" />
-                )}
-                {step}
-              </div>
-            )
-          })}
-        </div>
-      ) : (
-        <button
-          type="button"
-          onClick={onUploadClick}
-          className="mt-5 inline-flex h-10 items-center gap-2 rounded-lg border border-border bg-white px-4 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-        >
-          <UploadCloud className="size-4" aria-hidden="true" />
-          {fileName ? "Replace Dataset" : "Upload Dataset"}
-        </button>
-      )}
-    </div>
-  )
+function EmptyUpload({ title, hint, format, onClick }: { title: string; hint: string; format: string; onClick: () => void }) {
+  return <div className="mt-4 flex min-h-44 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50/70 px-4 py-8 text-center"><FileText className="size-7 text-slate-400" /><p className="mt-3 text-sm font-bold text-slate-800">{title}</p><p className="mt-1 max-w-xl text-xs text-slate-500">{hint} Select one or more {format} files.</p><button type="button" onClick={onClick} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white"><UploadCloud className="size-4" />Choose files</button></div>
 }

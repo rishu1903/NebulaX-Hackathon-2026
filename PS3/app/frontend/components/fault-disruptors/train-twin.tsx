@@ -522,6 +522,7 @@ function Car({
   const doorTop = 82
   const doorH = 82
   const doorW = 24
+  const overlayMeta = car.overlay ? CONDITION_META[car.overlay.condition] : null
 
   return (
     <motion.g
@@ -590,6 +591,19 @@ function Car({
           style={{ transition: "stroke 0.4s ease, fill 0.4s ease" }}
         />
 
+        {car.overlay?.kind === "structure" && overlayMeta && (
+          <rect
+            x={x + CAR_W * 0.36}
+            y={BODY_Y + 8}
+            width={CAR_W * 0.28}
+            height={BODY_H - 20}
+            rx={10}
+            fill={overlayMeta.soft}
+            stroke={overlayMeta.color}
+            strokeWidth={3}
+          />
+        )}
+
         <rect
           x={x + 8}
           y={STRIPE_Y}
@@ -639,7 +653,9 @@ function Car({
         )
       })}
 
-      {doorCenters.map((cx, d) => (
+      {doorCenters.map((cx, d) => {
+        const highlighted = car.overlay?.kind === "door" && car.overlay.componentIndex === d + 1
+        return (
         <g key={d}>
           <rect
             x={cx - doorW / 2}
@@ -647,9 +663,9 @@ function Car({
             width={doorW}
             height={doorH}
             rx={5}
-            fill="#f1f5f9"
-            stroke="#94a3b8"
-            strokeWidth={1}
+            fill={highlighted && overlayMeta ? overlayMeta.soft : "#f1f5f9"}
+            stroke={highlighted && overlayMeta ? overlayMeta.color : "#94a3b8"}
+            strokeWidth={highlighted ? 3 : 1}
           />
 
           <line
@@ -672,7 +688,17 @@ function Car({
             opacity={isNeutral ? 0.4 : 0.8}
           />
         </g>
-      ))}
+        )
+      })}
+
+      {car.overlay && overlayMeta && (
+        <g>
+          <rect x={x + 46} y={BODY_Y - 14} width={128} height={20} rx={5} fill="#7c3aed" />
+          <text x={x + 110} y={BODY_Y} textAnchor="middle" fontSize="9" fontWeight={800} fill="#ffffff">
+            {`${car.overlay.label.toUpperCase()} · SHOWCASE`}
+          </text>
+        </g>
+      )}
 
       {isLead && (
         <g>
@@ -752,5 +778,5 @@ export function carCenterFraction(index: number, total: number) {
 }
 
 export function trainStageWidth(total: number) {
-  return Math.max(760, total * 250)
+  return Math.max(720, total * 92)
 }

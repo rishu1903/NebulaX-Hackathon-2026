@@ -8,9 +8,11 @@ import { PanelTitle } from "@/components/fault-disruptors/panel-acv"
 export function PanelShm({
   damage,
   condition,
+  showcaseLocation,
 }: {
   damage: number
   condition: Condition
+  showcaseLocation?: string | null
 }) {
   const meta = CONDITION_META[condition]
   const boundedFill = Math.min(1, Math.max(0, damage)) * 100
@@ -22,6 +24,12 @@ export function PanelShm({
         title="Cumulative Fatigue Damage"
         hint="Numeric regression output for the uploaded structural stress signal."
       />
+
+      {showcaseLocation && (
+        <div className="mt-4 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs text-violet-900">
+          <strong>Showcase location: {showcaseLocation}.</strong> This marker demonstrates an inspection workflow; the prediction applies to the uploaded record as a whole and does not localise structural damage.
+        </div>
+      )}
 
       <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1.3fr)_minmax(260px,0.7fr)]">
         <div

@@ -35,7 +35,7 @@ export type DoorCycle = {
 
 export type Panel =
   | { kind: "acv"; rows: AcvRow[]; margin: number | null; emptyCars: string[] }
-  | { kind: "door"; cycles: DoorCycle[]; abnormal: number; review: number }
+  | { kind: "door"; cycles: DoorCycle[]; abnormal: number; review: number; showcaseLocation: string | null }
   | {
       kind: "rail"
       label: string
@@ -44,7 +44,7 @@ export type Panel =
       speedChanges: number | null
       lowMotion: boolean
     }
-  | { kind: "shm"; damage: number; condition: Condition }
+  | { kind: "shm"; damage: number; condition: Condition; showcaseLocation: string | null }
 
 export type LiveView = {
   headline: string
@@ -267,12 +267,14 @@ function doorView(result: AnalyseResult): LiveView {
           ? `${abnormal} of ${total} detected door cycles show abnormal resistance`
           : `All ${total} detected door cycles are classified as normal`,
     },
-    // The uploaded stream contains cycle-level door telemetry and no carriage identifier.
-    // Keep the 8-car context neutral rather than inventing a carriage location.
-    cars: idleCars().map((car) => ({
+    cars: idleCars().map((car) => car.id === 3 && abnormal > 0 ? {
+      ...car,
+      finding: "Showcase placement: Door 2 is highlighted for presentation context. The model reports cycle-level resistance and does not localise the carriage.",
+      overlay: { kind: "door", condition: "issue", label: "Door 2", componentIndex: 2, source: "showcase" },
+    } : {
       ...car,
       finding: "Door findings are reported by operating cycle, not by carriage",
-    })),
+    }),
     kpis: [
       { label: "Cycles Detected", value: String(total), condition: "neutral" },
       {
@@ -292,7 +294,7 @@ function doorView(result: AnalyseResult): LiveView {
       },
     ],
     railSide: null,
-    panel: { kind: "door", cycles, abnormal, review },
+    panel: { kind: "door", cycles, abnormal, review, showcaseLocation: abnormal > 0 ? "Car 03 · Door 2" : null },
     ...base(result),
   }
 }
@@ -396,12 +398,14 @@ function shmView(result: AnalyseResult): LiveView {
         ? `Predicted cumulative fatigue damage D = ${damage.toFixed(4)}`
         : "No cumulative fatigue damage value could be computed",
     },
-    // SHM predicts one numeric value for the uploaded structural record.
-    // There is no carriage or structural-zone localisation in the model output.
-    cars: idleCars().map((car) => ({
+    cars: idleCars().map((car) => car.id === 4 && (condition === "review" || condition === "issue") ? {
+      ...car,
+      finding: "Showcase placement: the centre body is highlighted for presentation context. The SHM model predicts one value for the full record and does not localise damage.",
+      overlay: { kind: "structure", condition, label: "Centre body", source: "showcase" },
+    } : {
       ...car,
       finding: "SHM reports cumulative damage for the uploaded structural record, not by carriage",
-    })),
+    }),
     kpis: [
       {
         label: "Predicted Damage D",
@@ -429,6 +433,7 @@ function shmView(result: AnalyseResult): LiveView {
       kind: "shm",
       damage: valid ? damage : 0,
       condition,
+      showcaseLocation: valid && (condition === "review" || condition === "issue") ? "Car 04 · Centre body" : null,
     },
     ...base(result),
   }

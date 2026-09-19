@@ -28,4 +28,6 @@ PS3/SHM_Work/outputs/submission/shm_test_predictions.csv
 PS3/SHM_Work/.pytest_tmp/
 
 /outputs/
+*.zip
+door_predictions.csv
 

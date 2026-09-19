@@ -15,7 +15,7 @@ const FLAG_LABELS: Record<string, string> = {
   near_threshold: "Near decision threshold",
 }
 
-export function PanelDoor({ cycles }: { cycles: DoorCycle[] }) {
+export function PanelDoor({ cycles, showcaseLocation }: { cycles: DoorCycle[]; showcaseLocation?: string | null }) {
   const defaultIndex = useMemo(
     () =>
       cycles.find((cycle) => cycle.condition === "issue")?.index ??
@@ -62,6 +62,12 @@ export function PanelDoor({ cycles }: { cycles: DoorCycle[] }) {
         title="Door Cycle Analysis"
         hint="Each numbered block represents one detected door movement in chronological order. Select a cycle to review its classification and supporting measurements."
       />
+
+      {showcaseLocation && (
+        <div className="mt-4 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs text-violet-900">
+          <strong>Showcase location: {showcaseLocation}.</strong> This marker demonstrates component-level maintenance workflow; the uploaded dataset contains one unlabeled door and the model does not infer its carriage.
+        </div>
+      )}
 
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <SummaryCard label="Cycles detected" value={String(cycles.length)} tone="neutral" />
