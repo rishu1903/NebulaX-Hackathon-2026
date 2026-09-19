@@ -22,6 +22,7 @@ export type DoorCycle = {
   date: string
   start: string
   end: string
+  durationSeconds: number | null
   label: string
   operation: string
   ratio: number
@@ -206,23 +207,39 @@ export function formatNativeTime(stamp: string): { date: string; time: string } 
   }
 }
 
+function nativeTimestampMs(stamp: string): number | null {
+  const parts = String(stamp).split("-").map(Number)
+  if (parts.length !== 7 || parts.some(Number.isNaN)) return null
+  const [y, mo, d, h, mi, s, ms] = parts
+  return Date.UTC(y, mo - 1, d, h, mi, s, ms)
+}
+
 const cycleCount = (n: number) => `${n} ${n === 1 ? "Cycle" : "Cycles"}`
 
 function doorView(result: AnalyseResult): LiveView {
   const cycles: DoorCycle[] = (result.table ?? []).map((row, index) => {
     const start = formatNativeTime(row.start_time)
     const end = formatNativeTime(row.end_time)
+    const startMs = nativeTimestampMs(row.start_time)
+    const endMs = nativeTimestampMs(row.end_time)
+    const durationSeconds =
+      startMs !== null && endMs !== null && endMs >= startMs
+        ? (endMs - startMs) / 1000
+        : null
+
     const flags = String(row.quality_flags ?? "")
       .split(";")
       .filter(Boolean)
+
     const abnormal = row.prediction === "Abnormal resistance"
-    const lowConfidence = String(row.confidence ?? "").startsWith("Low") || flags.length > 0
+    const lowConfidence = String(row.confidence ?? "").toLowerCase().startsWith("low") || flags.length > 0
 
     return {
       index: index + 1,
       date: start.date,
       start: start.time,
       end: end.time,
+      durationSeconds,
       label: String(row.prediction),
       operation: String(row.operation ?? ""),
       ratio: Number(row.resistance_ratio),
@@ -235,38 +252,43 @@ function doorView(result: AnalyseResult): LiveView {
   })
 
   const total = cycles.length
-  const abnormal = cycles.filter((cycle) => cycle.condition === "issue").length
-  const review = cycles.filter((cycle) => cycle.condition === "review").length
+  const abnormal = cycles.filter((cycle) => cycle.label === "Abnormal resistance").length
+  const normal = total - abnormal
+  const review = cycles.filter(
+    (cycle) => cycle.flags.length > 0 || cycle.confidence.toLowerCase().startsWith("low"),
+  ).length
 
   return {
-    headline: "Saloon door cycle diagnostics",
+    headline: "Door resistance cycle analysis",
     verdict: {
       condition: abnormal > 0 ? "issue" : "normal",
       text:
         abnormal > 0
-          ? `${abnormal} of ${total} door cycles show abnormal resistance`
-          : `All ${total} door cycles are within the normal resistance range`,
+          ? `${abnormal} of ${total} detected door cycles show abnormal resistance`
+          : `All ${total} detected door cycles are classified as normal`,
     },
+    // The uploaded stream contains cycle-level door telemetry and no carriage identifier.
+    // Keep the 8-car context neutral rather than inventing a carriage location.
     cars: idleCars().map((car) => ({
       ...car,
-      finding: "Door results are reported per cycle, not per car",
+      finding: "Door findings are reported by operating cycle, not by carriage",
     })),
     kpis: [
-      { label: "Cycles Evaluated", value: String(total), condition: "neutral" },
+      { label: "Cycles Detected", value: String(total), condition: "neutral" },
+      {
+        label: "Normal",
+        value: cycleCount(normal),
+        condition: normal > 0 ? "normal" : "neutral",
+      },
       {
         label: "Abnormal",
         value: cycleCount(abnormal),
         condition: abnormal > 0 ? "issue" : "normal",
       },
       {
-        label: "Review",
+        label: "Needs Review",
         value: cycleCount(review),
-        condition: review > 0 ? "review" : "neutral",
-      },
-      {
-        label: "Verdict",
-        value: abnormal > 0 ? "Abnormal Resistance" : "Normal",
-        condition: abnormal > 0 ? "issue" : "normal",
+        condition: review > 0 ? "review" : "normal",
       },
     ],
     railSide: null,
