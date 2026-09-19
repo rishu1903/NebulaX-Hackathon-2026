@@ -5,14 +5,12 @@ import { TrainSelector } from "@/components/fault-disruptors/train-selector"
 import type { DemoTrain } from "@/lib/fault-disruptors/data"
 
 export function Header({
-  onUploadClick,
   reportFileName,
   isAnalyzing,
   analysisComplete,
   selectedTrain,
   onTrainChange,
 }: {
-  onUploadClick: () => void
   reportFileName: string | null
   isAnalyzing: boolean
   analysisComplete: boolean
@@ -53,15 +51,6 @@ export function Header({
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
           <div className="flex min-w-0 flex-wrap items-center gap-2">
             <TrainSelector value={selectedTrain} onChange={onTrainChange} />
-
-            <button
-              type="button"
-              onClick={onUploadClick}
-              className="inline-flex h-9 items-center gap-2 rounded-md bg-slate-900 px-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            >
-              <FileUp className="size-4" aria-hidden="true" />
-              Upload Dataset
-            </button>
 
             {reportFileName && (
               <div className="hidden min-w-0 items-center gap-1.5 text-xs font-medium text-slate-500 sm:flex">

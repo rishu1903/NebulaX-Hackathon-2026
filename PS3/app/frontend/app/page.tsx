@@ -52,7 +52,6 @@ export default function Page() {
   const hoveredIndex = hoveredCar ? cars.findIndex((car) => car.id === hoveredCar.id) : -1
   const uploadConfig = SUBSYSTEM_UPLOAD[subsystem]
   const presentation = SUBSYSTEM_PRESENTATION[subsystem]
-  const queued = workspace.jobs.filter((job) => job.file && (job.status === "staged" || job.status === "error"))
   const isAnalyzing = workspace.jobs.some((job) => job.status === "running")
   const completed = workspace.jobs.filter((job) => job.status === "complete" && job.result)
   const downloadable = completed.filter((job) => job.result?.submission_csv)
@@ -76,6 +75,7 @@ export default function Page() {
   }
 
   function stageReports(files: File[]) {
+    const targetSubsystem = subsystem
     const valid: AnalysisJob[] = []
     const invalid: string[] = []
     for (const file of files) {
@@ -84,7 +84,7 @@ export default function Page() {
     }
     setFileError(invalid.length ? `${invalid.length} file${invalid.length === 1 ? "" : "s"} skipped. ${subsystem} requires ${uploadConfig.label}.` : null)
     if (!valid.length) return
-    updateWorkspace(subsystem, (current) => {
+    updateWorkspace(targetSubsystem, (current) => {
       const jobs = [...current.jobs]
       for (const job of valid) {
         const index = jobs.findIndex((item) => item.id === job.id)
@@ -93,6 +93,7 @@ export default function Page() {
       }
       return { ...current, jobs, activeJobId: valid[0].id }
     })
+    void analyseBatch(targetSubsystem, valid)
   }
 
   function handleFileChange(event: ChangeEvent<HTMLInputElement>) {
@@ -105,13 +106,11 @@ export default function Page() {
     stageReports(Array.from(event.dataTransfer.files ?? []))
   }
 
-  async function runBatch() {
-    if (!queued.length) return fileInputRef.current?.click()
-    const targetSubsystem = subsystem
+  async function analyseBatch(targetSubsystem: Subsystem, jobs: AnalysisJob[]) {
     let cursor = 0
     const worker = async () => {
-      while (cursor < queued.length) {
-        const job = queued[cursor++]
+      while (cursor < jobs.length) {
+        const job = jobs[cursor++]
         if (!job.file) continue
         updateWorkspace(targetSubsystem, (current) => ({ ...current, jobs: current.jobs.map((item) => item.id === job.id ? { ...item, status: "running", error: undefined } : item) }))
         try {
@@ -122,7 +121,7 @@ export default function Page() {
         }
       }
     }
-    await Promise.all(Array.from({ length: Math.min(2, queued.length) }, worker))
+    await Promise.all(Array.from({ length: Math.min(2, jobs.length) }, worker))
   }
 
   function removeJob(id: string) {
@@ -143,7 +142,7 @@ export default function Page() {
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-white to-slate-50 text-slate-900">
-      <Header onUploadClick={() => fileInputRef.current?.click()} reportFileName={workspace.jobs.length ? `${workspace.jobs.length} file${workspace.jobs.length === 1 ? "" : "s"}` : null} isAnalyzing={isAnalyzing} analysisComplete={completed.length > 0} selectedTrain={dashboard.selectedTrain} onTrainChange={(selectedTrain) => commitDashboard((current) => ({ ...current, selectedTrain }))} />
+      <Header reportFileName={workspace.jobs.length ? `${workspace.jobs.length} file${workspace.jobs.length === 1 ? "" : "s"}` : null} isAnalyzing={isAnalyzing} analysisComplete={completed.length > 0} selectedTrain={dashboard.selectedTrain} onTrainChange={(selectedTrain) => commitDashboard((current) => ({ ...current, selectedTrain }))} />
       <input ref={fileInputRef} type="file" multiple className="sr-only" accept={uploadConfig.accept} onChange={handleFileChange} />
 
       <div className="mx-auto max-w-7xl px-4 py-5 md:px-6">
@@ -154,19 +153,18 @@ export default function Page() {
             <p className="mt-1 text-sm font-medium text-slate-500">{presentation.question}</p>
             {live ? <div className="mt-3 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold" style={{ backgroundColor: verdictMeta.soft, color: verdictMeta.color }}><ConditionIcon condition={verdictCondition} className="size-5" />{live.verdict.text}</div>
               : isAnalyzing ? <p className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-slate-600"><Loader2 className="size-4 animate-spin" />Analyzing queued files…</p>
-                : <p className="mt-3 text-sm text-slate-500">{workspace.jobs.length ? "Select a result or analyze the staged files." : presentation.idleHint}</p>}
+                : <p className="mt-3 text-sm text-slate-500">{workspace.jobs.length ? "Select a completed result, or choose the file again to retry a failed analysis." : presentation.idleHint}</p>}
           </div>
 
           <div className="flex flex-col items-stretch gap-2">
             <nav aria-label="Subsystem switcher" className="inline-flex overflow-x-auto rounded-lg border border-border bg-white p-0.5">
               {SUBSYSTEMS.map((item) => <button key={item.id} type="button" onClick={() => switchSubsystem(item.id)} aria-pressed={item.id === subsystem} className={`rounded-md px-3 py-2 text-sm font-semibold transition ${item.id === subsystem ? "bg-slate-900 text-white" : "text-slate-500 hover:bg-slate-50"}`}>{item.label}{dashboard.workspaces[item.id].jobs.some((job) => job.status === "complete") && <span className="ml-1 text-emerald-400">•</span>}</button>)}
             </nav>
-            <div className="flex flex-wrap gap-2">
-              <button type="button" onClick={runBatch} disabled={isAnalyzing} className="inline-flex flex-1 items-center justify-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-60">{isAnalyzing ? <Loader2 className="size-4 animate-spin" /> : <UploadCloud className="size-4" />}{queued.length ? `Analyze ${queued.length} file${queued.length === 1 ? "" : "s"}` : "Add files"}</button>
+            {workspace.jobs.length > 0 && <div className="flex flex-wrap justify-end gap-2">
               {downloadable.length > 1 && <button type="button" onClick={() => downloadResultsZip(subsystem, workspace.jobs.filter((job) => job.status === "complete" || job.status === "error").map((job) => ({ sourceFile: job.fileName, submissionCsv: job.result?.submission_csv ?? null, prediction: job.result?.prediction, error: job.error })))} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"><FileArchive className="size-4" />ZIP ({downloadable.length})</button>}
               {result?.submission_csv && <button type="button" onClick={() => downloadCsv(subsystem, result.submission_csv!)} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"><Download className="size-4" />CSV</button>}
               {workspace.jobs.length > 0 && <button type="button" onClick={clearWorkspace} className="rounded-lg border border-border bg-white p-2.5 text-slate-500 hover:text-red-600" aria-label="Clear this subsystem"><RotateCcw className="size-4" /></button>}
-            </div>
+            </div>}
           </div>
         </div>
 
@@ -179,7 +177,7 @@ export default function Page() {
         </section>
 
         <section className="mt-5 rounded-2xl border border-border bg-white p-4 md:p-6">
-          <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">03 {live ? "Evidence & Analysis" : "Input Data"}</p><h3 className="mt-0.5 text-sm font-bold text-slate-900">{live ? presentation.evidenceLabel : presentation.uploadTitle}</h3></div><button type="button" onClick={() => fileInputRef.current?.click()} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50"><UploadCloud className="size-4" />Add multiple files</button></div>
+          <div className="flex flex-wrap items-start justify-between gap-3"><div><p className="text-[11px] font-bold uppercase tracking-[0.18em] text-slate-400">03 {live ? "Evidence & Analysis" : "Input Data"}</p><h3 className="mt-0.5 text-sm font-bold text-slate-900">{live ? presentation.evidenceLabel : presentation.uploadTitle}</h3></div>{workspace.jobs.length > 0 && <button type="button" onClick={() => fileInputRef.current?.click()} disabled={isAnalyzing} className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-50 disabled:opacity-50"><UploadCloud className="size-4" />Choose files</button>}</div>
           <div onDragOver={(event) => event.preventDefault()} onDrop={handleDrop}>
             <BatchQueue jobs={workspace.jobs} activeId={activeJob?.id ?? null} onSelect={(activeJobId) => updateWorkspace(subsystem, (current) => ({ ...current, activeJobId }))} onRemove={removeJob} />
             {fileError && <p role="alert" className="mt-3 text-xs font-semibold text-red-600">{fileError}</p>}
@@ -189,7 +187,7 @@ export default function Page() {
             {live.panel.kind === "acv" && <PanelAcv rows={live.panel.rows} margin={live.panel.margin} emptyCars={live.panel.emptyCars} />}
             {live.panel.kind === "door" && <PanelDoor cycles={live.panel.cycles} showcaseLocation={live.panel.showcaseLocation} />}
             {live.panel.kind === "rail" && <PanelRail label={live.panel.label} side={live.panel.side} speedKmh={live.panel.speedKmh} speedChanges={live.panel.speedChanges} distanceM={live.panel.distanceM} hotspot={live.panel.hotspot} filename={live.panel.filename} lowMotion={live.panel.lowMotion} />}
-            {live.panel.kind === "shm" && <PanelShm damage={live.panel.damage} condition={live.panel.condition} showcaseLocation={live.panel.showcaseLocation} />}
+            {live.panel.kind === "shm" && <PanelShm damage={live.panel.damage} condition={live.panel.condition} signal={live.panel.signal} sampleCount={live.panel.sampleCount} />}
             <TechnicalDetails details={live.technical} />
           </div>}
         </section>

@@ -40,6 +40,11 @@ export type RailHotspot = {
   peakToMedianEnergy: number
 }
 
+export type ShmSignalPoint = {
+  sample: number
+  value: number
+}
+
 export type Panel =
   | { kind: "acv"; rows: AcvRow[]; margin: number | null; emptyCars: string[] }
   | { kind: "door"; cycles: DoorCycle[]; abnormal: number; review: number; showcaseLocation: string | null }
@@ -54,7 +59,7 @@ export type Panel =
       filename: string
       lowMotion: boolean
     }
-  | { kind: "shm"; damage: number; condition: Condition; showcaseLocation: string | null }
+  | { kind: "shm"; damage: number; condition: Condition; signal: ShmSignalPoint[]; sampleCount: number | null }
 
 export type LiveView = {
   headline: string
@@ -398,6 +403,22 @@ export const SHM_BANDS = { review: 0.5, issue: 0.8 }
 function shmView(result: AnalyseResult): LiveView {
   const damage = Number(result.prediction)
   const valid = Number.isFinite(damage)
+  const chartData = result.chart_data && typeof result.chart_data === "object"
+    ? (result.chart_data as Record<string, any>).signal
+    : null
+  const indices = Array.isArray(chartData?.sample_indices) ? chartData.sample_indices : []
+  const values = Array.isArray(chartData?.raw_values) ? chartData.raw_values : []
+  const signal: ShmSignalPoint[] = indices.length === values.length
+    ? indices.flatMap((sample: unknown, index: number) => {
+        const value = values[index]
+        return typeof sample === "number" && Number.isFinite(sample) && typeof value === "number" && Number.isFinite(value)
+          ? [{ sample, value }]
+          : []
+      })
+    : []
+  const sampleCount = typeof chartData?.total_samples === "number" && Number.isFinite(chartData.total_samples)
+    ? chartData.total_samples
+    : null
 
   const condition: Condition = !valid
     ? "neutral"
@@ -415,23 +436,14 @@ function shmView(result: AnalyseResult): LiveView {
         ? `Predicted cumulative fatigue damage D = ${damage.toFixed(4)}`
         : "No cumulative fatigue damage value could be computed",
     },
-    cars: idleCars().map((car) => car.id === 4 && (condition === "review" || condition === "issue") ? {
+    cars: idleCars().map((car) => ({
       ...car,
-      finding: "Showcase placement: the centre body is highlighted for presentation context. The SHM model predicts one value for the full record and does not localise damage.",
-      overlay: { kind: "structure", condition, label: "Centre body", source: "showcase" },
-    } : {
-      ...car,
-      finding: "SHM reports cumulative damage for the uploaded structural record, not by carriage",
-    }),
+      finding: "The train is shown as asset context. SHM reports one result for the complete uploaded structural record.",
+    })),
     kpis: [
       {
         label: "Predicted Damage D",
         value: valid ? damage.toFixed(4) : "—",
-        condition,
-      },
-      {
-        label: "Reference Used",
-        value: valid ? `${Math.max(0, damage * 100).toFixed(1)}%` : "—",
         condition,
       },
       {
@@ -440,9 +452,14 @@ function shmView(result: AnalyseResult): LiveView {
         condition: "neutral",
       },
       {
-        label: "Showcase Context",
-        value: condition === "review" || condition === "issue" ? "Car 04 · Centre" : "None",
-        condition: condition === "review" || condition === "issue" ? "review" : "neutral",
+        label: "Input Signal",
+        value: sampleCount === null ? "Uploaded Record" : `${sampleCount.toLocaleString()} Samples`,
+        condition: "neutral",
+      },
+      {
+        label: "Localisation",
+        value: "Not Provided",
+        condition: "neutral",
       },
     ],
     railSide: null,
@@ -450,7 +467,8 @@ function shmView(result: AnalyseResult): LiveView {
       kind: "shm",
       damage: valid ? damage : 0,
       condition,
-      showcaseLocation: valid && (condition === "review" || condition === "issue") ? "Car 04 · Centre body" : null,
+      signal,
+      sampleCount,
     },
     ...base(result),
   }

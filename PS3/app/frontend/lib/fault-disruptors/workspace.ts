@@ -47,7 +47,7 @@ export function fileJobId(file: File) {
   return `${file.name}:${file.size}:${file.lastModified}`
 }
 
-/** Store completed lightweight results only; browser File objects and chart payloads are deliberately omitted. */
+/** Store completed lightweight results only. Keep the compact SHM preview so its evidence survives a reload. */
 export function saveDashboardWorkspace(value: DashboardWorkspace) {
   const workspaces = Object.fromEntries(
     Object.entries(value.workspaces).map(([key, workspace]) => {
@@ -56,7 +56,7 @@ export function saveDashboardWorkspace(value: DashboardWorkspace) {
         .map((job) => ({
           ...job,
           file: undefined,
-          result: { ...job.result!, chart_data: null },
+          result: { ...job.result!, chart_data: key === "SHM" ? job.result!.chart_data : null },
         }))
       return [key, { ...workspace, jobs, activeJobId: jobs.some((job) => job.id === workspace.activeJobId) ? workspace.activeJobId : jobs[0]?.id ?? null }]
     }),

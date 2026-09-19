@@ -162,6 +162,15 @@ def test_shm_adapter_success_contract(monkeypatch) -> None:
     assert parsed.loc[0, "prediction"] == 0.123
 
 
+def test_shm_signal_preview_preserves_raw_extremes() -> None:
+    preview = shm_adapter._signal_preview(b"1\n-4\n3\n2\n", max_points=4)
+
+    assert preview is not None
+    assert preview["total_samples"] == 4
+    assert preview["raw_values"] == [1.0, -4.0, 3.0, 2.0]
+    assert preview["units"] is None
+
+
 def test_extension_errors_return_contract() -> None:
     for adapter, name in [
         (acv_adapter, "case.csv"),

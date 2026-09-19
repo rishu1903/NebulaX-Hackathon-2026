@@ -7,7 +7,7 @@ Phases 1–3 are implemented in the frontend. The production Next.js build and s
 Rail and SHM received a second layout pass after live review:
 
 - Rail now converts wheel-pulse transitions into travelled metres, uses that distance on the track ribbon, and groups model verdict, measured context and inspection guidance without repeating the top KPI strip.
-- SHM now presents one compact damage gauge, separates model scope from the showcase asset context, collapses the calculation method, and renders front, centre, rear and underframe zones on the showcase carriage.
+- SHM now presents the damage value as the visual hero, plots a compact preview of the uploaded signal, keeps the train neutral as asset context, and states that physical inspection determines damage location.
 
 ## Outcome
 
@@ -29,7 +29,7 @@ This plan is based on:
 | Refreshing loses completed results | All analysis state lived in React `useState` inside `app/page.tsx` | Save serializable completed results, selected train and active subsystem to versioned browser storage |
 | Only one file can be selected | The file input lacks `multiple`; change/drop handlers use only `files[0]` | Accept and validate a `File[]`, display a queue, and analyse files with controlled concurrency |
 | Only one CSV can be downloaded | `downloadCsv()` creates one browser download from one result | Add “Download all as ZIP”, containing one prediction CSV per successful upload plus a manifest |
-| SHM damage has no carriage | The model returns one damage value for the uploaded structural record and has no carriage or zone field | Show a clearly labelled showcase asset context, defaulting to Car 04 / Center Body, while preserving the model scope statement |
+| SHM damage has no carriage | The model returns one damage value for the uploaded structural record and has no carriage or zone field | Keep the train neutral, show the uploaded signal as evidence, and state that the result applies to the complete record without localisation |
 | Door result does not identify a physical door | The dataset provides cycle-level telemetry for one unlabelled door | Highlight one fixed showcase door, defaulting to Car 03 / Door 2, labelled “Showcase location — not model output” |
 | Eight-car overview is difficult to scan | The SVG is rendered on a roughly 2,000 px stage, forcing horizontal scrolling on normal screens | Fit all eight carriages into the desktop hero; open a larger selected-car detail below or in a floating card |
 | Main result is below the fold | Header, disclaimer, task copy and upload controls consume most of the first viewport | Compress the header and put fleet selector, subsystem switcher, verdict and twin into the first viewport |
@@ -194,19 +194,18 @@ Continue highlighting Side I or Side II on the rail bed. Do not assign rail corr
 
 ### SHM
 
-Use Car 04 / Center Body as the default showcase asset context for elevated damage. Add a translucent structural-zone overlay to the selected carriage. The result card must separate:
+Keep all carriages neutral because the SHM model does not return a carriage, crack, bogie or body zone. The evidence area must show:
 
-- **Model result:** cumulative fatigue damage for the uploaded record;
-- **Showcase asset context:** Car 04 / Center Body, not localised by the model.
-
-This gives the visual demonstration requested without presenting invented localization as an engineering conclusion.
+- **Model result:** cumulative fatigue damage for the complete uploaded record;
+- **Signal evidence:** a downsampled preview of the actual uploaded one-column record, labelled with raw values and sample index;
+- **Inspection scope:** the prediction supports follow-up planning, while physical inspection determines the location and nature of damage.
 
 ## 6. Digital Twin visual changes
 
 - Fit all eight cars within a standard desktop-width hero so the complete consist is visible at once.
 - Keep horizontal scrolling only for narrow mobile screens.
 - Increase the selected carriage with a focused detail strip rather than enlarging the whole consist.
-- Pass the active subsystem into each car so Door and SHM can render component-specific overlays.
+- Pass the active subsystem into each car so Door can render its explicitly labelled showcase overlay while SHM remains neutral context.
 - Replace whole-car red tint for component faults with localized door/zone colour.
 - Make locked selection visually distinct from hover.
 - Add an always-visible legend for Model, Showcase and No Location Available.
@@ -229,18 +228,18 @@ This gives the visual demonstration requested without presenting invented locali
 | `frontend/app/page.tsx` | Replace single-file state with subsystem workspaces; add persistence, batch queue and active-result selection |
 | `frontend/lib/fault-disruptors/api.ts` | Add `analyseMany`, safe output naming and ZIP download helpers |
 | `frontend/lib/fault-disruptors/data.ts` | Add demo train records and component overlay types |
-| `frontend/lib/fault-disruptors/live.ts` | Produce model vs showcase overlays and truthful scope labels |
+| `frontend/lib/fault-disruptors/live.ts` | Produce model-derived views, truthful scope labels and the SHM signal preview model |
 | `frontend/components/fault-disruptors/header.tsx` | Add train selector and compact the header |
-| `frontend/components/fault-disruptors/train-twin.tsx` | Fit eight cars, render individual door and SHM zone overlays, add source legend |
+| `frontend/components/fault-disruptors/train-twin.tsx` | Fit eight cars, render the Door showcase overlay, and keep SHM carriages neutral |
 | `frontend/components/fault-disruptors/batch-queue.tsx` | New file list, statuses, selection, retry and remove controls |
 | `frontend/components/fault-disruptors/train-selector.tsx` | New showcase train-number bar |
 | `frontend/components/fault-disruptors/result-actions.tsx` | New selected CSV and combined ZIP actions |
 | `frontend/components/fault-disruptors/panel-door.tsx` | Link selected abnormal cycle to the showcase door overlay |
-| `frontend/components/fault-disruptors/panel-shm.tsx` | Split model output from showcase asset context |
+| `frontend/components/fault-disruptors/panel-shm.tsx` | Show cumulative damage, the uploaded signal preview, scope, interpretation and next-check guidance |
 | `frontend/app/globals.css` | Add compact layout, full-consist breakpoints, overlay and batch-state styles |
 | `frontend/package.json` | Add the chosen local ZIP dependency |
 
-No backend change is required for the initial batch implementation. The existing stateless endpoint can process each file independently.
+The stateless SHM adapter returns a compact min/max downsample of the uploaded signal for visualization. Inference still uses the complete signal.
 
 ## 9. Implementation sequence
 
@@ -263,7 +262,7 @@ No backend change is required for the initial batch implementation. The existing
 1. Fit the full consist in the hero.
 2. Add the showcase fleet selector.
 3. Add model/showcase component overlays.
-4. Implement Door 2 and SHM Center Body showcase locations with explicit labels.
+4. Implement the Door 2 showcase location and keep SHM free from component or carriage localisation.
 5. Connect batch result selection to the twin and evidence panel.
 
 ### Phase 4 — Polish and verification
@@ -283,7 +282,7 @@ No backend change is required for the initial batch implementation. The existing
 - One failed file does not remove or invalidate successful results.
 - A combined ZIP contains every successful prediction CSV and a manifest describing successes and failures.
 - ACV carriage highlights come from model output.
-- Door and SHM demo locations are visually obvious and always labelled as showcase-only.
+- The Door demo location is visually obvious and labelled as showcase-only; SHM has no demo location or carriage highlight.
 - Rail results highlight the affected rail side without inventing carriage localization.
 - All eight cars are visible together on a common desktop screen.
 - The primary verdict and affected subsystem/component can be understood within three seconds.
