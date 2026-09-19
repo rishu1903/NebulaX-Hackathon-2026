@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 from io import StringIO
+from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from PS3.app.adapters import acv_adapter, door_adapter, rail_adapter, shm_adapter
 
@@ -30,42 +32,47 @@ def assert_contract(result: dict) -> None:
     assert isinstance(result["technical_details"], dict)
 
 
-def test_door_adapter_success_contract(monkeypatch) -> None:
-    predictions = pd.DataFrame(
-        [
-            {
-                "start_time": "2023-7-5-0-0-0-0",
-                "end_time": "2023-7-5-0-0-3-760",
-                "prediction": "Normal",
-            },
-            {
-                "start_time": "2023-7-5-0-0-15-5",
-                "end_time": "2023-7-5-0-0-18-765",
-                "prediction": "Abnormal resistance",
-            },
-        ]
-    )
-
-    class FakePipeline:
-        def predict_stream(self, path):
-            return predictions
-
-    monkeypatch.setattr(door_adapter, "_pipeline", lambda: FakePipeline())
-    csv_bytes = (
+def _door_stream() -> bytes:
+    """Two synthetic door cycles: a low-resistance one (Normal) and a high-resistance one (Abnormal)."""
+    header = (
         "Datetime,Motor current(mA),Motor Voltage(10mV),Motor electrodynamic force,"
-        "Door leaf position,Door is opening\n"
-        "2023-7-5-0-0-0-0,1,2,3,4,1\n"
-    ).encode()
+        "Door leaf position,Open command,Close command,Door is opening\n"
+    )
+    rows = []
+    for start_s, current in ((0, 100), (30, 300)):  # 30 s idle gap between cycles
+        for i in range(60):  # 20 ms sampling
+            ms = start_s * 1000 + i * 20
+            stamp = f"2023-7-5-0-0-{ms // 1000}-{ms % 1000}"
+            rows.append(f"{stamp},{current},400,400,{i * 10},1,0,1\n")
+    return (header + "".join(rows)).encode()
 
-    result = door_adapter.analyse_upload(csv_bytes, "Test.csv")
+
+def test_door_adapter_success_contract() -> None:
+    result = door_adapter.analyse_upload(_door_stream(), "Test.csv")
 
     assert_contract(result)
     assert result["success"] is True
+    assert result["prediction"] == ["Normal", "Abnormal resistance"]
     assert result["summary"]["cycles_found"] == 2
     assert result["summary"]["abnormal"] == 1
+    assert result["technical_details"]["retraining_during_inference"] is False
     parsed = pd.read_csv(StringIO(result["submission_csv"]))
     assert list(parsed.columns) == ["start_time", "end_time", "prediction"]
     assert parsed.shape == (2, 3)
+
+
+def test_door_adapter_matches_submitted_csv() -> None:
+    """The app must produce exactly the file we submit (guards against a stale submission)."""
+    ps3 = Path(__file__).resolve().parents[2]
+    test_csv = ps3 / "02_Datasets" / "Door" / "Test.csv"
+    submitted = ps3 / "Door_Work" / "outputs" / "submission" / "door_predictions.csv"
+    if not test_csv.exists():
+        pytest.skip("raw Door dataset not present")
+
+    result = door_adapter.analyse_upload(test_csv.read_bytes(), "Test.csv")
+
+    assert result["success"] is True
+    assert result["submission_csv"] == submitted.read_text()
 
 
 def test_door_adapter_missing_column_is_readable() -> None:

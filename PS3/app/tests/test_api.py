@@ -109,3 +109,4 @@ def test_door_end_to_end(client):
     body = resp.json()
     assert resp.status_code == 200 and set(body) == CONTRACT_KEYS
     assert body["summary"]["cycles_found"] == 38
+    assert body["summary"]["abnormal"] == 8
