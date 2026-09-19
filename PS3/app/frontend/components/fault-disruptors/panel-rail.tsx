@@ -3,18 +3,25 @@
 import { AlertTriangle, CheckCircle2, Gauge, MapPinned, Route, ShieldCheck } from "lucide-react"
 import { CONDITION_META, type Condition } from "@/lib/fault-disruptors/data"
 import { PanelTitle } from "@/components/fault-disruptors/panel-acv"
+import type { RailHotspot } from "@/lib/fault-disruptors/live"
 
 export function PanelRail({
   label,
   side,
   speedKmh,
   speedChanges,
+  distanceM,
+  hotspot,
+  filename,
   lowMotion,
 }: {
   label: string
   side: "I" | "II" | null
   speedKmh: number | null
   speedChanges: number | null
+  distanceM: number | null
+  hotspot: RailHotspot | null
+  filename: string
   lowMotion: boolean
 }) {
   const condition: Condition = side ? "issue" : "normal"
@@ -23,38 +30,27 @@ export function PanelRail({
   return (
     <div>
       <PanelTitle
-        title="Rail Corrugation Assessment"
-        hint="The model classifies the uploaded recording as Normal, Side I or Side II. The result applies to the recording window as a whole."
+        title="Track Window & Inspection Guidance"
+        hint="Measured context for the uploaded recording, followed by the rail side that should be inspected."
       />
 
-      <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1.3fr)_minmax(260px,0.7fr)]">
-        <div
-          className="rounded-xl border p-4"
-          style={{ borderColor: meta.color, backgroundColor: meta.soft }}
-        >
+      <div className="mt-4 grid gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
+        <div className="rounded-xl border p-4" style={{ borderColor: meta.color, backgroundColor: meta.soft }}>
           <div className="flex items-start gap-3">
-            <div
-              className="flex size-11 shrink-0 items-center justify-center rounded-lg"
-              style={{ backgroundColor: meta.color, color: "#ffffff" }}
-            >
-              {side ? (
-                <AlertTriangle className="size-5" aria-hidden="true" />
-              ) : (
-                <CheckCircle2 className="size-5" aria-hidden="true" />
-              )}
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-lg text-white" style={{ backgroundColor: meta.color }}>
+              {side ? <AlertTriangle className="size-5" aria-hidden="true" /> : <CheckCircle2 className="size-5" aria-hidden="true" />}
             </div>
-
             <div>
-              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
-                Model classification
-              </p>
+              <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">Model verdict</p>
               <p className="mt-1 text-2xl font-bold tracking-tight" style={{ color: meta.color }}>
-                {side ? `Side ${side} corrugation` : label || "Normal"}
+                {side ? `Inspect Side ${side}` : label || "Normal"}
               </p>
               <p className="mt-1 text-sm leading-relaxed text-slate-600">
                 {side
-                  ? `The uploaded recording is classified as showing corrugation on Side ${side}.`
-                  : "The uploaded recording is classified as normal, with no rail side flagged for corrugation."}
+                  ? hotspot
+                    ? `Corrugation is classified on Side ${side}; the strongest signal region is estimated at ${hotspot.startM.toFixed(2)}–${hotspot.endM.toFixed(2)} m.`
+                    : `Corrugation is classified on Side ${side} for the measured window.`
+                  : "Neither rail side is flagged for corrugation in this measured window."}
               </p>
             </div>
           </div>
@@ -62,50 +58,25 @@ export function PanelRail({
 
         <div className="rounded-xl border border-border bg-slate-50 p-4">
           <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
-            <MapPinned className="size-3.5" aria-hidden="true" />
-            Scope of result
+            <MapPinned className="size-3.5" aria-hidden="true" /> Recorded window
           </p>
-          <p className="mt-2 text-sm font-bold text-slate-900">Uploaded recording window</p>
-          <p className="mt-1 text-xs leading-relaxed text-slate-500">
-            This classification identifies the affected rail side for the complete uploaded window. It does not
-            identify an exact defect start or end position within that window.
-          </p>
+          <dl className="mt-3 grid grid-cols-[max-content_1fr] gap-x-4 gap-y-2 text-sm">
+            <dt className="text-slate-500">File</dt><dd className="truncate text-right font-bold text-slate-900">{filename}</dd>
+            <dt className="text-slate-500">Distance</dt><dd className="text-right font-bold text-slate-900">{distanceM === null ? "Not available" : `${distanceM.toFixed(2)} m`}</dd>
+            <dt className="text-slate-500">Mean speed</dt><dd className="text-right font-bold text-slate-900">{speedKmh === null ? "Not available" : `${speedKmh.toFixed(1)} km/h`}</dd>
+          </dl>
         </div>
       </div>
 
-      <div className="mt-5 grid gap-3 md:grid-cols-2">
-        <MetricCard
-          icon={<Gauge className="size-4" aria-hidden="true" />}
-          label="Mean train speed"
-          value={speedKmh === null ? "Not available" : `${speedKmh.toFixed(1)} km/h`}
-          description="Average speed measured for the uploaded recording."
-        />
-
-        <MetricCard
-          icon={<Route className="size-4" aria-hidden="true" />}
-          label="Speed transitions"
-          value={speedChanges === null ? "Not available" : String(speedChanges)}
-          description="Number of speed-state transitions detected in the recording."
-        />
+      <div className="mt-4 grid gap-3 md:grid-cols-2">
+        <RailSideCard title="Left Rail · Side I" active={side === "I"} />
+        <RailSideCard title="Right Rail · Side II" active={side === "II"} />
       </div>
 
-      <div className="mt-5 overflow-hidden rounded-xl border border-border">
-        <div className="grid grid-cols-[1fr_120px] gap-4 border-b border-border bg-slate-50 px-4 py-2.5 text-[11px] font-bold uppercase tracking-wide text-slate-500">
-          <span>Rail side</span>
-          <span className="text-right">Assessment</span>
-        </div>
-
-        <RailSideRow
-          title="Side I"
-          active={side === "I"}
-          normal={side !== "I"}
-        />
-
-        <RailSideRow
-          title="Side II"
-          active={side === "II"}
-          normal={side !== "II"}
-        />
+      <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 rounded-lg border border-border bg-white px-4 py-3 text-xs text-slate-600">
+        <span className="inline-flex items-center gap-2"><Route className="size-4 text-slate-400" />{speedChanges === null ? "Transition count unavailable" : `${speedChanges} wheel-pulse transitions`}</span>
+        <span className="inline-flex items-center gap-2"><Gauge className="size-4 text-slate-400" />Distance uses 0.014835 m per transition</span>
+        <span className="inline-flex items-center gap-2"><MapPinned className="size-4 text-slate-400" />{hotspot ? `Peak local energy ${hotspot.peakToMedianEnergy.toFixed(2)}× window median` : "No abnormal hotspot estimated"}</span>
       </div>
 
       {lowMotion && (
@@ -113,94 +84,35 @@ export function PanelRail({
           <ShieldCheck className="mt-0.5 size-5 shrink-0 text-amber-700" aria-hidden="true" />
           <div>
             <p className="text-sm font-bold text-amber-900">Low-motion rule applied</p>
-            <p className="mt-0.5 text-xs leading-relaxed text-amber-800">
-              The recording contained very little speed-state movement, so the Rail pipeline applied its
-              low-transition override. This is part of the model&apos;s normal inference logic for low-motion inputs.
-            </p>
+            <p className="mt-0.5 text-xs leading-relaxed text-amber-800">Very little wheel movement was recorded, so the pipeline applied its low-transition override.</p>
           </div>
         </div>
       )}
 
-      <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4">
-        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
-          Suggested technician check
+      <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+        <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">Recommended next check</p>
+        <p className="mt-1 text-sm font-bold text-slate-900">
+          {side && hotspot
+            ? `Prioritise Side ${side} from ${hotspot.startM.toFixed(2)} m to ${hotspot.endM.toFixed(2)} m within the recording.`
+            : side
+              ? `Inspect Side ${side} across the ${distanceM === null ? "uploaded" : `${distanceM.toFixed(2)} m`} recording window.`
+              : "Continue routine monitoring; no corrugation follow-up is indicated by this recording."}
         </p>
-
-        {side ? (
-          <>
-            <p className="mt-1 text-sm font-bold text-slate-900">
-              Inspect Side {side} within the track segment represented by this recording.
-            </p>
-            <p className="mt-1 text-xs leading-relaxed text-slate-500">
-              Use a physical rail inspection or maintenance measurement to localise the exact treatment area and
-              determine any grinding or repair parameters. Those details are not predicted by this classifier.
-            </p>
-          </>
-        ) : (
-          <>
-            <p className="mt-1 text-sm font-bold text-slate-900">
-              No corrugation follow-up is indicated by this recording.
-            </p>
-            <p className="mt-1 text-xs leading-relaxed text-slate-500">
-              Continue routine monitoring and review future recordings for any change in rail condition.
-            </p>
-          </>
-        )}
+        {side && <p className="mt-1 text-xs leading-relaxed text-slate-500">The highlighted interval is an energy-based estimate derived from wheel-pulse distance and local sensor energy. Confirm treatment limits with a physical rail measurement.</p>}
       </div>
     </div>
   )
 }
 
-function RailSideRow({
-  title,
-  active,
-  normal,
-}: {
-  title: string
-  active: boolean
-  normal: boolean
-}) {
-  const condition: Condition = active ? "issue" : normal ? "normal" : "neutral"
-  const meta = CONDITION_META[condition]
-
+function RailSideCard({ title, active }: { title: string; active: boolean }) {
+  const meta = CONDITION_META[active ? "issue" : "normal"]
   return (
-    <div className="grid grid-cols-[1fr_120px] items-center gap-4 border-b border-border bg-white px-4 py-3 last:border-b-0">
+    <div className="flex items-center justify-between gap-3 rounded-xl border bg-white px-4 py-3" style={{ borderColor: active ? meta.color : "var(--border)" }}>
       <div>
-        <p className="text-sm font-bold text-slate-800">{title}</p>
-        <p className="mt-0.5 text-xs text-slate-500">
-          {active ? "Flagged by the model for corrugation." : "Not flagged in this recording."}
-        </p>
+        <p className="text-sm font-bold text-slate-900">{title}</p>
+        <p className="mt-0.5 text-xs text-slate-500">{active ? "Flagged for inspection" : "Not flagged in this recording"}</p>
       </div>
-
-      <span
-        className="justify-self-end rounded-md px-2.5 py-1 text-xs font-bold"
-        style={{ backgroundColor: meta.soft, color: meta.color }}
-      >
-        {active ? "Corrugation" : "Not flagged"}
-      </span>
-    </div>
-  )
-}
-
-function MetricCard({
-  icon,
-  label,
-  value,
-  description,
-}: {
-  icon: React.ReactNode
-  label: string
-  value: string
-  description: string
-}) {
-  return (
-    <div className="rounded-xl border border-border bg-white p-4">
-      <p className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-500">
-        {icon}
-        {label}
-      </p>
-      <p className="mt-1 text-2xl font-bold tracking-tight text-slate-950">{value}</p>
-      <p className="mt-1 text-xs leading-relaxed text-slate-500">{description}</p>
+      <span className="rounded-md px-2.5 py-1 text-xs font-bold" style={{ backgroundColor: meta.soft, color: meta.color }}>{active ? "Corrugation" : "Clear"}</span>
     </div>
   )
 }

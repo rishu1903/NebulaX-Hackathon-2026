@@ -1,4 +1,5 @@
 import type { Subsystem } from "@/lib/fault-disruptors/data"
+import { strToU8, zipSync } from "fflate"
 
 /**
  * Base URL of the analysis API. In production it is empty (same origin: the API serves this UI, or
@@ -72,6 +73,50 @@ export function downloadCsv(subsystem: Subsystem, csv: string) {
   const link = document.createElement("a")
   link.href = url
   link.download = DOWNLOAD_NAME[subsystem]
+  document.body.appendChild(link)
+  link.click()
+  link.remove()
+  URL.revokeObjectURL(url)
+}
+
+export type ZipPrediction = {
+  sourceFile: string
+  submissionCsv: string | null
+  prediction?: unknown
+  error?: string
+}
+
+function safeStem(name: string) {
+  return name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9_-]+/g, "_") || "prediction"
+}
+
+/** Package successful batch outputs and an audit manifest without sending data to another service. */
+export function downloadResultsZip(subsystem: Subsystem, items: ZipPrediction[]) {
+  const files: Record<string, Uint8Array> = {}
+  const used = new Set<string>()
+  const manifest = items.map((item, index) => {
+    let stem = safeStem(item.sourceFile)
+    if (used.has(stem)) stem = `${stem}_${index + 1}`
+    used.add(stem)
+    const output = item.submissionCsv ? `predictions/${stem}_predictions.csv` : null
+    if (output && item.submissionCsv) files[output] = strToU8(item.submissionCsv)
+    return {
+      source_file: item.sourceFile,
+      status: output ? "success" : "error",
+      output_file: output,
+      prediction: item.prediction ?? null,
+      error: item.error ?? null,
+    }
+  })
+
+  files["manifest.json"] = strToU8(
+    JSON.stringify({ subsystem, generated_at: new Date().toISOString(), successful_files: manifest.filter((item) => item.status === "success").length, failed_files: manifest.filter((item) => item.status === "error").length, files: manifest }, null, 2),
+  )
+  const archive = zipSync(files, { level: 6 })
+  const url = URL.createObjectURL(new Blob([archive as BlobPart], { type: "application/zip" }))
+  const link = document.createElement("a")
+  link.href = url
+  link.download = `${subsystem.toLowerCase()}_prediction_batch.zip`
   document.body.appendChild(link)
   link.click()
   link.remove()

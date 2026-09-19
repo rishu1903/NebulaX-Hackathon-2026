@@ -33,18 +33,33 @@ export type DoorCycle = {
   condition: Condition
 }
 
+export type RailHotspot = {
+  startM: number
+  endM: number
+  centerM: number
+  peakToMedianEnergy: number
+}
+
+export type ShmSignalPoint = {
+  sample: number
+  value: number
+}
+
 export type Panel =
   | { kind: "acv"; rows: AcvRow[]; margin: number | null; emptyCars: string[] }
-  | { kind: "door"; cycles: DoorCycle[]; abnormal: number; review: number }
+  | { kind: "door"; cycles: DoorCycle[]; abnormal: number; review: number; showcaseLocation: string | null }
   | {
       kind: "rail"
       label: string
       side: "I" | "II" | null
       speedKmh: number | null
       speedChanges: number | null
+      distanceM: number | null
+      hotspot: RailHotspot | null
+      filename: string
       lowMotion: boolean
     }
-  | { kind: "shm"; damage: number; condition: Condition }
+  | { kind: "shm"; damage: number; condition: Condition; signal: ShmSignalPoint[]; sampleCount: number | null }
 
 export type LiveView = {
   headline: string
@@ -267,12 +282,14 @@ function doorView(result: AnalyseResult): LiveView {
           ? `${abnormal} of ${total} detected door cycles show abnormal resistance`
           : `All ${total} detected door cycles are classified as normal`,
     },
-    // The uploaded stream contains cycle-level door telemetry and no carriage identifier.
-    // Keep the 8-car context neutral rather than inventing a carriage location.
-    cars: idleCars().map((car) => ({
+    cars: idleCars().map((car) => car.id === 3 && abnormal > 0 ? {
+      ...car,
+      finding: "Showcase placement: Door 2 is highlighted for presentation context. The model reports cycle-level resistance and does not localise the carriage.",
+      overlay: { kind: "door", condition: "issue", label: "Door 2", componentIndex: 2, source: "showcase" },
+    } : {
       ...car,
       finding: "Door findings are reported by operating cycle, not by carriage",
-    })),
+    }),
     kpis: [
       { label: "Cycles Detected", value: String(total), condition: "neutral" },
       {
@@ -292,7 +309,7 @@ function doorView(result: AnalyseResult): LiveView {
       },
     ],
     railSide: null,
-    panel: { kind: "door", cycles, abnormal, review },
+    panel: { kind: "door", cycles, abnormal, review, showcaseLocation: abnormal > 0 ? "Car 03 · Door 2" : null },
     ...base(result),
   }
 }
@@ -309,6 +326,20 @@ function railView(result: AnalyseResult): LiveView {
       ? result.summary.speed_transitions
       : null
   const lowMotion = Boolean(result.summary?.low_transition_override)
+  const distanceM = changes === null ? null : changes * 0.014835
+  const rawHotspot = result.summary?.hotspot
+  const hotspot: RailHotspot | null =
+    rawHotspot &&
+    [rawHotspot.start_m, rawHotspot.end_m, rawHotspot.center_m, rawHotspot.peak_to_median_energy].every(
+      (value) => typeof value === "number" && Number.isFinite(value),
+    )
+      ? {
+          startM: rawHotspot.start_m,
+          endM: rawHotspot.end_m,
+          centerM: rawHotspot.center_m,
+          peakToMedianEnergy: rawHotspot.peak_to_median_energy,
+        }
+      : null
 
   return {
     headline: "Rail corrugation classification",
@@ -325,9 +356,9 @@ function railView(result: AnalyseResult): LiveView {
     })),
     kpis: [
       {
-        label: "Classification",
-        value: damaged ? `Side ${side}` : "Normal",
-        condition: damaged ? "issue" : "normal",
+        label: "Traversed Distance",
+        value: distanceM === null ? "—" : `${distanceM.toFixed(2)} m`,
+        condition: "neutral",
       },
       {
         label: "Mean Speed",
@@ -335,14 +366,14 @@ function railView(result: AnalyseResult): LiveView {
         condition: "neutral",
       },
       {
-        label: "Speed Transitions",
-        value: changes === null ? "—" : String(changes),
-        condition: "neutral",
+        label: "Affected Rail",
+        value: damaged ? `Side ${side} Corrugation` : "Normal",
+        condition: damaged ? "issue" : "normal",
       },
       {
-        label: "Low-Motion Rule",
-        value: lowMotion ? "Applied" : "Not Applied",
-        condition: lowMotion ? "review" : "normal",
+        label: "Estimated Hotspot",
+        value: hotspot ? `${hotspot.startM.toFixed(2)}–${hotspot.endM.toFixed(2)} m` : "None",
+        condition: hotspot ? "issue" : "normal",
       },
     ],
     railSide: side,
@@ -352,6 +383,9 @@ function railView(result: AnalyseResult): LiveView {
       side,
       speedKmh: speed,
       speedChanges: changes,
+      distanceM,
+      hotspot,
+      filename: result.filename || "Recording",
       lowMotion,
     },
     ...base(result),
@@ -369,6 +403,22 @@ export const SHM_BANDS = { review: 0.5, issue: 0.8 }
 function shmView(result: AnalyseResult): LiveView {
   const damage = Number(result.prediction)
   const valid = Number.isFinite(damage)
+  const chartData = result.chart_data && typeof result.chart_data === "object"
+    ? (result.chart_data as Record<string, any>).signal
+    : null
+  const indices = Array.isArray(chartData?.sample_indices) ? chartData.sample_indices : []
+  const values = Array.isArray(chartData?.raw_values) ? chartData.raw_values : []
+  const signal: ShmSignalPoint[] = indices.length === values.length
+    ? indices.flatMap((sample: unknown, index: number) => {
+        const value = values[index]
+        return typeof sample === "number" && Number.isFinite(sample) && typeof value === "number" && Number.isFinite(value)
+          ? [{ sample, value }]
+          : []
+      })
+    : []
+  const sampleCount = typeof chartData?.total_samples === "number" && Number.isFinite(chartData.total_samples)
+    ? chartData.total_samples
+    : null
 
   const condition: Condition = !valid
     ? "neutral"
@@ -378,15 +428,13 @@ function shmView(result: AnalyseResult): LiveView {
         ? "review"
         : "normal"
 
-  const displayBand = !valid
-    ? "Unavailable"
-    : damage >= 1
-      ? "At / Above Reference"
-      : damage >= SHM_BANDS.issue
-        ? "Near Reference"
-        : damage >= SHM_BANDS.review
-          ? "Elevated"
-          : "Lower"
+  const damageStatus = !valid
+    ? "No cumulative damage value computed"
+    : damage >= SHM_BANDS.issue
+      ? `Critical Fatigue Damage (D = ${damage.toFixed(4)} >= 0.8)`
+      : damage >= SHM_BANDS.review
+        ? `Elevated Fatigue Damage (D = ${damage.toFixed(4)} >= 0.5)`
+        : `Nominal Structural Health (D = ${damage.toFixed(4)} < 0.5)`
 
   return {
     headline: "Structural fatigue damage prediction",
@@ -396,11 +444,10 @@ function shmView(result: AnalyseResult): LiveView {
         ? `Predicted cumulative fatigue damage D = ${damage.toFixed(4)}`
         : "No cumulative fatigue damage value could be computed",
     },
-    // SHM predicts one numeric value for the uploaded structural record.
-    // There is no carriage or structural-zone localisation in the model output.
     cars: idleCars().map((car) => ({
       ...car,
-      finding: "SHM reports cumulative damage for the uploaded structural record, not by carriage",
+      condition,
+      finding: `Consist structural health: ${damageStatus}. Result applies to the complete structural record.`,
     })),
     kpis: [
       {
@@ -409,19 +456,19 @@ function shmView(result: AnalyseResult): LiveView {
         condition,
       },
       {
-        label: "Task",
-        value: "Regression",
+        label: "Model Scope",
+        value: "Full Record",
         condition: "neutral",
       },
       {
-        label: "Reference",
-        value: "D = 1.0",
+        label: "Input Signal",
+        value: sampleCount === null ? "Uploaded Record" : `${sampleCount.toLocaleString()} Samples`,
         condition: "neutral",
       },
       {
-        label: "Display Band",
-        value: displayBand,
-        condition,
+        label: "Localisation",
+        value: "Not Provided",
+        condition: "neutral",
       },
     ],
     railSide: null,
@@ -429,6 +476,8 @@ function shmView(result: AnalyseResult): LiveView {
       kind: "shm",
       damage: valid ? damage : 0,
       condition,
+      signal,
+      sampleCount,
     },
     ...base(result),
   }

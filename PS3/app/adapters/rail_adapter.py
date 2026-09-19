@@ -62,9 +62,10 @@ def analyse_upload(file_bytes: bytes, filename: str) -> dict[str, Any]:
             "speed_kmh": result["speed_kmh"],
             "speed_transitions": result["speed_transitions"],
             "low_transition_override": result["low_transition_override"],
+            "hotspot": result.get("hotspot"),
         },
         "table": [{"file_id": safe_name, "prediction": prediction}],
-        "chart_data": None,
+        "chart_data": {"hotspot": result.get("hotspot")},
         "technical_details": {
             "implementation": "PS3/Rail_Corrugation_Work/src/inference.predict_csv_bytes",
             "model": "frozen joblib ensemble artifact",

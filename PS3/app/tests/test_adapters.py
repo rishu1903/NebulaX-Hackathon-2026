@@ -116,6 +116,13 @@ def test_rail_adapter_success_contract(monkeypatch) -> None:
             "speed_kmh": 31.5,
             "speed_transitions": 590,
             "low_transition_override": False,
+            "hotspot": {
+                "start_m": 2.0,
+                "end_m": 3.5,
+                "center_m": 2.75,
+                "total_m": 8.75,
+                "peak_to_median_energy": 1.4,
+            },
         },
     )
 
@@ -124,6 +131,7 @@ def test_rail_adapter_success_contract(monkeypatch) -> None:
     assert_contract(result)
     assert result["success"] is True
     assert result["prediction"] == "Side I"
+    assert result["summary"]["hotspot"]["center_m"] == 2.75
     parsed = pd.read_csv(StringIO(result["submission_csv"]))
     assert list(parsed.columns) == ["file_id", "prediction"]
     assert parsed.loc[0, "prediction"] == "Side I"
@@ -152,6 +160,15 @@ def test_shm_adapter_success_contract(monkeypatch) -> None:
     parsed = pd.read_csv(StringIO(result["submission_csv"]))
     assert list(parsed.columns) == ["file_id", "prediction"]
     assert parsed.loc[0, "prediction"] == 0.123
+
+
+def test_shm_signal_preview_preserves_raw_extremes() -> None:
+    preview = shm_adapter._signal_preview(b"1\n-4\n3\n2\n", max_points=4)
+
+    assert preview is not None
+    assert preview["total_samples"] == 4
+    assert preview["raw_values"] == [1.0, -4.0, 3.0, 2.0]
+    assert preview["units"] is None
 
 
 def test_extension_errors_return_contract() -> None:

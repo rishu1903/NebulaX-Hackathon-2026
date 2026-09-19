@@ -4,7 +4,7 @@ import { ConditionIcon } from "@/components/fault-disruptors/condition-icon"
 import { CONDITION_META, type CarState } from "@/lib/fault-disruptors/data"
 
 export function HoverBubble({ car, leftFraction }: { car: CarState; leftFraction: number }) {
-  const meta = CONDITION_META[car.condition]
+  const meta = CONDITION_META[car.overlay?.condition ?? car.condition]
   const priority = car.rank ? ` · Priority #${car.rank}` : ""
 
   return (
@@ -19,13 +19,16 @@ export function HoverBubble({ car, leftFraction }: { car: CarState; leftFraction
             className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
             style={{ backgroundColor: meta.soft, color: meta.color }}
           >
-            <ConditionIcon condition={car.condition} className="size-3.5" /> {meta.label}
+            <ConditionIcon condition={car.overlay?.condition ?? car.condition} className="size-3.5" /> {meta.label}
           </span>
         </div>
         <p className="mt-1.5 text-xs leading-snug text-slate-600">
           {car.finding}
           {priority}
         </p>
+        {car.overlay?.source === "showcase" && (
+          <p className="mt-2 rounded bg-violet-50 px-2 py-1 text-[10px] font-bold uppercase tracking-wide text-violet-700">Showcase location · not model output</p>
+        )}
       </div>
       <div className="mx-auto h-3 w-3 -translate-y-1.5 rotate-45 border-b border-r border-border bg-white" />
     </div>

@@ -1,21 +1,25 @@
 "use client"
 
-import { CheckCircle2, FileUp, Loader2, ShieldCheck, TrainFront } from "lucide-react"
+import { CheckCircle2, FileUp, Loader2, ShieldCheck } from "lucide-react"
+import { TrainSelector } from "@/components/fault-disruptors/train-selector"
+import type { DemoTrain } from "@/lib/fault-disruptors/data"
 
 export function Header({
-  onUploadClick,
   reportFileName,
   isAnalyzing,
   analysisComplete,
+  selectedTrain,
+  onTrainChange,
 }: {
-  onUploadClick: () => void
   reportFileName: string | null
   isAnalyzing: boolean
   analysisComplete: boolean
+  selectedTrain: DemoTrain
+  onTrainChange: (train: DemoTrain) => void
 }) {
   return (
     <header className="border-b border-border bg-white">
-      <div className="flex flex-col gap-4 px-6 py-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-3 px-4 py-3 md:px-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-white">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -45,20 +49,8 @@ export function Header({
         </div>
 
         <div className="flex flex-col gap-3 md:flex-row md:items-center">
-          <div className="flex min-w-0 items-center gap-2 rounded-lg border border-border bg-slate-50 px-2 py-1.5">
-            <div className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-white px-3 text-sm font-semibold text-slate-700">
-              <TrainFront className="size-4 text-slate-500" aria-hidden="true" />
-              <span>8-Car Consist</span>
-            </div>
-
-            <button
-              type="button"
-              onClick={onUploadClick}
-              className="inline-flex h-9 items-center gap-2 rounded-md bg-slate-900 px-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            >
-              <FileUp className="size-4" aria-hidden="true" />
-              Upload Dataset
-            </button>
+          <div className="flex min-w-0 flex-wrap items-center gap-2">
+            <TrainSelector value={selectedTrain} onChange={onTrainChange} />
 
             {reportFileName && (
               <div className="hidden min-w-0 items-center gap-1.5 text-xs font-medium text-slate-500 sm:flex">
@@ -76,7 +68,7 @@ export function Header({
         </div>
       </div>
 
-      <div className="flex items-start gap-2 border-t border-slate-100 bg-slate-50/70 px-6 py-2 text-xs text-slate-500">
+      <div className="flex items-start gap-2 border-t border-slate-100 bg-slate-50/70 px-4 py-1.5 text-[11px] text-slate-500 md:px-6">
         <ShieldCheck className="mt-0.5 size-3.5 shrink-0 text-slate-600" aria-hidden="true" />
         <span>
           Decision-support tool: predictions and suggested checks support inspection planning and do not replace

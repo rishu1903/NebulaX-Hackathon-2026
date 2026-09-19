@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import sys
+from io import BytesIO
 from pathlib import Path
 from typing import Any
+
+import numpy as np
+import pandas as pd
 
 
 SUBSYSTEM = "SHM"
@@ -15,6 +19,41 @@ from shm_app_adapter import (  # noqa: E402
     prediction_result_to_submission_csv,
     predict_shm_upload,
 )
+
+
+def _signal_preview(file_bytes: bytes, max_points: int = 320) -> dict[str, Any] | None:
+    """Return a compact min/max envelope of the uploaded one-column signal."""
+    try:
+        signal = pd.read_csv(BytesIO(file_bytes), header=None).iloc[:, 0].to_numpy(dtype=float)
+    except Exception:
+        return None
+    if signal.size == 0 or not np.isfinite(signal).all():
+        return None
+
+    if signal.size <= max_points:
+        indices = np.arange(signal.size)
+    else:
+        bin_count = max(1, max_points // 2)
+        edges = np.linspace(0, signal.size, bin_count + 1, dtype=int)
+        selected: list[int] = []
+        for start, end in zip(edges[:-1], edges[1:]):
+            if end <= start:
+                continue
+            segment = signal[start:end]
+            low = start + int(np.argmin(segment))
+            high = start + int(np.argmax(segment))
+            selected.extend(sorted({low, high}))
+        indices = np.asarray(selected, dtype=int)
+
+    return {
+        "sample_indices": indices.tolist(),
+        "raw_values": signal[indices].astype(float).tolist(),
+        "total_samples": int(signal.size),
+        "downsampling": "min-max envelope",
+        "x_label": "Sample index",
+        "y_label": "Raw signal value",
+        "units": None,
+    }
 
 
 def _empty_response(filename: str, error: str) -> dict[str, Any]:
@@ -57,7 +96,7 @@ def analyse_upload(file_bytes: bytes, filename: str) -> dict[str, Any]:
             "model_name": result["model_name"],
         },
         "table": [{"file_id": safe_name, "prediction": prediction}],
-        "chart_data": None,
+        "chart_data": {"signal": _signal_preview(bytes(file_bytes))},
         "technical_details": {
             "implementation": "PS3/SHM_Work/src/shm_app_adapter.predict_shm_upload",
             "model": result["model_name"],

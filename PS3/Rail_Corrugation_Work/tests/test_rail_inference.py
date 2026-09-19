@@ -27,6 +27,12 @@ class RailInferenceTests(unittest.TestCase):
             with self.subTest(filename=filename):
                 result = predict_file(train / filename)
                 self.assertEqual(result["prediction"], label)
+                if label.startswith("Side"):
+                    self.assertIsNotNone(result["hotspot"])
+                    self.assertGreaterEqual(result["hotspot"]["start_m"], 0)
+                    self.assertLessEqual(result["hotspot"]["end_m"], result["hotspot"]["total_m"])
+                else:
+                    self.assertIsNone(result["hotspot"])
         self.assertTrue(predict_file(train / "Train5.csv")["low_transition_override"])
 
     def test_malformed_recording_rejected(self):

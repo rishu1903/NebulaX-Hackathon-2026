@@ -87,7 +87,20 @@ export type CarState = {
   condition: Condition
   rank?: number
   finding: string
+  overlay?: ComponentOverlay
 }
+
+export type ComponentOverlay = {
+  kind: "door" | "structure"
+  condition: Exclude<Condition, "neutral">
+  label: string
+  /** One-based door number when kind is door. */
+  componentIndex?: number
+  source: "showcase"
+}
+
+export const DEMO_TRAINS = ["T01", "T02", "T03"] as const
+export type DemoTrain = (typeof DEMO_TRAINS)[number]
 
 export const carLabel = (id: number | string) => `Car ${String(id).padStart(2, "0")}`
 

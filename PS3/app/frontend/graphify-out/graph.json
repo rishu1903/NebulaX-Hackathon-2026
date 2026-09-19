@@ -1,0 +1,3589 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "next-env.d.ts",
+      "file_type": "code",
+      "source_file": "next-env.d.ts",
+      "source_location": "L1",
+      "id": "next_env_d_ts",
+      "community": 12,
+      "norm_label": "next-env.d.ts"
+    },
+    {
+      "label": "next.config.mjs",
+      "file_type": "code",
+      "source_file": "next.config.mjs",
+      "source_location": "L1",
+      "id": "next_config_mjs",
+      "community": 9,
+      "norm_label": "next.config.mjs"
+    },
+    {
+      "label": "nextConfig",
+      "file_type": "code",
+      "source_file": "next.config.mjs",
+      "source_location": "L2",
+      "id": "frontend_next_config_nextconfig",
+      "community": 9,
+      "norm_label": "nextconfig"
+    },
+    {
+      "label": "postcss.config.mjs",
+      "file_type": "code",
+      "source_file": "postcss.config.mjs",
+      "source_location": "L1",
+      "id": "postcss_config_mjs",
+      "community": 10,
+      "norm_label": "postcss.config.mjs"
+    },
+    {
+      "label": "config",
+      "file_type": "code",
+      "source_file": "postcss.config.mjs",
+      "source_location": "L2",
+      "id": "frontend_postcss_config_config",
+      "community": 10,
+      "norm_label": "config"
+    },
+    {
+      "label": "layout.tsx",
+      "file_type": "code",
+      "source_file": "app/layout.tsx",
+      "source_location": "L1",
+      "id": "app_layout_tsx",
+      "community": 8,
+      "norm_label": "layout.tsx"
+    },
+    {
+      "label": "metadata",
+      "file_type": "code",
+      "source_file": "app/layout.tsx",
+      "source_location": "L4",
+      "id": "app_layout_metadata",
+      "community": 8,
+      "norm_label": "metadata"
+    },
+    {
+      "label": "viewport",
+      "file_type": "code",
+      "source_file": "app/layout.tsx",
+      "source_location": "L27",
+      "id": "app_layout_viewport",
+      "community": 8,
+      "norm_label": "viewport"
+    },
+    {
+      "label": "RootLayout()",
+      "file_type": "code",
+      "source_file": "app/layout.tsx",
+      "source_location": "L32",
+      "id": "app_layout_rootlayout",
+      "community": 8,
+      "norm_label": "rootlayout()"
+    },
+    {
+      "label": "page.tsx",
+      "file_type": "code",
+      "source_file": "app/page.tsx",
+      "source_location": "L1",
+      "id": "app_page_tsx",
+      "community": 0,
+      "norm_label": "page.tsx"
+    },
+    {
+      "label": "SUBSYSTEM_UPLOAD",
+      "file_type": "code",
+      "source_file": "app/page.tsx",
+      "source_location": "L21",
+      "id": "app_page_subsystem_upload",
+      "community": 0,
+      "norm_label": "subsystem_upload"
+    },
+    {
+      "label": "Page()",
+      "file_type": "code",
+      "source_file": "app/page.tsx",
+      "source_location": "L28",
+      "id": "app_page_page",
+      "community": 4,
+      "norm_label": "page()"
+    },
+    {
+      "label": "EmptyUpload()",
+      "file_type": "code",
+      "source_file": "app/page.tsx",
+      "source_location": "L201",
+      "id": "app_page_emptyupload",
+      "community": 0,
+      "norm_label": "emptyupload()"
+    },
+    {
+      "label": "batch-queue.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/batch-queue.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_batch_queue_tsx",
+      "community": 0,
+      "norm_label": "batch-queue.tsx"
+    },
+    {
+      "label": "BatchQueue()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/batch-queue.tsx",
+      "source_location": "L6",
+      "id": "fault_disruptors_batch_queue_batchqueue",
+      "community": 0,
+      "norm_label": "batchqueue()"
+    },
+    {
+      "label": "condition-icon.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/condition-icon.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_condition_icon_tsx",
+      "community": 5,
+      "norm_label": "condition-icon.tsx"
+    },
+    {
+      "label": "ConditionIcon()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/condition-icon.tsx",
+      "source_location": "L6",
+      "id": "fault_disruptors_condition_icon_conditionicon",
+      "community": 5,
+      "norm_label": "conditionicon()"
+    },
+    {
+      "label": "header.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/header.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_header_tsx",
+      "community": 3,
+      "norm_label": "header.tsx"
+    },
+    {
+      "label": "Header()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/header.tsx",
+      "source_location": "L7",
+      "id": "fault_disruptors_header_header",
+      "community": 3,
+      "norm_label": "header()"
+    },
+    {
+      "label": "hover-bubble.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/hover-bubble.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_hover_bubble_tsx",
+      "community": 5,
+      "norm_label": "hover-bubble.tsx"
+    },
+    {
+      "label": "HoverBubble()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/hover-bubble.tsx",
+      "source_location": "L6",
+      "id": "fault_disruptors_hover_bubble_hoverbubble",
+      "community": 5,
+      "norm_label": "hoverbubble()"
+    },
+    {
+      "label": "kpi-strip.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_kpi_strip_tsx",
+      "community": 5,
+      "norm_label": "kpi-strip.tsx"
+    },
+    {
+      "label": "Kpi",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L6",
+      "id": "fault_disruptors_kpi_strip_kpi",
+      "community": 5,
+      "norm_label": "kpi"
+    },
+    {
+      "label": "KpiStrip()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L8",
+      "id": "fault_disruptors_kpi_strip_kpistrip",
+      "community": 5,
+      "norm_label": "kpistrip()"
+    },
+    {
+      "label": "panel-acv.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_panel_acv_tsx",
+      "community": 1,
+      "norm_label": "panel-acv.tsx"
+    },
+    {
+      "label": "PanelAcv()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L7",
+      "id": "fault_disruptors_panel_acv_panelacv",
+      "community": 1,
+      "norm_label": "panelacv()"
+    },
+    {
+      "label": "PanelTitle()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L154",
+      "id": "fault_disruptors_panel_acv_paneltitle",
+      "community": 1,
+      "norm_label": "paneltitle()"
+    },
+    {
+      "label": "panel-door.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_panel_door_tsx",
+      "community": 6,
+      "norm_label": "panel-door.tsx"
+    },
+    {
+      "label": "FLAG_LABELS",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L9",
+      "id": "fault_disruptors_panel_door_flag_labels",
+      "community": 6,
+      "norm_label": "flag_labels"
+    },
+    {
+      "label": "PanelDoor()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L18",
+      "id": "fault_disruptors_panel_door_paneldoor",
+      "community": 6,
+      "norm_label": "paneldoor()"
+    },
+    {
+      "label": "SelectedCycle()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L202",
+      "id": "fault_disruptors_panel_door_selectedcycle",
+      "community": 6,
+      "norm_label": "selectedcycle()"
+    },
+    {
+      "label": "SummaryCard()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L329",
+      "id": "fault_disruptors_panel_door_summarycard",
+      "community": 6,
+      "norm_label": "summarycard()"
+    },
+    {
+      "label": "Legend()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L356",
+      "id": "fault_disruptors_panel_door_legend",
+      "community": 6,
+      "norm_label": "legend()"
+    },
+    {
+      "label": "humanizeFlag()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L374",
+      "id": "fault_disruptors_panel_door_humanizeflag",
+      "community": 6,
+      "norm_label": "humanizeflag()"
+    },
+    {
+      "label": "formatMetric()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L380",
+      "id": "fault_disruptors_panel_door_formatmetric",
+      "community": 6,
+      "norm_label": "formatmetric()"
+    },
+    {
+      "label": "panel-rail.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_panel_rail_tsx",
+      "community": 1,
+      "norm_label": "panel-rail.tsx"
+    },
+    {
+      "label": "PanelRail()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L7",
+      "id": "fault_disruptors_panel_rail_panelrail",
+      "community": 1,
+      "norm_label": "panelrail()"
+    },
+    {
+      "label": "RailSideCard()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L98",
+      "id": "fault_disruptors_panel_rail_railsidecard",
+      "community": 1,
+      "norm_label": "railsidecard()"
+    },
+    {
+      "label": "panel-shm.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_panel_shm_tsx",
+      "community": 1,
+      "norm_label": "panel-shm.tsx"
+    },
+    {
+      "label": "PanelShm()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L8",
+      "id": "fault_disruptors_panel_shm_panelshm",
+      "community": 1,
+      "norm_label": "panelshm()"
+    },
+    {
+      "label": "MethodStep()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L96",
+      "id": "fault_disruptors_panel_shm_methodstep",
+      "community": 1,
+      "norm_label": "methodstep()"
+    },
+    {
+      "label": "damageBandLabel()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L100",
+      "id": "fault_disruptors_panel_shm_damagebandlabel",
+      "community": 1,
+      "norm_label": "damagebandlabel()"
+    },
+    {
+      "label": "damageBandSummary()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L107",
+      "id": "fault_disruptors_panel_shm_damagebandsummary",
+      "community": 1,
+      "norm_label": "damagebandsummary()"
+    },
+    {
+      "label": "technical-details.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/technical-details.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_technical_details_tsx",
+      "community": 0,
+      "norm_label": "technical-details.tsx"
+    },
+    {
+      "label": "TechnicalDetails()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/technical-details.tsx",
+      "source_location": "L6",
+      "id": "fault_disruptors_technical_details_technicaldetails",
+      "community": 0,
+      "norm_label": "technicaldetails()"
+    },
+    {
+      "label": "train-selector.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-selector.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_train_selector_tsx",
+      "community": 3,
+      "norm_label": "train-selector.tsx"
+    },
+    {
+      "label": "TrainSelector()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-selector.tsx",
+      "source_location": "L6",
+      "id": "fault_disruptors_train_selector_trainselector",
+      "community": 3,
+      "norm_label": "trainselector()"
+    },
+    {
+      "label": "train-twin.tsx",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L1",
+      "id": "components_fault_disruptors_train_twin_tsx",
+      "community": 4,
+      "norm_label": "train-twin.tsx"
+    },
+    {
+      "label": "viewWidth()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L22",
+      "id": "fault_disruptors_train_twin_viewwidth",
+      "community": 4,
+      "norm_label": "viewwidth()"
+    },
+    {
+      "label": "carX()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L26",
+      "id": "fault_disruptors_train_twin_carx",
+      "community": 4,
+      "norm_label": "carx()"
+    },
+    {
+      "label": "Props",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L30",
+      "id": "fault_disruptors_train_twin_props",
+      "community": 4,
+      "norm_label": "props"
+    },
+    {
+      "label": "TrainTwin()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L41",
+      "id": "fault_disruptors_train_twin_traintwin",
+      "community": 4,
+      "norm_label": "traintwin()"
+    },
+    {
+      "label": "RailHighlight()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L397",
+      "id": "fault_disruptors_train_twin_railhighlight",
+      "community": 4,
+      "norm_label": "railhighlight()"
+    },
+    {
+      "label": "RailLabel()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L435",
+      "id": "fault_disruptors_train_twin_raillabel",
+      "community": 4,
+      "norm_label": "raillabel()"
+    },
+    {
+      "label": "Car()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L472",
+      "id": "fault_disruptors_train_twin_car",
+      "community": 4,
+      "norm_label": "car()"
+    },
+    {
+      "label": "carCenterFraction()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L784",
+      "id": "fault_disruptors_train_twin_carcenterfraction",
+      "community": 4,
+      "norm_label": "carcenterfraction()"
+    },
+    {
+      "label": "trainStageWidth()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L788",
+      "id": "fault_disruptors_train_twin_trainstagewidth",
+      "community": 4,
+      "norm_label": "trainstagewidth()"
+    },
+    {
+      "label": "button.tsx",
+      "file_type": "code",
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L1",
+      "id": "components_ui_button_tsx",
+      "community": 7,
+      "norm_label": "button.tsx"
+    },
+    {
+      "label": "buttonVariants",
+      "file_type": "code",
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L6",
+      "id": "ui_button_buttonvariants",
+      "community": 7,
+      "norm_label": "buttonvariants"
+    },
+    {
+      "label": "Button()",
+      "file_type": "code",
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L43",
+      "id": "ui_button_button",
+      "community": 7,
+      "norm_label": "button()"
+    },
+    {
+      "label": "utils.ts",
+      "file_type": "code",
+      "source_file": "lib/utils.ts",
+      "source_location": "L1",
+      "id": "lib_utils_ts",
+      "community": 7,
+      "norm_label": "utils.ts"
+    },
+    {
+      "label": "cn()",
+      "file_type": "code",
+      "source_file": "lib/utils.ts",
+      "source_location": "L4",
+      "id": "lib_utils_cn",
+      "community": 7,
+      "norm_label": "cn()"
+    },
+    {
+      "label": "api.ts",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L1",
+      "id": "lib_fault_disruptors_api_ts",
+      "community": 0,
+      "norm_label": "api.ts"
+    },
+    {
+      "label": "ROUTE",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L12",
+      "id": "fault_disruptors_api_route",
+      "community": 0,
+      "norm_label": "route"
+    },
+    {
+      "label": "DOWNLOAD_NAME",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L15",
+      "id": "fault_disruptors_api_download_name",
+      "community": 0,
+      "norm_label": "download_name"
+    },
+    {
+      "label": "AnalyseResult",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L23",
+      "id": "fault_disruptors_api_analyseresult",
+      "community": 0,
+      "norm_label": "analyseresult"
+    },
+    {
+      "label": "ApiError",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L37",
+      "id": "fault_disruptors_api_apierror",
+      "community": 0,
+      "norm_label": "apierror"
+    },
+    {
+      "label": "analyse()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L39",
+      "id": "fault_disruptors_api_analyse",
+      "community": 0,
+      "norm_label": "analyse()"
+    },
+    {
+      "label": "downloadCsv()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L71",
+      "id": "fault_disruptors_api_downloadcsv",
+      "community": 0,
+      "norm_label": "downloadcsv()"
+    },
+    {
+      "label": "ZipPrediction",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L82",
+      "id": "fault_disruptors_api_zipprediction",
+      "community": 0,
+      "norm_label": "zipprediction"
+    },
+    {
+      "label": "safeStem()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L89",
+      "id": "fault_disruptors_api_safestem",
+      "community": 0,
+      "norm_label": "safestem()"
+    },
+    {
+      "label": "downloadResultsZip()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L94",
+      "id": "fault_disruptors_api_downloadresultszip",
+      "community": 0,
+      "norm_label": "downloadresultszip()"
+    },
+    {
+      "label": "data.ts",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L1",
+      "id": "lib_fault_disruptors_data_ts",
+      "community": 3,
+      "norm_label": "data.ts"
+    },
+    {
+      "label": "Subsystem",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L1",
+      "id": "fault_disruptors_data_subsystem",
+      "community": 4,
+      "norm_label": "subsystem"
+    },
+    {
+      "label": "Condition",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L3",
+      "id": "fault_disruptors_data_condition",
+      "community": 1,
+      "norm_label": "condition"
+    },
+    {
+      "label": "CONDITION_META",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L5",
+      "id": "fault_disruptors_data_condition_meta",
+      "community": 5,
+      "norm_label": "condition_meta"
+    },
+    {
+      "label": "SUBSYSTEMS",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L15",
+      "id": "fault_disruptors_data_subsystems",
+      "community": 3,
+      "norm_label": "subsystems"
+    },
+    {
+      "label": "SubsystemPresentation",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L22",
+      "id": "fault_disruptors_data_subsystempresentation",
+      "community": 3,
+      "norm_label": "subsystempresentation"
+    },
+    {
+      "label": "SUBSYSTEM_PRESENTATION",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L34",
+      "id": "fault_disruptors_data_subsystem_presentation",
+      "community": 3,
+      "norm_label": "subsystem_presentation"
+    },
+    {
+      "label": "CarState",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L84",
+      "id": "fault_disruptors_data_carstate",
+      "community": 5,
+      "norm_label": "carstate"
+    },
+    {
+      "label": "ComponentOverlay",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L93",
+      "id": "fault_disruptors_data_componentoverlay",
+      "community": 3,
+      "norm_label": "componentoverlay"
+    },
+    {
+      "label": "DEMO_TRAINS",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L102",
+      "id": "fault_disruptors_data_demo_trains",
+      "community": 3,
+      "norm_label": "demo_trains"
+    },
+    {
+      "label": "DemoTrain",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L103",
+      "id": "fault_disruptors_data_demotrain",
+      "community": 3,
+      "norm_label": "demotrain"
+    },
+    {
+      "label": "carLabel()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L105",
+      "id": "fault_disruptors_data_carlabel",
+      "community": 1,
+      "norm_label": "carlabel()"
+    },
+    {
+      "label": "idleCars()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L108",
+      "id": "fault_disruptors_data_idlecars",
+      "community": 2,
+      "norm_label": "idlecars()"
+    },
+    {
+      "label": "SUBSYSTEM_HEADLINES",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L118",
+      "id": "fault_disruptors_data_subsystem_headlines",
+      "community": 3,
+      "norm_label": "subsystem_headlines"
+    },
+    {
+      "label": "live.ts",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L1",
+      "id": "lib_fault_disruptors_live_ts",
+      "community": 2,
+      "norm_label": "live.ts"
+    },
+    {
+      "label": "AcvRow",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L10",
+      "id": "fault_disruptors_live_acvrow",
+      "community": 1,
+      "norm_label": "acvrow"
+    },
+    {
+      "label": "DoorCycle",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L20",
+      "id": "fault_disruptors_live_doorcycle",
+      "community": 6,
+      "norm_label": "doorcycle"
+    },
+    {
+      "label": "Panel",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L36",
+      "id": "fault_disruptors_live_panel",
+      "community": 2,
+      "norm_label": "panel"
+    },
+    {
+      "label": "LiveView",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L51",
+      "id": "fault_disruptors_live_liveview",
+      "community": 2,
+      "norm_label": "liveview"
+    },
+    {
+      "label": "buildLiveView()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L62",
+      "id": "fault_disruptors_live_buildliveview",
+      "community": 2,
+      "norm_label": "buildliveview()"
+    },
+    {
+      "label": "base()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L75",
+      "id": "fault_disruptors_live_base",
+      "community": 2,
+      "norm_label": "base()"
+    },
+    {
+      "label": "ACV_RISK",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L82",
+      "id": "fault_disruptors_live_acv_risk",
+      "community": 2,
+      "norm_label": "acv_risk"
+    },
+    {
+      "label": "ACV_NOTE",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L89",
+      "id": "fault_disruptors_live_acv_note",
+      "community": 2,
+      "norm_label": "acv_note"
+    },
+    {
+      "label": "acvView()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L96",
+      "id": "fault_disruptors_live_acvview",
+      "community": 2,
+      "norm_label": "acvview()"
+    },
+    {
+      "label": "MONTHS",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L198",
+      "id": "fault_disruptors_live_months",
+      "community": 2,
+      "norm_label": "months"
+    },
+    {
+      "label": "formatNativeTime()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L201",
+      "id": "fault_disruptors_live_formatnativetime",
+      "community": 2,
+      "norm_label": "formatnativetime()"
+    },
+    {
+      "label": "nativeTimestampMs()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L212",
+      "id": "fault_disruptors_live_nativetimestampms",
+      "community": 2,
+      "norm_label": "nativetimestampms()"
+    },
+    {
+      "label": "cycleCount()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L219",
+      "id": "fault_disruptors_live_cyclecount",
+      "community": 2,
+      "norm_label": "cyclecount()"
+    },
+    {
+      "label": "doorView()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L221",
+      "id": "fault_disruptors_live_doorview",
+      "community": 2,
+      "norm_label": "doorview()"
+    },
+    {
+      "label": "railView()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L306",
+      "id": "fault_disruptors_live_railview",
+      "community": 2,
+      "norm_label": "railview()"
+    },
+    {
+      "label": "SHM_BANDS",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L374",
+      "id": "fault_disruptors_live_shm_bands",
+      "community": 1,
+      "norm_label": "shm_bands"
+    },
+    {
+      "label": "shmView()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L376",
+      "id": "fault_disruptors_live_shmview",
+      "community": 2,
+      "norm_label": "shmview()"
+    },
+    {
+      "label": "workspace.ts",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L1",
+      "id": "lib_fault_disruptors_workspace_ts",
+      "community": 0,
+      "norm_label": "workspace.ts"
+    },
+    {
+      "label": "JobStatus",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L4",
+      "id": "fault_disruptors_workspace_jobstatus",
+      "community": 0,
+      "norm_label": "jobstatus"
+    },
+    {
+      "label": "AnalysisJob",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L6",
+      "id": "fault_disruptors_workspace_analysisjob",
+      "community": 0,
+      "norm_label": "analysisjob"
+    },
+    {
+      "label": "SubsystemWorkspace",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L17",
+      "id": "fault_disruptors_workspace_subsystemworkspace",
+      "community": 0,
+      "norm_label": "subsystemworkspace"
+    },
+    {
+      "label": "DashboardWorkspace",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L23",
+      "id": "fault_disruptors_workspace_dashboardworkspace",
+      "community": 0,
+      "norm_label": "dashboardworkspace"
+    },
+    {
+      "label": "emptySubsystem()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L31",
+      "id": "fault_disruptors_workspace_emptysubsystem",
+      "community": 0,
+      "norm_label": "emptysubsystem()"
+    },
+    {
+      "label": "createDashboardWorkspace()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L33",
+      "id": "fault_disruptors_workspace_createdashboardworkspace",
+      "community": 0,
+      "norm_label": "createdashboardworkspace()"
+    },
+    {
+      "label": "fileJobId()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L46",
+      "id": "fault_disruptors_workspace_filejobid",
+      "community": 0,
+      "norm_label": "filejobid()"
+    },
+    {
+      "label": "saveDashboardWorkspace()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L51",
+      "id": "fault_disruptors_workspace_savedashboardworkspace",
+      "community": 0,
+      "norm_label": "savedashboardworkspace()"
+    },
+    {
+      "label": "loadDashboardWorkspace()",
+      "file_type": "code",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L68",
+      "id": "fault_disruptors_workspace_loaddashboardworkspace",
+      "community": 0,
+      "norm_label": "loaddashboardworkspace()"
+    },
+    {
+      "label": "AGENTS.md",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "id": "agents_md",
+      "community": 11,
+      "norm_label": "agents.md"
+    },
+    {
+      "label": "This is NOT the Next.js you know",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L3",
+      "id": "frontend_agents_this_is_not_the_next_js_you_know",
+      "community": 11,
+      "norm_label": "this is not the next.js you know"
+    },
+    {
+      "label": "CLAUDE.md",
+      "file_type": "document",
+      "source_file": "CLAUDE.md",
+      "source_location": "L1",
+      "id": "claude_md",
+      "community": 13,
+      "norm_label": "claude.md"
+    },
+    {
+      "label": "RailSideRow()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L154",
+      "community": 1,
+      "norm_label": "railsiderow()",
+      "id": "fault_disruptors_panel_rail_railsiderow"
+    },
+    {
+      "label": "MetricCard()",
+      "file_type": "code",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L185",
+      "community": 1,
+      "norm_label": "metriccard()",
+      "id": "fault_disruptors_panel_rail_metriccard"
+    },
+    {
+      "label": "ANALYSIS_STEPS",
+      "file_type": "code",
+      "source_file": "app/page.tsx",
+      "source_location": "L26",
+      "community": 0,
+      "norm_label": "analysis_steps",
+      "id": "app_page_analysis_steps"
+    },
+    {
+      "label": "ReportIntake()",
+      "file_type": "code",
+      "source_file": "app/page.tsx",
+      "source_location": "L356",
+      "community": 0,
+      "norm_label": "reportintake()",
+      "id": "app_page_reportintake"
+    }
+  ],
+  "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "next.config.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "next_config_mjs",
+      "target": "frontend_next_config_nextconfig"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "postcss.config.mjs",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "postcss_config_mjs",
+      "target": "frontend_postcss_config_config"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/layout.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_layout_tsx",
+      "target": "app_layout_metadata"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/layout.tsx",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_layout_tsx",
+      "target": "app_layout_viewport"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/layout.tsx",
+      "source_location": "L32",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_layout_tsx",
+      "target": "app_layout_rootlayout"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_batch_queue_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_batch_queue_batchqueue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_condition_icon_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_condition_icon_conditionicon"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_header_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_header_header"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_hover_bubble_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_hover_bubble_hoverbubble"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_kpi_strip_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_kpi_strip_kpistrip"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_panel_acv_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_panel_acv_panelacv"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_panel_door_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_panel_door_paneldoor"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_panel_rail_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_panel_rail_panelrail"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_panel_shm_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_panel_shm_panelshm"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_technical_details_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_technical_details_technicaldetails"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "components_fault_disruptors_train_twin_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_train_twin_carcenterfraction"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_train_twin_traintwin"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "lib_fault_disruptors_api_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_api_analyse"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_api_downloadcsv"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_api_downloadresultszip"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_data_subsystem_presentation"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_data_subsystems"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_data_idlecars"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_data_carstate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_data_subsystem"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "lib_fault_disruptors_live_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_live_buildliveview"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "lib_fault_disruptors_workspace_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_workspace_createdashboardworkspace"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_workspace_filejobid"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_workspace_loaddashboardworkspace"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_workspace_savedashboardworkspace"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_workspace_analysisjob"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_workspace_dashboardworkspace"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_workspace_subsystemworkspace"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "app_page_subsystem_upload"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "app_page_page"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L201",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "app_page_emptyupload"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_train_twin_trainstagewidth"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "fault_disruptors_api_analyseresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "app_page_analysis_steps"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "app/page.tsx",
+      "source_location": "L356",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "app_page_tsx",
+      "target": "app_page_reportintake"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/page.tsx",
+      "source_location": "L295",
+      "weight": 1.0,
+      "source": "app_page_page",
+      "target": "fault_disruptors_train_twin_carcenterfraction"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "app/page.tsx",
+      "source_location": "L284",
+      "weight": 1.0,
+      "source": "app_page_page",
+      "target": "fault_disruptors_train_twin_trainstagewidth"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/batch-queue.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_batch_queue_tsx",
+      "target": "lib_fault_disruptors_workspace_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/batch-queue.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_batch_queue_tsx",
+      "target": "fault_disruptors_workspace_analysisjob"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/batch-queue.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_batch_queue_tsx",
+      "target": "fault_disruptors_batch_queue_batchqueue"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/condition-icon.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_condition_icon_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/condition-icon.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_condition_icon_tsx",
+      "target": "fault_disruptors_data_condition"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/condition-icon.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_condition_icon_tsx",
+      "target": "fault_disruptors_condition_icon_conditionicon"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/hover-bubble.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_hover_bubble_tsx",
+      "target": "components_fault_disruptors_condition_icon_tsx"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_kpi_strip_tsx",
+      "target": "components_fault_disruptors_condition_icon_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/hover-bubble.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_hover_bubble_tsx",
+      "target": "fault_disruptors_condition_icon_conditionicon"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_kpi_strip_tsx",
+      "target": "fault_disruptors_condition_icon_conditionicon"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/header.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_header_tsx",
+      "target": "components_fault_disruptors_train_selector_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/header.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_header_tsx",
+      "target": "fault_disruptors_train_selector_trainselector"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/header.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_header_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/header.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_header_tsx",
+      "target": "fault_disruptors_data_demotrain"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/header.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_header_tsx",
+      "target": "fault_disruptors_header_header"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/hover-bubble.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_hover_bubble_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/hover-bubble.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_hover_bubble_tsx",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/hover-bubble.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_hover_bubble_tsx",
+      "target": "fault_disruptors_data_carstate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/hover-bubble.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_hover_bubble_tsx",
+      "target": "fault_disruptors_hover_bubble_hoverbubble"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_kpi_strip_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_kpi_strip_tsx",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_kpi_strip_tsx",
+      "target": "fault_disruptors_data_condition"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_kpi_strip_tsx",
+      "target": "fault_disruptors_kpi_strip_kpi"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/kpi-strip.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_kpi_strip_tsx",
+      "target": "fault_disruptors_kpi_strip_kpistrip"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "components_fault_disruptors_kpi_strip_tsx"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_kpi_strip_kpi"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_acv_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_acv_tsx",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_acv_tsx",
+      "target": "fault_disruptors_data_carlabel"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_acv_tsx",
+      "target": "lib_fault_disruptors_live_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_acv_tsx",
+      "target": "fault_disruptors_live_acvrow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_acv_tsx",
+      "target": "fault_disruptors_panel_acv_panelacv"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L154",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_acv_tsx",
+      "target": "fault_disruptors_panel_acv_paneltitle"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "components_fault_disruptors_panel_acv_tsx"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "components_fault_disruptors_panel_acv_tsx"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "components_fault_disruptors_panel_acv_tsx"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "components/fault-disruptors/panel-acv.tsx",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "fault_disruptors_panel_acv_panelacv",
+      "target": "fault_disruptors_data_carlabel"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_panel_acv_paneltitle"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "fault_disruptors_panel_acv_paneltitle"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_panel_acv_paneltitle"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "lib_fault_disruptors_live_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_live_doorcycle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_panel_door_flag_labels"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_panel_door_paneldoor"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L196",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_panel_door_selectedcycle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L323",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_panel_door_summarycard"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L350",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_panel_door_legend"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L368",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_panel_door_humanizeflag"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L374",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_door_tsx",
+      "target": "fault_disruptors_panel_door_formatmetric"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-door.tsx",
+      "source_location": "L278",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_panel_door_selectedcycle",
+      "target": "fault_disruptors_panel_door_formatmetric"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "fault_disruptors_data_condition"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "fault_disruptors_panel_rail_panelrail"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L98",
+      "weight": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "fault_disruptors_panel_rail_railsidecard",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L154",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "fault_disruptors_panel_rail_railsiderow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-rail.tsx",
+      "source_location": "L185",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_rail_tsx",
+      "target": "fault_disruptors_panel_rail_metriccard"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_data_condition"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "lib_fault_disruptors_live_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_live_shm_bands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_panel_shm_panelshm"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L189",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_panel_shm_methodstep"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L214",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_panel_shm_damagebandlabel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L107",
+      "weight": 1.0,
+      "source": "components_fault_disruptors_panel_shm_tsx",
+      "target": "fault_disruptors_panel_shm_damagebandsummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_panel_shm_panelshm",
+      "target": "fault_disruptors_panel_shm_damagebandlabel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/panel-shm.tsx",
+      "source_location": "L70",
+      "weight": 1.0,
+      "source": "fault_disruptors_panel_shm_panelshm",
+      "target": "fault_disruptors_panel_shm_damagebandsummary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/technical-details.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_technical_details_tsx",
+      "target": "fault_disruptors_technical_details_technicaldetails"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-selector.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_selector_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-selector.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_selector_tsx",
+      "target": "fault_disruptors_data_demo_trains"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-selector.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_selector_tsx",
+      "target": "fault_disruptors_data_demotrain"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-selector.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_selector_tsx",
+      "target": "fault_disruptors_train_selector_trainselector"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_data_carstate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_data_subsystem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_viewwidth"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_carx"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L30",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_props"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_traintwin"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L393",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_railhighlight"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L431",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_raillabel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L468",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_car"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L750",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_carcenterfraction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L754",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_fault_disruptors_train_twin_tsx",
+      "target": "fault_disruptors_train_twin_trainstagewidth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L42",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_train_twin_traintwin",
+      "target": "fault_disruptors_train_twin_viewwidth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L751",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_train_twin_carcenterfraction",
+      "target": "fault_disruptors_train_twin_viewwidth"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/fault-disruptors/train-twin.tsx",
+      "source_location": "L751",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_train_twin_carcenterfraction",
+      "target": "fault_disruptors_train_twin_carx"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_button_tsx",
+      "target": "lib_utils_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_button_tsx",
+      "target": "lib_utils_cn"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_button_tsx",
+      "target": "ui_button_buttonvariants"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "components_ui_button_tsx",
+      "target": "ui_button_button"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "ui_button_button",
+      "target": "ui_button_buttonvariants"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "components/ui/button.tsx",
+      "source_location": "L52",
+      "weight": 1.0,
+      "source": "ui_button_button",
+      "target": "lib_utils_cn"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/utils.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_utils_ts",
+      "target": "lib_utils_cn"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_data_subsystem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_route"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_download_name"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_analyseresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_apierror"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_analyse"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L70",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_downloadcsv"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L82",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_zipprediction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L88",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_safestem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/api.ts",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_api_ts",
+      "target": "fault_disruptors_api_downloadresultszip"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "lib_fault_disruptors_api_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "lib_fault_disruptors_api_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_api_analyseresult"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_api_analyseresult"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_subsystem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_condition"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_condition_meta"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_subsystems"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_subsystempresentation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_subsystem_presentation"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L84",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_carstate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_componentoverlay"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L102",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_demo_trains"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L103",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_demotrain"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L92",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_carlabel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L95",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_idlecars"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/data.ts",
+      "source_location": "L105",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_data_ts",
+      "target": "fault_disruptors_data_subsystem_headlines"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "lib_fault_disruptors_data_ts"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_data_subsystem"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_data_subsystem"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_data_condition"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_data_carstate"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_data_demotrain"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_data_carlabel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L161",
+      "weight": 1.0,
+      "source": "fault_disruptors_live_acvview",
+      "target": "fault_disruptors_data_carlabel"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_data_idlecars"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L272",
+      "weight": 1.0,
+      "source": "fault_disruptors_live_doorview",
+      "target": "fault_disruptors_data_idlecars"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L322",
+      "weight": 1.0,
+      "source": "fault_disruptors_live_railview",
+      "target": "fault_disruptors_data_idlecars"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L401",
+      "weight": 1.0,
+      "source": "fault_disruptors_live_shmview",
+      "target": "fault_disruptors_data_idlecars"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_acvrow"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_doorcycle"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L36",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_panel"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L49",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_liveview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L60",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_buildliveview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L73",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_base"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L80",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_acv_risk"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L87",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_acv_note"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L94",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_acvview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L196",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_months"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L199",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_formatnativetime"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L210",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_nativetimestampms"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L217",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_cyclecount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L219",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_doorview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L302",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_railview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L367",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_shm_bands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L369",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_live_ts",
+      "target": "fault_disruptors_live_shmview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_buildliveview",
+      "target": "fault_disruptors_live_acvview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_buildliveview",
+      "target": "fault_disruptors_live_doorview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L67",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_buildliveview",
+      "target": "fault_disruptors_live_railview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_buildliveview",
+      "target": "fault_disruptors_live_shmview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L190",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_acvview",
+      "target": "fault_disruptors_live_base"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L296",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_doorview",
+      "target": "fault_disruptors_live_base"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L357",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_railview",
+      "target": "fault_disruptors_live_base"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L433",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_shmview",
+      "target": "fault_disruptors_live_base"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/live.ts",
+      "source_location": "L280",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_live_doorview",
+      "target": "fault_disruptors_live_cyclecount"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_jobstatus"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_analysisjob"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_subsystemworkspace"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_dashboardworkspace"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_emptysubsystem"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_createdashboardworkspace"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_filejobid"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L51",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_savedashboardworkspace"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "lib_fault_disruptors_workspace_ts",
+      "target": "fault_disruptors_workspace_loaddashboardworkspace"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L38",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_workspace_createdashboardworkspace",
+      "target": "fault_disruptors_workspace_emptysubsystem"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "lib/fault-disruptors/workspace.ts",
+      "source_location": "L69",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "fault_disruptors_workspace_loaddashboardworkspace",
+      "target": "fault_disruptors_workspace_createdashboardworkspace"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "agents_md",
+      "target": "frontend_agents_this_is_not_the_next_js_you_know"
+    }
+  ],
+  "hyperedges": [],
+  "built_at_commit": "9501247c5815d23c2201449673d12cf90cd416c1"
+}
