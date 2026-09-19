@@ -1,6 +1,6 @@
 "use client"
 
-import { CheckCircle2, FileUp, Loader2 } from "lucide-react"
+import { CheckCircle2, FileUp, Loader2, TrainFront } from "lucide-react"
 
 export function Header({
   onUploadClick,
@@ -37,13 +37,18 @@ export function Header({
 
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <div className="flex min-w-0 items-center gap-2 rounded-lg border border-border bg-slate-50 px-2 py-1.5">
+          <div className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-white px-3 text-sm font-semibold text-slate-700">
+            <TrainFront className="size-4 text-slate-500" aria-hidden="true" />
+            <span>8-Car Consist</span>
+          </div>
+
           <button
             type="button"
             onClick={onUploadClick}
             className="inline-flex h-9 items-center gap-2 rounded-md bg-slate-900 px-3 text-sm font-semibold text-white transition-colors hover:bg-slate-800 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
           >
             <FileUp className="size-4" aria-hidden="true" />
-            Upload Report
+            Upload Dataset
           </button>
           {reportFileName && (
             <div className="hidden min-w-0 items-center gap-1.5 text-xs font-medium text-slate-500 sm:flex">
