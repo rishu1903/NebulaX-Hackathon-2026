@@ -377,6 +377,7 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
               car={car}
               x={carX(i)}
               isLead={i === 0}
+              showRank={subsystem === "ACV"}
               selected={selectedId === car.id}
               hovered={hoveredId === car.id}
               onHover={onHover}
@@ -468,6 +469,7 @@ function Car({
   car,
   x,
   isLead,
+  showRank,
   selected,
   hovered,
   onHover,
@@ -476,6 +478,7 @@ function Car({
   car: CarState
   x: number
   isLead: boolean
+  showRank: boolean
   selected: boolean
   hovered: boolean
   onHover: (id: number | null) => void
@@ -719,13 +722,13 @@ function Car({
         {car.label}
       </text>
 
-      {car.rank && active && (
+      {showRank && car.rank && (
         <g>
           <circle
             cx={x + CAR_W - 22}
             cy={ROOF_Y - 2}
             r={12}
-            fill={meta.color}
+            fill={car.rank === 1 ? "#dc2626" : car.rank <= 3 ? "#f59e0b" : "#64748b"}
           />
 
           <text

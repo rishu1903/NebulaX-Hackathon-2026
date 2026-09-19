@@ -13,7 +13,7 @@ export type AcvRow = {
   score: number | null
   condition: Condition
   note: string
-  /** Bar length, 0-100, relative to the highest score. */
+  /** Bar length, 0-100, normalized within this uploaded consist. */
   value: number
 }
 
@@ -35,7 +35,14 @@ export type DoorCycle = {
 export type Panel =
   | { kind: "acv"; rows: AcvRow[]; margin: number | null; emptyCars: string[] }
   | { kind: "door"; cycles: DoorCycle[]; abnormal: number; review: number }
-  | { kind: "rail"; label: string; side: "I" | "II" | null; speedKmh: number | null; speedChanges: number | null; lowMotion: boolean }
+  | {
+      kind: "rail"
+      label: string
+      side: "I" | "II" | null
+      speedKmh: number | null
+      speedChanges: number | null
+      lowMotion: boolean
+    }
   | { kind: "shm"; damage: number; condition: Condition }
 
 export type LiveView = {
@@ -69,28 +76,43 @@ const base = (result: AnalyseResult) => ({
 
 /* ------------------------------ ACV ------------------------------ */
 
-const ACV_RISK: Record<string, Condition> = { red: "issue", yellow: "review", green: "normal", "no data": "neutral" }
+const ACV_RISK: Record<string, Condition> = {
+  red: "issue",
+  yellow: "review",
+  green: "normal",
+  "no data": "neutral",
+}
+
 const ACV_NOTE: Record<Condition, string> = {
-  issue: "High deviation",
+  issue: "Elevated",
   review: "Review",
-  normal: "Nominal",
+  normal: "Lower priority",
   neutral: "No data",
 }
 
 function acvView(result: AnalyseResult): LiveView {
   const table = result.table ?? []
-  const scores = table.map((r) => (typeof r.score === "number" ? r.score : null))
-  const maxScore = Math.max(0, ...scores.filter((s): s is number => s !== null))
+  const numericScores = table
+    .map((row) => (typeof row.score === "number" ? row.score : null))
+    .filter((score): score is number => score !== null)
 
-  const rows: AcvRow[] = table.map((r) => {
-    const top = r.rank === 1
-    const condition: Condition = top ? "issue" : (ACV_RISK[r.risk] ?? "neutral")
-    const score: number | null = typeof r.score === "number" ? r.score : null
+  const minScore = numericScores.length ? Math.min(...numericScores) : 0
+  const maxScore = numericScores.length ? Math.max(...numericScores) : 0
+  const scoreRange = maxScore - minScore
+
+  const rows: AcvRow[] = table.map((row) => {
+    const top = row.rank === 1
+    const condition: Condition = top ? "issue" : (ACV_RISK[row.risk] ?? "neutral")
+    const score: number | null = typeof row.score === "number" ? row.score : null
+
     let value = 0
-    if (score !== null && maxScore > 0) value = Math.max(score > 0 ? 3 : 0, (Math.max(0, score) / maxScore) * 100)
+    if (score !== null) {
+      value = scoreRange > 0 ? 18 + ((score - minScore) / scoreRange) * 82 : 60
+    }
+
     return {
-      rank: r.rank,
-      car: String(r.car),
+      rank: row.rank,
+      car: String(row.car),
       score,
       condition,
       note: top ? "Inspect first" : ACV_NOTE[condition],
@@ -99,19 +121,22 @@ function acvView(result: AnalyseResult): LiveView {
   })
 
   const cars: CarState[] = rows
-    .map((row, i) => {
+    .map((row, index) => {
       const id = Number.parseInt(row.car, 10)
-      const scoreText = row.score === null ? "" : ` (score ${row.score >= 0 ? "+" : ""}${row.score.toFixed(3)})`
+      const scoreText =
+        row.score === null ? "" : ` Model score: ${row.score >= 0 ? "+" : ""}${row.score.toFixed(3)}.`
+
       const finding =
         row.rank === 1
-          ? `Most likely refrigerant leak — inspect first${scoreText}`
+          ? `Highest refrigerant-leak suspicion score in this consist. Inspect this carriage first.${scoreText}`
           : row.condition === "issue" || row.condition === "review"
-            ? `Cooling deviation above the healthy range — review${scoreText}`
+            ? `Elevated cooling deviation compared with lower-ranked carriages.${scoreText}`
             : row.condition === "neutral"
-              ? "No usable sensor data for this car"
-              : `Cooling within the normal range${scoreText}`
+              ? "No usable sensor score was available for this carriage."
+              : `Lower refrigerant-leak suspicion score in this uploaded case.${scoreText}`
+
       return {
-        id: Number.isNaN(id) ? i + 1 : id,
+        id: Number.isNaN(id) ? index + 1 : id,
         label: carLabel(row.car),
         condition: row.condition,
         rank: row.rank,
@@ -120,25 +145,39 @@ function acvView(result: AnalyseResult): LiveView {
     })
     .sort((a, b) => a.id - b.id)
 
-  const top = rows.find((r) => r.rank === 1)
-  const reviewCars = rows.filter((r) => r.rank !== 1 && (r.condition === "review" || r.condition === "issue"))
+  const ranked = [...rows].sort((a, b) => a.rank - b.rank)
+  const top = ranked[0]
+  const second = ranked[1]
+  const reviewCount = rows.filter(
+    (row) => row.rank !== 1 && (row.condition === "review" || row.condition === "issue"),
+  ).length
 
   return {
-    headline: "Refrigerant leak ranking across the consist",
+    headline: "Refrigerant leak inspection priority",
     verdict: {
       condition: top ? "issue" : "neutral",
-      text: top ? `${carLabel(top.car)} — Most likely refrigerant leak (Priority #1)` : "No cars could be ranked",
+      text: top
+        ? `${carLabel(top.car)} has the highest refrigerant-leak suspicion score`
+        : "No carriages could be ranked from this upload",
     },
     cars,
     kpis: [
-      { label: "Consist", value: `${rows.length} Cars`, condition: "neutral" },
-      { label: "Flagged", value: top ? carLabel(top.car) : "—", condition: top ? "issue" : "neutral" },
+      { label: "Cars Ranked", value: String(rows.length), condition: "neutral" },
       {
-        label: "Under Review",
-        value: reviewCars.length ? reviewCars.map((r) => carLabel(r.car)).join(", ") : "None",
-        condition: reviewCars.length ? "review" : "neutral",
+        label: "Inspect First",
+        value: top ? carLabel(top.car) : "—",
+        condition: top ? "issue" : "neutral",
       },
-      { label: "Verdict", value: "Refrigerant Leak", condition: top ? "issue" : "neutral" },
+      {
+        label: "Second Priority",
+        value: second ? carLabel(second.car) : "—",
+        condition: second ? "review" : "neutral",
+      },
+      {
+        label: "Additional Review",
+        value: reviewCount > 0 ? `${reviewCount} ${reviewCount === 1 ? "Car" : "Cars"}` : "None",
+        condition: reviewCount > 0 ? "review" : "normal",
+      },
     ],
     railSide: null,
     panel: {
@@ -161,39 +200,43 @@ export function formatNativeTime(stamp: string): { date: string; time: string } 
   if (parts.length !== 7 || parts.some(Number.isNaN)) return { date: "", time: String(stamp) }
   const [y, mo, d, h, mi, s, ms] = parts
   const p = (n: number, w = 2) => String(n).padStart(w, "0")
-  return { date: `${d} ${MONTHS[mo - 1] ?? mo} ${y}`, time: `${p(h)}:${p(mi)}:${p(s)}.${p(ms, 3)}` }
+  return {
+    date: `${d} ${MONTHS[mo - 1] ?? mo} ${y}`,
+    time: `${p(h)}:${p(mi)}:${p(s)}.${p(ms, 3)}`,
+  }
 }
 
 const cycleCount = (n: number) => `${n} ${n === 1 ? "Cycle" : "Cycles"}`
 
 function doorView(result: AnalyseResult): LiveView {
-  const cycles: DoorCycle[] = (result.table ?? []).map((r, i) => {
-    const start = formatNativeTime(r.start_time)
-    const end = formatNativeTime(r.end_time)
-    const flags = String(r.quality_flags ?? "")
+  const cycles: DoorCycle[] = (result.table ?? []).map((row, index) => {
+    const start = formatNativeTime(row.start_time)
+    const end = formatNativeTime(row.end_time)
+    const flags = String(row.quality_flags ?? "")
       .split(";")
       .filter(Boolean)
-    const abnormal = r.prediction === "Abnormal resistance"
-    const lowConfidence = String(r.confidence ?? "").startsWith("Low") || flags.length > 0
+    const abnormal = row.prediction === "Abnormal resistance"
+    const lowConfidence = String(row.confidence ?? "").startsWith("Low") || flags.length > 0
+
     return {
-      index: i + 1,
+      index: index + 1,
       date: start.date,
       start: start.time,
       end: end.time,
-      label: String(r.prediction),
-      operation: String(r.operation ?? ""),
-      ratio: Number(r.resistance_ratio),
-      threshold: Number(r.threshold),
-      margin: Number(r.margin_to_threshold),
-      confidence: String(r.confidence ?? ""),
+      label: String(row.prediction),
+      operation: String(row.operation ?? ""),
+      ratio: Number(row.resistance_ratio),
+      threshold: Number(row.threshold),
+      margin: Number(row.margin_to_threshold),
+      confidence: String(row.confidence ?? ""),
       flags,
       condition: abnormal ? "issue" : lowConfidence ? "review" : "normal",
     }
   })
 
   const total = cycles.length
-  const abnormal = cycles.filter((c) => c.condition === "issue").length
-  const review = cycles.filter((c) => c.condition === "review").length
+  const abnormal = cycles.filter((cycle) => cycle.condition === "issue").length
+  const review = cycles.filter((cycle) => cycle.condition === "review").length
 
   return {
     headline: "Saloon door cycle diagnostics",
@@ -204,13 +247,22 @@ function doorView(result: AnalyseResult): LiveView {
           ? `${abnormal} of ${total} door cycles show abnormal resistance`
           : `All ${total} door cycles are within the normal resistance range`,
     },
-    // Door telemetry is one door's continuous stream; it carries no car identifier, so the
-    // train stays neutral and the findings are shown per cycle.
-    cars: idleCars().map((c) => ({ ...c, finding: "Door results are reported per cycle, not per car" })),
+    cars: idleCars().map((car) => ({
+      ...car,
+      finding: "Door results are reported per cycle, not per car",
+    })),
     kpis: [
       { label: "Cycles Evaluated", value: String(total), condition: "neutral" },
-      { label: "Abnormal", value: cycleCount(abnormal), condition: abnormal > 0 ? "issue" : "normal" },
-      { label: "Review", value: cycleCount(review), condition: review > 0 ? "review" : "neutral" },
+      {
+        label: "Abnormal",
+        value: cycleCount(abnormal),
+        condition: abnormal > 0 ? "issue" : "normal",
+      },
+      {
+        label: "Review",
+        value: cycleCount(review),
+        condition: review > 0 ? "review" : "neutral",
+      },
       {
         label: "Verdict",
         value: abnormal > 0 ? "Abnormal Resistance" : "Normal",
@@ -238,12 +290,27 @@ function railView(result: AnalyseResult): LiveView {
       condition: damaged ? "issue" : "normal",
       text: damaged ? `${label} corrugation detected` : "No rail corrugation detected",
     },
-    cars: idleCars().map((c) => ({ ...c, finding: "Rail scan is reported for the whole consist" })),
+    cars: idleCars().map((car) => ({
+      ...car,
+      finding: "Rail scan is reported for the whole consist",
+    })),
     kpis: [
       { label: "Active File", value: result.filename, condition: "neutral" },
-      { label: "Mean Speed", value: speed === null ? "—" : `${speed.toFixed(1)} km/h`, condition: "neutral" },
-      { label: "Speed Changes", value: changes === null ? "—" : String(changes), condition: "neutral" },
-      { label: "Verdict", value: damaged ? `${label} Corrugation` : "Normal", condition: damaged ? "issue" : "normal" },
+      {
+        label: "Mean Speed",
+        value: speed === null ? "—" : `${speed.toFixed(1)} km/h`,
+        condition: "neutral",
+      },
+      {
+        label: "Speed Changes",
+        value: changes === null ? "—" : String(changes),
+        condition: "neutral",
+      },
+      {
+        label: "Verdict",
+        value: damaged ? `${label} Corrugation` : "Normal",
+        condition: damaged ? "issue" : "normal",
+      },
     ],
     railSide: side,
     panel: {
@@ -276,6 +343,7 @@ function shmView(result: AnalyseResult): LiveView {
       : damage >= SHM_BANDS.review
         ? "review"
         : "normal"
+
   const pct = valid ? `${(damage * 100).toFixed(1)}%` : "—"
 
   return {
@@ -286,10 +354,17 @@ function shmView(result: AnalyseResult): LiveView {
         ? `Cumulative fatigue damage D = ${damage.toFixed(3)} (${pct} of fatigue life)`
         : "No damage value could be computed",
     },
-    cars: idleCars().map((c) => ({ ...c, finding: "Fatigue damage is reported for the measured record" })),
+    cars: idleCars().map((car) => ({
+      ...car,
+      finding: "Fatigue damage is reported for the measured record",
+    })),
     kpis: [
       { label: "Record", value: result.filename, condition: "neutral" },
-      { label: "Damage Index D", value: valid ? damage.toFixed(3) : "—", condition },
+      {
+        label: "Damage Index D",
+        value: valid ? damage.toFixed(3) : "—",
+        condition,
+      },
       { label: "Fatigue Life Used", value: pct, condition },
       {
         label: "Verdict",
