@@ -158,9 +158,30 @@ export default function Page() {
             <p className="text-xs font-semibold uppercase tracking-widest text-slate-400">01 Task · {SUBSYSTEMS.find((item) => item.id === subsystem)?.full}</p>
             <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-950">{presentation.title}</h2>
             <p className="mt-1 text-sm font-medium text-slate-500">{presentation.question}</p>
-            {live ? <div className="mt-3 inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold" style={{ backgroundColor: verdictMeta.soft, color: verdictMeta.color }}><ConditionIcon condition={verdictCondition} className="size-5" />{live.verdict.text}</div>
-              : isAnalyzing ? <p className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-slate-600"><Loader2 className="size-4 animate-spin" />Analyzing queued files…</p>
-                : <p className="mt-3 text-sm text-slate-500">{workspace.jobs.length ? "Select a completed result, or choose the file again to retry a failed analysis." : presentation.idleHint}</p>}
+            {live ? (
+              <div className="mt-3 flex flex-wrap items-center gap-3">
+                <div
+                  className="inline-flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-bold"
+                  style={{ backgroundColor: verdictMeta.soft, color: verdictMeta.color }}
+                >
+                  <ConditionIcon condition={verdictCondition} className="size-5" />
+                  {live.verdict.text}
+                </div>
+
+                {subsystem === "SHM" && (
+                  <ShmHeatmapLegend currentD={live.panel.kind === "shm" ? live.panel.damage : null} />
+                )}
+              </div>
+            ) : isAnalyzing ? (
+              <p className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-slate-600">
+                <Loader2 className="size-4 animate-spin" />
+                Analyzing queued files…
+              </p>
+            ) : (
+              <p className="mt-3 text-sm text-slate-500">
+                {workspace.jobs.length ? "Select a completed result, or choose the file again to retry a failed analysis." : presentation.idleHint}
+              </p>
+            )}
           </div>
 
           <div className="flex flex-col items-stretch gap-2">
@@ -285,4 +306,59 @@ export default function Page() {
 
 function EmptyUpload({ title, hint, format, onClick }: { title: string; hint: string; format: string; onClick: () => void }) {
   return <div className="mt-4 flex min-h-44 flex-col items-center justify-center rounded-xl border border-dashed border-slate-300 bg-slate-50/70 px-4 py-8 text-center"><FileText className="size-7 text-slate-400" /><p className="mt-3 text-sm font-bold text-slate-800">{title}</p><p className="mt-1 max-w-xl text-xs text-slate-500">{hint} Select one or more {format} files.</p><button type="button" onClick={onClick} className="mt-4 inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white"><UploadCloud className="size-4" />Choose files</button></div>
+}
+
+function ShmHeatmapLegend({ currentD }: { currentD: number | null }) {
+  const boundedPct = currentD !== null && Number.isFinite(currentD) ? Math.min(100, Math.max(0, currentD * 100)) : null
+
+  return (
+    <div className="inline-flex flex-wrap items-center gap-3 rounded-lg border border-slate-200 bg-white/95 px-3 py-1.5 shadow-2xs backdrop-blur-xs">
+      <div className="flex flex-col gap-0.5">
+        <div className="flex items-center justify-between gap-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+          <span>Damage Scale (D)</span>
+          {currentD !== null && Number.isFinite(currentD) && (
+            <span className="font-mono text-[11px] font-bold text-slate-800">
+              D = {currentD.toFixed(4)}
+            </span>
+          )}
+        </div>
+
+        <div className="relative mt-0.5 h-2.5 w-36 overflow-visible rounded-full bg-slate-200">
+          <div className="h-full w-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 via-65% to-red-500" />
+          
+          {/* Threshold markers at 0.5 (50%) and 0.8 (80%) */}
+          <div className="absolute top-0 h-full w-px bg-white/90" style={{ left: "50%" }} title="D = 0.5 Review threshold" />
+          <div className="absolute top-0 h-full w-px bg-white/90" style={{ left: "80%" }} title="D = 0.8 Critical threshold" />
+
+          {/* Current position needle */}
+          {boundedPct !== null && (
+            <div
+              className="absolute -top-1 -ml-1 size-4 rounded-full border-2 border-white bg-slate-900 shadow-xs transition-all duration-500"
+              style={{ left: `${boundedPct}%` }}
+              title={`Current damage: ${currentD?.toFixed(4)}`}
+            />
+          )}
+        </div>
+
+        <div className="flex w-36 justify-between text-[9px] font-semibold text-slate-400">
+          <span>0</span>
+          <span>0.5</span>
+          <span>0.8</span>
+          <span>1.0</span>
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 border-l border-slate-200 pl-2.5 text-[11px] font-semibold">
+        <span className="inline-flex items-center gap-1 text-emerald-700" title="D < 0.5">
+          <span className="size-2 rounded-full bg-emerald-500" /> &lt;0.5 Normal
+        </span>
+        <span className="inline-flex items-center gap-1 text-amber-700" title="0.5 <= D < 0.8">
+          <span className="size-2 rounded-full bg-amber-500" /> 0.5–0.8 Review
+        </span>
+        <span className="inline-flex items-center gap-1 text-red-700" title="D >= 0.8">
+          <span className="size-2 rounded-full bg-red-500" /> &ge;0.8 Critical
+        </span>
+      </div>
+    </div>
+  )
 }
