@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from PS3.app.backend import main
@@ -110,3 +111,17 @@ def test_door_end_to_end(client):
     assert resp.status_code == 200 and set(body) == CONTRACT_KEYS
     assert body["summary"]["cycles_found"] == 38
     assert body["summary"]["abnormal"] == 8
+
+
+def test_mount_ui_serves_static_and_keeps_api(tmp_path):
+    (tmp_path / "index.html").write_text("<h1>ui</h1>")
+    application = FastAPI()
+    application.include_router(main.router)
+    assert main.mount_ui(application, tmp_path) is True
+    with TestClient(application) as c:
+        assert "<h1>ui</h1>" in c.get("/").text
+        assert c.get("/api/health").json()["status"] == "ok"  # API not shadowed by the UI
+
+
+def test_mount_ui_skips_missing_dir(tmp_path):
+    assert main.mount_ui(FastAPI(), tmp_path / "nope") is False

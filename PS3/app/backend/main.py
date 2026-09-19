@@ -15,11 +15,13 @@ import logging
 import os
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter, FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 logger = logging.getLogger("ps3.api")
 
@@ -31,6 +33,8 @@ CORS_ORIGINS = [
     if o.strip()
 ]
 READ_CHUNK = 1024 * 1024
+# Exported frontend, served at "/" when present (single-service deployment).
+STATIC_DIR = Path(os.environ.get("STATIC_DIR", Path(__file__).resolve().parents[1] / "static"))
 
 
 @dataclass(frozen=True)
@@ -149,3 +153,14 @@ def analyse(subsystem: str, file: UploadFile = File(...)) -> JSONResponse:
 
 
 app.include_router(router)
+
+
+def mount_ui(application: FastAPI, static_dir: Path) -> bool:
+    """Serve the exported frontend at "/" if it exists. API routes registered earlier win."""
+    if not static_dir.is_dir():
+        return False
+    application.mount("/", StaticFiles(directory=static_dir, html=True), name="ui")
+    return True
+
+
+mount_ui(app, STATIC_DIR)
