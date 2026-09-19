@@ -11,7 +11,7 @@ import pandas as pd
 
 
 SUBSYSTEM = "ACV"
-ACV_SRC = Path(__file__).resolve().parents[2] / "dev" / "ACV"
+ACV_SRC = Path(__file__).resolve().parents[2] / "ACV"
 if str(ACV_SRC) not in sys.path:
     sys.path.insert(0, str(ACV_SRC))
 
@@ -28,7 +28,7 @@ def _empty_response(filename: str, error: str) -> dict[str, Any]:
         "summary": {},
         "table": [],
         "chart_data": None,
-        "technical_details": {"implementation": "PS3/dev/ACV/acv_core.py"},
+        "technical_details": {"implementation": "PS3/ACV/acv_core.py"},
         "submission_csv": None,
         "error": error,
     }
@@ -86,7 +86,7 @@ def analyse_upload(file_bytes: bytes, filename: str) -> dict[str, Any]:
         "table": rows,
         "chart_data": {"cars": [row["car"] for row in rows], "scores": [row["score"] for row in rows]},
         "technical_details": {
-            "implementation": "PS3/dev/ACV/acv_core.predict_file",
+            "implementation": "PS3/ACV/acv_core.predict_file",
             "model": "within-file refrigerant-leak ranking heuristic; no trained artifact",
             "retraining_during_inference": False,
             "input_format": "Excel .xlsx ACV case file",
