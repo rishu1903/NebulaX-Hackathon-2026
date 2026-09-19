@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect, type CSSProperties } from "react"
+import { useState, useMemo, type CSSProperties } from "react"
 import { motion } from "framer-motion"
 import { CONDITION_META, type CarState, type Subsystem } from "@/lib/fault-disruptors/data"
 
@@ -60,21 +60,6 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
   const isRailMode = subsystem === "RAIL"
   const inspectRailBed = isRailMode && !forceTrainVisible
 
-  // Track elevation state: delayed by 0.5s when entering inspection mode to let train roll off first
-  const [trackElevated, setTrackElevated] = useState(false)
-
-  useEffect(() => {
-    if (inspectRailBed) {
-      // 0.5s for train to roll off track, then track moves up into inspection focus
-      const timer = setTimeout(() => {
-        setTrackElevated(true)
-      }, 500)
-      return () => clearTimeout(timer)
-    } else {
-      setTrackElevated(false)
-    }
-  }, [inspectRailBed])
-
   const [scrubberX, setScrubberX] = useState<number | null>(null)
 
   const railTopActive = railSide === "I"
@@ -116,11 +101,7 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
 
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-medium text-slate-500">
-              {trackElevated
-                ? "Track Bed Focus · Train Departed"
-                : inspectRailBed
-                  ? "Train Rolling Off Track..."
-                  : "Consist Over Track View"}
+              {inspectRailBed ? "Track Bed Focus · Train Departed" : "Consist Over Track View"}
             </span>
             <button
               type="button"
@@ -135,11 +116,11 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
 
       <svg
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
-        className="h-auto w-full max-w-none select-none overflow-hidden"
+        className="h-auto w-full max-w-none select-none"
         role="img"
         aria-label={`Train digital twin showing ${subsystem} subsystem status`}
         onMouseMove={(e) => {
-          if (!trackElevated) return
+          if (!inspectRailBed) return
           const rect = e.currentTarget.getBoundingClientRect()
           const svgX = ((e.clientX - rect.left) / rect.width) * VIEW_W
           if (svgX >= trackX && svgX <= trackX + trackW) {
@@ -202,98 +183,21 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
         </defs>
 
         {/* ------------------------------------------------------------- */}
-        {/* COMPACT TRACK BED (NORMAL OPERATION UNDER THE TRAIN)          */}
+        {/* TRACK BED & RAIL STRETCH (HERO ELEMENT IN RAIL INSPECTION MODE) */}
         {/* ------------------------------------------------------------- */}
         <motion.g
-          id="compact-track-bed"
           initial={false}
           animate={{
-            opacity: trackElevated ? 0 : 1,
+            y: inspectRailBed ? -50 : 0,
           }}
           transition={{
-            duration: 0.3,
-            ease: "easeInOut",
-          }}
-          style={{
-            pointerEvents: trackElevated ? "none" : "auto",
-          }}
-        >
-          {/* Ballast bed background */}
-          <rect
-            x={trackX}
-            y={218}
-            width={trackW}
-            height={32}
-            rx={8}
-            fill="url(#trackGrad)"
-            stroke="#cbd5e1"
-            strokeWidth={1}
-          />
-
-          {/* Concrete Sleepers (Ties) */}
-          {Array.from({ length: Math.round(trackW / 20) }).map((_, i) => {
-            const sleeperX = trackX + 6 + i * 20
-            return (
-              <rect
-                key={i}
-                x={sleeperX}
-                y={222}
-                width={6}
-                height={24}
-                rx={2}
-                fill="#94a3b8"
-                opacity={0.6}
-              />
-            )
-          })}
-
-          {/* TOP RAIL: Left Rail (Side I) */}
-          <rect
-            x={trackX}
-            y={228}
-            width={trackW}
-            height={5}
-            rx={2}
-            fill={railTopActive ? "#ef4444" : "#475569"}
-          />
-
-          {/* BOTTOM RAIL: Right Rail (Side II) */}
-          <rect
-            x={trackX}
-            y={242}
-            width={trackW}
-            height={5}
-            rx={2}
-            fill={railBottomActive ? "#ef4444" : "#475569"}
-          />
-
-          {railSide && (
-            <text x={trackX} y={262} fontSize="11" fill="#ef4444" fontWeight={600}>
-              {`Side ${railSide} corrugation · 0.0 m → 18.07 m traversed`}
-            </text>
-          )}
-        </motion.g>
-
-        {/* ------------------------------------------------------------- */}
-        {/* TRACK INSPECTION RIBBON (HERO ELEMENT ELEVATED AFTER 0.5s)   */}
-        {/* ------------------------------------------------------------- */}
-        <motion.g
-          id="inspection-track-ribbon"
-          initial={false}
-          animate={{
-            y: trackElevated ? 0 : 45,
-            opacity: trackElevated ? 1 : 0,
-          }}
-          transition={{
-            duration: 0.55,
+            duration: 0.65,
+            delay: inspectRailBed ? 0.08 : 0,
             ease: [0.16, 1, 0.3, 1],
-          }}
-          style={{
-            pointerEvents: trackElevated ? "auto" : "none",
           }}
         >
           {/* Defect Boundary Guidelines in Inspection Mode */}
-          {railTopActive && (
+          {inspectRailBed && railTopActive && (
             <g>
               {/* Boundary vertical lines */}
               <line x1={defectX} y1={70} x2={defectX} y2={220} stroke="#ef4444" strokeWidth={1.5} strokeDasharray="4 3" />
@@ -338,31 +242,35 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
           {/* Ballast bed background */}
           <rect
             x={trackX}
-            y={100}
+            y={inspectRailBed ? 100 : 218}
             width={trackW}
-            height={116}
+            height={inspectRailBed ? 116 : 32}
             rx={8}
             fill="url(#trackGrad)"
             stroke="#cbd5e1"
-            strokeWidth={1.5}
+            strokeWidth={inspectRailBed ? 1.5 : 1}
           />
 
-          {/* Concrete Sleepers (Ties) with Fasteners */}
+          {/* Concrete Sleepers (Ties) - Constant count prevents DOM thrashing on click */}
           {Array.from({ length: Math.round(trackW / 20) }).map((_, i) => {
             const sleeperX = trackX + 6 + i * 20
             return (
               <g key={i}>
                 <rect
                   x={sleeperX}
-                  y={105}
-                  width={8}
-                  height={106}
+                  y={inspectRailBed ? 105 : 222}
+                  width={inspectRailBed ? 8 : 6}
+                  height={inspectRailBed ? 106 : 24}
                   rx={2}
                   fill="#94a3b8"
-                  opacity={0.75}
+                  opacity={inspectRailBed ? 0.75 : 0.6}
                 />
-                <rect x={sleeperX - 1} y={118} width={10} height={4} rx={1} fill="#475569" />
-                <rect x={sleeperX - 1} y={172} width={10} height={4} rx={1} fill="#475569" />
+                {inspectRailBed && (
+                  <>
+                    <rect x={sleeperX - 1} y={118} width={10} height={4} rx={1} fill="#475569" />
+                    <rect x={sleeperX - 1} y={172} width={10} height={4} rx={1} fill="#475569" />
+                  </>
+                )}
               </g>
             )
           })}
@@ -370,20 +278,20 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
           {/* TOP RAIL: Left Rail (Side I) */}
           <rect
             x={trackX}
-            y={122}
+            y={inspectRailBed ? 122 : 228}
             width={trackW}
-            height={14}
-            rx={4}
+            height={inspectRailBed ? 14 : 5}
+            rx={inspectRailBed ? 4 : 2}
             fill="#475569"
           />
 
           {/* BOTTOM RAIL: Right Rail (Side II) */}
           <rect
             x={trackX}
-            y={176}
+            y={inspectRailBed ? 176 : 242}
             width={trackW}
-            height={14}
-            rx={4}
+            height={inspectRailBed ? 14 : 5}
+            rx={inspectRailBed ? 4 : 2}
             fill="#475569"
           />
 
@@ -393,9 +301,9 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
               {/* Glowing underlay on Side I */}
               <rect
                 x={defectX - 4}
-                y={116}
+                y={inspectRailBed ? 116 : 224}
                 width={defectW + 8}
-                height={26}
+                height={inspectRailBed ? 26 : 13}
                 rx={6}
                 fill="#ef4444"
                 opacity={0.4}
@@ -404,143 +312,157 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
               {/* Textured washboard ripple defect bar */}
               <rect
                 x={defectX}
-                y={122}
+                y={inspectRailBed ? 122 : 228}
                 width={defectW}
-                height={14}
-                rx={4}
+                height={inspectRailBed ? 14 : 5}
+                rx={inspectRailBed ? 4 : 2}
                 fill="url(#corrugationHatch)"
                 stroke="#dc2626"
                 strokeWidth={1.5}
               />
               {/* Realistic sinusoidal physical corrugation waves on rail head */}
-              <path
-                d={waveTop}
-                stroke="#991b1b"
-                strokeWidth={2}
-                fill="none"
-              />
-              <path
-                d={waveBottom}
-                stroke="#991b1b"
-                strokeWidth={2}
-                fill="none"
-              />
+              {inspectRailBed && (
+                <>
+                  <path
+                    d={waveTop}
+                    stroke="#991b1b"
+                    strokeWidth={2}
+                    fill="none"
+                  />
+                  <path
+                    d={waveBottom}
+                    stroke="#991b1b"
+                    strokeWidth={2}
+                    fill="none"
+                  />
+                </>
+              )}
             </g>
           )}
 
           {/* Rail Side Identifiers and Status Badges */}
-          <g>
-            <rect x={trackX + 12} y={108} width={188} height={20} rx={4} fill="#fee2e2" stroke="#fca5a5" strokeWidth={1} />
-            <text x={trackX + 20} y={122} fontSize="10.5" fontWeight={700} fill={railTopActive ? "#dc2626" : "#475569"}>
-              Left Rail (Side I) {railTopActive ? "⚠️ CORRUGATED" : "✓ Nominal"}
-            </text>
-          </g>
-
-          <g>
-            <rect x={trackX + 12} y={162} width={188} height={20} rx={4} fill="#ecfdf5" stroke="#a7f3d0" strokeWidth={1} />
-            <text x={trackX + 20} y={176} fontSize="10.5" fontWeight={700} fill={railBottomActive ? "#dc2626" : "#059669"}>
-              Right Rail (Side II) {railBottomActive ? "⚠️ CORRUGATED" : "✓ SMOOTH"}
-            </text>
-          </g>
-
-          {/* High-Resolution Distance Ruler */}
-          <line x1={trackX} y1={224} x2={trackX + trackW} y2={224} stroke="#64748b" strokeWidth={1.5} />
-          
-          {/* Highlight defect span along distance axis */}
-          {railTopActive && (
-            <line x1={defectX} y1={224} x2={defectX + defectW} y2={224} stroke="#ef4444" strokeWidth={3.5} />
-          )}
-
-          {/* Minor ticks (every 1 m) */}
-          {minorTicks.map((dist) => {
-            const tickX = trackX + trackW * (dist / 18.07)
-            return <line key={`min-${dist}`} x1={tickX} y1={224} x2={tickX} y2={228} stroke="#94a3b8" strokeWidth={1} />
-          })}
-
-          {/* Major ticks (every 2 m + ends) */}
-          {majorTicks.map((dist) => {
-            const tickX = trackX + trackW * (dist / 18.07)
-            const isDefectBoundary = dist === 6 || dist === 14
-            return (
-              <g key={`maj-${dist}`}>
-                <line
-                  x1={tickX}
-                  y1={224}
-                  x2={tickX}
-                  y2={232}
-                  stroke={isDefectBoundary ? "#ef4444" : "#64748b"}
-                  strokeWidth={1.5}
-                />
-                <text
-                  x={tickX}
-                  y={245}
-                  textAnchor="middle"
-                  fontSize="10"
-                  fontWeight={isDefectBoundary ? 700 : 600}
-                  fill={isDefectBoundary ? "#ef4444" : "#475569"}
-                >
-                  {dist.toFixed(dist === 18.07 ? 2 : 0)} m
+          {inspectRailBed ? (
+            <g>
+              <g>
+                <rect x={trackX + 12} y={108} width={188} height={20} rx={4} fill="#fee2e2" stroke="#fca5a5" strokeWidth={1} />
+                <text x={trackX + 20} y={122} fontSize="10.5" fontWeight={700} fill={railTopActive ? "#dc2626" : "#475569"}>
+                  Left Rail (Side I) {railTopActive ? "⚠️ CORRUGATED" : "✓ Nominal"}
                 </text>
               </g>
-            )
-          })}
 
-          {/* Interactive Scrubber Tooltip */}
-          {scrubberX !== null && (
-            <g>
-              <line x1={scrubberX} y1={40} x2={scrubberX} y2={250} stroke="#2563eb" strokeWidth={1.5} strokeDasharray="3 3" />
-              <circle cx={scrubberX} cy={129} r={4.5} fill="#2563eb" />
-              <circle cx={scrubberX} cy={183} r={4.5} fill="#2563eb" />
+              <g>
+                <rect x={trackX + 12} y={162} width={188} height={20} rx={4} fill="#ecfdf5" stroke="#a7f3d0" strokeWidth={1} />
+                <text x={trackX + 20} y={176} fontSize="10.5" fontWeight={700} fill={railBottomActive ? "#dc2626" : "#059669"}>
+                  Right Rail (Side II) {railBottomActive ? "⚠️ CORRUGATED" : "✓ SMOOTH"}
+                </text>
+              </g>
+
+              {/* High-Resolution Distance Ruler */}
+              <line x1={trackX} y1={224} x2={trackX + trackW} y2={224} stroke="#64748b" strokeWidth={1.5} />
               
-              {/* Floating HUD Badge */}
-              <rect
-                x={Math.max(trackX, Math.min(trackX + trackW - 220, scrubberX - 110))}
-                y={254}
-                width={220}
-                height={38}
-                rx={6}
-                fill="#0f172a"
-                filter="url(#carShadow)"
-              />
-              <text
-                x={Math.max(trackX + 110, Math.min(trackX + trackW - 110, scrubberX))}
-                y={268}
-                textAnchor="middle"
-                fontSize="10.5"
-                fontWeight={700}
-                fill="#ffffff"
-              >
-                {`Position: ${scrubberDistance.toFixed(2)} m (Pulse ${scrubberPulse})`}
-              </text>
-              <text
-                x={Math.max(trackX + 110, Math.min(trackX + trackW - 110, scrubberX))}
-                y={284}
-                textAnchor="middle"
-                fontSize="9.5"
-                fontWeight={700}
-                fill={scrubberInDefect ? "#f87171" : "#4ade80"}
-              >
-                {scrubberInDefect
-                  ? "⚠️ DEFECT: Corrugation · 0.15mm Grinding Req."
-                  : "✓ NOMINAL: Smooth Track Profile (0.28g RMS)"}
-              </text>
+              {/* Highlight defect span along distance axis */}
+              {railTopActive && (
+                <line x1={defectX} y1={224} x2={defectX + defectW} y2={224} stroke="#ef4444" strokeWidth={3.5} />
+              )}
+
+              {/* Minor ticks (every 1 m) */}
+              {minorTicks.map((dist) => {
+                const tickX = trackX + trackW * (dist / 18.07)
+                return <line key={`min-${dist}`} x1={tickX} y1={224} x2={tickX} y2={228} stroke="#94a3b8" strokeWidth={1} />
+              })}
+
+              {/* Major ticks (every 2 m + ends) */}
+              {majorTicks.map((dist) => {
+                const tickX = trackX + trackW * (dist / 18.07)
+                const isDefectBoundary = dist === 6 || dist === 14
+                return (
+                  <g key={`maj-${dist}`}>
+                    <line
+                      x1={tickX}
+                      y1={224}
+                      x2={tickX}
+                      y2={232}
+                      stroke={isDefectBoundary ? "#ef4444" : "#64748b"}
+                      strokeWidth={1.5}
+                    />
+                    <text
+                      x={tickX}
+                      y={245}
+                      textAnchor="middle"
+                      fontSize="10"
+                      fontWeight={isDefectBoundary ? 700 : 600}
+                      fill={isDefectBoundary ? "#ef4444" : "#475569"}
+                    >
+                      {dist.toFixed(dist === 18.07 ? 2 : 0)} m
+                    </text>
+                  </g>
+                )
+              })}
+
+              {/* Interactive Scrubber Tooltip */}
+              {scrubberX !== null && (
+                <g>
+                  <line x1={scrubberX} y1={40} x2={scrubberX} y2={250} stroke="#2563eb" strokeWidth={1.5} strokeDasharray="3 3" />
+                  <circle cx={scrubberX} cy={129} r={4.5} fill="#2563eb" />
+                  <circle cx={scrubberX} cy={183} r={4.5} fill="#2563eb" />
+                  
+                  {/* Floating HUD Badge */}
+                  <rect
+                    x={Math.max(trackX, Math.min(trackX + trackW - 220, scrubberX - 110))}
+                    y={254}
+                    width={220}
+                    height={38}
+                    rx={6}
+                    fill="#0f172a"
+                    filter="url(#carShadow)"
+                  />
+                  <text
+                    x={Math.max(trackX + 110, Math.min(trackX + trackW - 110, scrubberX))}
+                    y={268}
+                    textAnchor="middle"
+                    fontSize="10.5"
+                    fontWeight={700}
+                    fill="#ffffff"
+                  >
+                    {`Position: ${scrubberDistance.toFixed(2)} m (Pulse ${scrubberPulse})`}
+                  </text>
+                  <text
+                    x={Math.max(trackX + 110, Math.min(trackX + trackW - 110, scrubberX))}
+                    y={284}
+                    textAnchor="middle"
+                    fontSize="9.5"
+                    fontWeight={700}
+                    fill={scrubberInDefect ? "#f87171" : "#4ade80"}
+                  >
+                    {scrubberInDefect
+                      ? "⚠️ DEFECT: Corrugation · 0.15mm Grinding Req."
+                      : "✓ NOMINAL: Smooth Track Profile (0.28g RMS)"}
+                  </text>
+                </g>
+              )}
             </g>
+          ) : (
+            railSide && (
+              <text x={trackX} y={262} fontSize="11" fill="#ef4444" fontWeight={600}>
+                {`Side ${railSide} corrugation · 0.0 m → 18.07 m traversed`}
+              </text>
+            )
           )}
         </motion.g>
 
         {/* ------------------------------------------------------------- */}
-        {/* THE TRAIN CONSIST (ANIMATES OFF THE TRACK SOLID WITH 0.5s)    */}
+        {/* THE TRAIN CONSIST (ANIMATES OFF THE TRACK IMMEDIATELY)        */}
         {/* ------------------------------------------------------------- */}
         <motion.g
           id="train-consist-group"
           initial={false}
           animate={{
             x: inspectRailBed ? -(VIEW_W + 500) : 0,
+            opacity: inspectRailBed ? 0 : 1,
           }}
           transition={{
-            duration: inspectRailBed ? 0.52 : 0.6,
-            delay: inspectRailBed ? 0 : 0.15,
-            ease: inspectRailBed ? [0.35, 0, 0.25, 1] : [0.16, 1, 0.3, 1],
+            duration: 0.75,
+            ease: [0.16, 1, 0.3, 1],
           }}
           style={{
             pointerEvents: inspectRailBed ? "none" : "auto",
