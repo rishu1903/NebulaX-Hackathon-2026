@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, type CSSProperties } from "react"
+import { motion } from "framer-motion"
 import { CONDITION_META, type CarState, type Subsystem } from "@/lib/fault-disruptors/data"
 
 const MARGIN_X = 80
@@ -96,14 +97,14 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
 
           <div className="flex items-center gap-2">
             <span className="text-[11px] font-medium text-slate-500">
-              {inspectRailBed ? "Track Bed Focus · Defect View" : "Consist Over Track View"}
+              {inspectRailBed ? "Track Bed Focus · Train Departed" : "Consist Over Track View"}
             </span>
             <button
               type="button"
               onClick={() => setForceTrainVisible(!forceTrainVisible)}
               className="inline-flex items-center gap-1.5 rounded-md border border-slate-300 bg-white px-3 py-1 text-xs font-semibold text-slate-800 shadow-xs transition hover:bg-slate-100 hover:text-slate-950 active:scale-95"
             >
-              {inspectRailBed ? "🚆 Bring Train Down" : "🛤️ Move Train Away & Show Track Only"}
+              {inspectRailBed ? "🚆 Drive Train Back Onto Track" : "🛤️ Run Train Off Track & Inspect Rail"}
             </button>
           </div>
         </div>
@@ -180,11 +181,15 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
         {/* ------------------------------------------------------------- */}
         {/* TRACK BED & RAIL STRETCH (HERO ELEMENT IN RAIL INSPECTION MODE) */}
         {/* ------------------------------------------------------------- */}
-        <g
-          className="transition-all duration-700 ease-out"
-          style={{
-            transform: inspectRailBed ? "translateY(-50px)" : "translateY(0px)",
-            transition: "transform 0.75s cubic-bezier(0.16, 1, 0.3, 1)",
+        <motion.g
+          initial={false}
+          animate={{
+            y: inspectRailBed ? -50 : 0,
+          }}
+          transition={{
+            duration: 0.8,
+            delay: inspectRailBed ? 0.35 : 0,
+            ease: [0.16, 1, 0.3, 1],
           }}
         >
           {/* Defect Boundary Guidelines in Inspection Mode */}
@@ -439,17 +444,29 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
               </text>
             )
           )}
-        </g>
+        </motion.g>
 
         {/* ------------------------------------------------------------- */}
         {/* THE TRAIN CONSIST (ANIMATES COMPLETELY AWAY IN RAIL MODE)     */}
         {/* ------------------------------------------------------------- */}
-        <g
+        <motion.g
           id="train-consist-group"
+          initial={false}
+          animate={{
+            x: inspectRailBed ? -(VIEW_W + 500) : 0,
+            opacity: inspectRailBed ? [1, 1, 0.85, 0] : 1,
+          }}
+          transition={{
+            x: {
+              duration: 1.25,
+              ease: inspectRailBed ? [0.38, 0, 0.25, 1] : [0.16, 1, 0.3, 1],
+            },
+            opacity: {
+              duration: inspectRailBed ? 1.25 : 0.4,
+              times: [0, 0.65, 0.88, 1],
+            },
+          }}
           style={{
-            transform: inspectRailBed ? "translateY(-300px) scale(0.92)" : "translateY(0px) scale(1)",
-            opacity: inspectRailBed ? 0 : 1,
-            transition: "transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.55s ease",
             pointerEvents: inspectRailBed ? "none" : "auto",
           }}
         >
@@ -465,7 +482,7 @@ export function TrainTwin({ subsystem, cars, railSide, selectedId, hoveredId, on
               onSelect={onSelect}
             />
           ))}
-        </g>
+        </motion.g>
       </svg>
     </div>
   )
@@ -494,12 +511,6 @@ function Car({
   const isReview = car.condition === "review"
   const active = isIssue || isReview
 
-  const lift = hovered ? -8 : 0
-  const style: CSSProperties = {
-    transition: "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)",
-    transform: `translateY(${lift}px)`,
-    cursor: "pointer",
-  }
 
   // Realistic light passenger train palette
   const bodyGradId = isIssue ? "url(#bodyIssueGrad)" : isReview ? "url(#bodyReviewGrad)" : isNeutral ? "url(#bodyNeutralGrad)" : "url(#bodyNominalGrad)"
@@ -516,8 +527,10 @@ function Car({
   const doorW = 24
 
   return (
-    <g
-      style={style}
+    <motion.g
+      animate={{ y: hovered ? -8 : 0 }}
+      transition={{ type: "spring", stiffness: 450, damping: 28 }}
+      style={{ cursor: "pointer" }}
       onMouseEnter={() => onHover(car.id)}
       onMouseLeave={() => onHover(null)}
       onClick={() => onSelect(selected ? null : car.id)}
@@ -647,14 +660,14 @@ function Car({
 
       {/* Rank Badge for ACV / Priority */}
       {car.rank && active && (
-        <g style={{ transform: `translateY(${lift}px)` }}>
+        <g>
           <circle cx={x + CAR_W - 22} cy={ROOF_Y - 2} r={12} fill={meta.color} />
           <text x={x + CAR_W - 22} y={ROOF_Y + 2.5} textAnchor="middle" fontSize="12" fontWeight={700} fill="#ffffff">
             {car.rank}
           </text>
         </g>
       )}
-    </g>
+    </motion.g>
   )
 }
 
