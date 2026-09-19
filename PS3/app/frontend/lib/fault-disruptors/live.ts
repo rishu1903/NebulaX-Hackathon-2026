@@ -304,34 +304,45 @@ function railView(result: AnalyseResult): LiveView {
   const side = label === "Side I" ? "I" : label === "Side II" ? "II" : null
   const damaged = side !== null
   const speed = typeof result.summary?.speed_kmh === "number" ? result.summary.speed_kmh : null
-  const changes = typeof result.summary?.speed_transitions === "number" ? result.summary.speed_transitions : null
+  const changes =
+    typeof result.summary?.speed_transitions === "number"
+      ? result.summary.speed_transitions
+      : null
+  const lowMotion = Boolean(result.summary?.low_transition_override)
 
   return {
-    headline: "Rail corrugation scan",
+    headline: "Rail corrugation classification",
     verdict: {
       condition: damaged ? "issue" : "normal",
-      text: damaged ? `${label} corrugation detected` : "No rail corrugation detected",
+      text: damaged
+        ? `Side ${side} is classified as showing rail corrugation`
+        : "The uploaded recording is classified as normal",
     },
+    // Rail inference is performed on the uploaded track recording. It does not identify a carriage.
     cars: idleCars().map((car) => ({
       ...car,
-      finding: "Rail scan is reported for the whole consist",
+      finding: "Rail condition is reported for the uploaded track recording, not by carriage",
     })),
     kpis: [
-      { label: "Active File", value: result.filename, condition: "neutral" },
+      {
+        label: "Classification",
+        value: damaged ? `Side ${side}` : "Normal",
+        condition: damaged ? "issue" : "normal",
+      },
       {
         label: "Mean Speed",
         value: speed === null ? "—" : `${speed.toFixed(1)} km/h`,
         condition: "neutral",
       },
       {
-        label: "Speed Changes",
+        label: "Speed Transitions",
         value: changes === null ? "—" : String(changes),
         condition: "neutral",
       },
       {
-        label: "Verdict",
-        value: damaged ? `${label} Corrugation` : "Normal",
-        condition: damaged ? "issue" : "normal",
+        label: "Low-Motion Rule",
+        value: lowMotion ? "Applied" : "Not Applied",
+        condition: lowMotion ? "review" : "normal",
       },
     ],
     railSide: side,
@@ -341,7 +352,7 @@ function railView(result: AnalyseResult): LiveView {
       side,
       speedKmh: speed,
       speedChanges: changes,
-      lowMotion: Boolean(result.summary?.low_transition_override),
+      lowMotion,
     },
     ...base(result),
   }
