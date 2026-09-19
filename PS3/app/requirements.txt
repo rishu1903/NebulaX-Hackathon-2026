@@ -1,0 +1,22 @@
+# Runtime dependencies for the PS3 API (all four subsystems), pinned to the versions the
+# full test suite was verified against on Python 3.13.
+#
+# scikit-learn MUST stay at 1.8.0: the Rail model (joblib pickle) was saved with it and
+# fails to load on other versions (e.g. 1.9.x: "No module named '_loss'").
+#
+# System libraries: LightGBM needs the OpenMP runtime
+#   macOS:          brew install libomp
+#   Debian/Ubuntu:  apt-get install libgomp1
+
+numpy==2.5.3
+pandas==2.3.3
+scipy==1.18.1
+scikit-learn==1.8.0
+lightgbm==4.7.0
+joblib==1.6.0
+openpyxl==3.1.5
+rainflow==3.2.0
+
+fastapi==0.141.1
+uvicorn==0.53.0
+python-multipart==0.0.32
