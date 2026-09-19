@@ -369,6 +369,7 @@ export const SHM_BANDS = { review: 0.5, issue: 0.8 }
 function shmView(result: AnalyseResult): LiveView {
   const damage = Number(result.prediction)
   const valid = Number.isFinite(damage)
+
   const condition: Condition = !valid
     ? "neutral"
     : damage >= SHM_BANDS.issue
@@ -377,36 +378,58 @@ function shmView(result: AnalyseResult): LiveView {
         ? "review"
         : "normal"
 
-  const pct = valid ? `${(damage * 100).toFixed(1)}%` : "—"
+  const displayBand = !valid
+    ? "Unavailable"
+    : damage >= 1
+      ? "At / Above Reference"
+      : damage >= SHM_BANDS.issue
+        ? "Near Reference"
+        : damage >= SHM_BANDS.review
+          ? "Elevated"
+          : "Lower"
 
   return {
-    headline: "Structural fatigue assessment",
+    headline: "Structural fatigue damage prediction",
     verdict: {
       condition,
       text: valid
-        ? `Cumulative fatigue damage D = ${damage.toFixed(3)} (${pct} of fatigue life)`
-        : "No damage value could be computed",
+        ? `Predicted cumulative fatigue damage D = ${damage.toFixed(4)}`
+        : "No cumulative fatigue damage value could be computed",
     },
+    // SHM predicts one numeric value for the uploaded structural record.
+    // There is no carriage or structural-zone localisation in the model output.
     cars: idleCars().map((car) => ({
       ...car,
-      finding: "Fatigue damage is reported for the measured record",
+      finding: "SHM reports cumulative damage for the uploaded structural record, not by carriage",
     })),
     kpis: [
-      { label: "Record", value: result.filename, condition: "neutral" },
       {
-        label: "Damage Index D",
-        value: valid ? damage.toFixed(3) : "—",
+        label: "Predicted Damage D",
+        value: valid ? damage.toFixed(4) : "—",
         condition,
       },
-      { label: "Fatigue Life Used", value: pct, condition },
       {
-        label: "Verdict",
-        value: condition === "issue" ? "Near Limit" : condition === "review" ? "Elevated" : "Within Limits",
+        label: "Task",
+        value: "Regression",
+        condition: "neutral",
+      },
+      {
+        label: "Reference",
+        value: "D = 1.0",
+        condition: "neutral",
+      },
+      {
+        label: "Display Band",
+        value: displayBand,
         condition,
       },
     ],
     railSide: null,
-    panel: { kind: "shm", damage: valid ? damage : 0, condition },
+    panel: {
+      kind: "shm",
+      damage: valid ? damage : 0,
+      condition,
+    },
     ...base(result),
   }
 }
